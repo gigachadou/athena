@@ -48,19 +48,37 @@ Features (Planned)
 ```bash
 # clone this repository:
 https://github.com/gigachadou/athena.git
+```
+```bash
 # go to the file
 cd athena
+```
+```bash
 # install dependencies and modules
 npm install
-# create a db.json file in the folder with name 'backend' (there will be an example)
+```
+```bash
+# create a db.json file in the folder with name 'backend' (there will be an example below)
 # run
 npm run dev
+```
+```bash
+# run servers
+npm run server
+node src/backend/server.js
+```
+
+```json
+//server watches "users" endpoint only, so name it correctly or change it in server.js!
+{
+   "users": []
+}
 ```
 
 ## Gatito wishes you luck!
 
    /\_/\
-  ( -_- ) 
+  ( -_- )
   /     \
  (  ___  )
   `-----'
