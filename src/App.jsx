@@ -14,14 +14,14 @@ function App() {
       element: <PublicRoot />,
       children: [
         { path: "/login", element: <Login /> },
-        { path: "/signin", element: <Signin /> }
+        { path: "/signin", element: <Signin /> },
+        { path: "/", element: <EnterPage /> }
       ],
     },
     {
       element: <ProtectedRoot />,
       children: [
         { path: "/home", element: <ProtectedRoute><Home /></ProtectedRoute> },
-        { path: "/", element: <EnterPage /> } 
       ],
     },
     { path: "*", element: <Navigate to="/" /> },
