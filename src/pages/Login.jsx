@@ -34,7 +34,7 @@ export default function Login() {
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     {error && <div className="error-message">{error}</div>}
-                    <label style={{ color: "white" }}>Email</label>
+                    <label style={{ color: "black" }}>Email</label>
                     <input
                         name="email"
                         value={email}
@@ -45,7 +45,7 @@ export default function Login() {
                     />
                 </div>
                 <div className="form-group">
-                    <label style={{ color: "white" }}>Password</label>
+                    <label style={{ color: "black" }}>Password</label>
                     <div className="password-wrapper">
                         <input
                             name="password"
