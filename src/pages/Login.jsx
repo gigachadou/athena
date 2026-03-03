@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -60,7 +61,7 @@ export default function Login() {
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? "🙈" : "👁️"}
+                            {showPassword ? <FaEye/> : <FaEyeSlash/>}
                         </button>
                     </div>
                 </div>

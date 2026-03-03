@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Signin.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Signin() {
     const [name, setName] = useState(localStorage.getItem("name") || "");
@@ -24,10 +25,10 @@ export default function Signin() {
         }
 
         try {
-            const res = await fetch("http://localhost:5000/register", {
+            const res = await fetch("http://localhost:5000/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, email: email, password: password, status: "user", cart: [], saved: [], activities: [] }),
+                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts:[] ,followers: [], followings: [], likes: [] , comments:[] }),
             });
 
             const data = await res.json();
@@ -62,6 +63,7 @@ export default function Signin() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={loading}
+                        placeholder="login"
                     />
                 </div>
 
@@ -72,6 +74,7 @@ export default function Signin() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         disabled={loading}
+                        placeholder="email@gmail.com"
                     />
                 </div>
 
@@ -84,13 +87,14 @@ export default function Signin() {
                             onChange={(e) => setPassword(e.target.value)}
                             disabled={loading}
                             minLength={8}
+                            placeholder="*********"
                         />
                         <button
                             type="button"
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? "🙈" : "👁️"}
+                            {showPassword ? <FaEye/> : <FaEyeSlash/>}
                         </button>
                     </div>
                 </div>
