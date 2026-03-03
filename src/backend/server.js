@@ -1,5 +1,6 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
+
 const jsonServer = require("json-server");
 const auth = require("json-server-auth");
 const path = require("path");
@@ -12,18 +13,17 @@ const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, "db.json"));
 const middlewares = jsonServer.defaults();
 
+
+// 2. DB ni auth ga bog'lash (JUDA MUHIM)
 server.db = router.db;
 
-const rules = auth.rewriter({
-    users: 600,
-});
-
-server.use(middlewares);
-server.use(rules);
-server.use(auth);
-server.use(router);
+// 3. Middleware-larni to'g'ri tartibda ulash
+server.use(middlewares); // Avval defaults
+server.use(auth);        // Keyin auth
+server.use(router);      // Eng oxirida router
 
 const PORT = 5000;
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`\n✅ JSON Server running on http://localhost:${PORT}`);
+    console.log(`🔐 Auth enabled\n`);
 });

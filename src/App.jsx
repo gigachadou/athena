@@ -6,7 +6,8 @@ import ProtectedRoot from './ProtectedRoot';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './pages/Login';
 import Signin from './pages/Signin';
-import EnterPage from './pages/EnterPage';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 
 function App() {
   const router = createBrowserRouter([
@@ -20,8 +21,9 @@ function App() {
     {
       element: <ProtectedRoot />,
       children: [
-        { path: "/home", element: <ProtectedRoute><Home /></ProtectedRoute> },
-        { path: "/", element: <EnterPage /> } 
+        { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
+        {path:"/profile" , element:<ProtectedRoute><Profile/></ProtectedRoute>},
+        {path:"/settings" , element:<ProtectedRoute><Settings/> </ProtectedRoute>}
       ],
     },
     { path: "*", element: <Navigate to="/" /> },
