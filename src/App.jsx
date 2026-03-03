@@ -7,6 +7,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './pages/Login';
 import Signin from './pages/Signin';
 import EnterPage from './pages/EnterPage';
+import AddPost from './pages/AddPost';
 
 function App() {
   const router = createBrowserRouter([
@@ -15,13 +16,14 @@ function App() {
       children: [
         { path: "/login", element: <Login /> },
         { path: "/signin", element: <Signin /> },
-        { path: "/", element: <EnterPage /> }
+        { path: "/enter", element: <EnterPage /> }
       ],
     },
     {
       element: <ProtectedRoot />,
       children: [
-        { path: "/home", element: <ProtectedRoute><Home /></ProtectedRoute> },
+        { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
+        { path: "/addPost", element: <ProtectedRoute><AddPost /></ProtectedRoute> }
       ],
     },
     { path: "*", element: <Navigate to="/" /> },

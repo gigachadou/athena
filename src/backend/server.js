@@ -16,6 +16,7 @@ server.db = router.db;
 
 const rules = auth.rewriter({
     users: 600,
+    posts: 640
 });
 
 server.use(middlewares);
