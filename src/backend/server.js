@@ -13,8 +13,6 @@ const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, "db.json"));
 const middlewares = jsonServer.defaults();
 
-
-// 2. DB ni auth ga bog'lash (JUDA MUHIM)
 server.db = router.db;
 
 const rules = auth.rewriter({
