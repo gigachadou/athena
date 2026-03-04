@@ -1,7 +1,15 @@
+import { FaBell, FaHome, FaPlus, FaSearch, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import "../styles/header.css"
+
 export default function Header() {
     return (
         <div className="header">
-            <h1>Header</h1>
+            <Link to="/"><FaHome/></Link>
+            <Link to="/search"><FaSearch/></Link>
+            <Link to="/addversments"><FaPlus/></Link>
+            <Link to="/notification"><FaBell/></Link>
+            <Link to="/profile"><FaUser/></Link>
         </div>
     );
 };
