@@ -1,10 +1,12 @@
 import { useState } from "react";
 import "../styles/AddPost.css";
+import { useOutletContext } from "react-router-dom";
 
 export default function AddPost() {
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [error, setError] = useState("");
+    const {userData} = useOutletContext();
     function handleSubmit() {
 
     };
@@ -27,7 +29,7 @@ export default function AddPost() {
                             maxLength={50}
                             required
                         />
-                        <div className="add-post-meta">{header.length}/100</div>
+                        <div className="add-post-meta">{header.length}/50</div>
                     </div>
                     <div className="add-post-field">
                         <label className="add-post-label">Text</label>
@@ -41,7 +43,7 @@ export default function AddPost() {
                             maxLength={300}
                             required
                         />
-                        <div className="add-post-meta">{text.length}/500</div>
+                        <div className="add-post-meta">{text.length}/300</div>
                     </div>
                     <button type="submit" className="add-post-submit">Post</button>
                 </form>

@@ -10,7 +10,7 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Search from './pages/Search';
 import Notification from './pages/Notification';
-import Add from './pages/Add';
+import AddPost from './pages/AddPost';
 
 function App() {
   const router = createBrowserRouter([
@@ -24,14 +24,13 @@ function App() {
     {
       element: <ProtectedRoot />,
       children: [
-        { path: "/home", element: <ProtectedRoute><Home /></ProtectedRoute> },
+        { path: "/home", element: <Home /> },
         { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
-        {path:"/profile" , element:<ProtectedRoute><Profile/></ProtectedRoute>},
-        {path:"/settings" , element:<ProtectedRoute><Settings/> </ProtectedRoute>},
-        {path:"/search" , element:<Search/>},
-        {path:"/notification" , element:<Notification/>},
-        {path:"/addversments" , element:<Add/>}
-
+        { path: "/profile", element: <ProtectedRoute><Profile /></ProtectedRoute> },
+        { path: "/settings", element: <ProtectedRoute><Settings /> </ProtectedRoute> },
+        { path: "/search", element: <ProtectedRoute><Search /> </ProtectedRoute> },
+        { path: "/notification", element: <ProtectedRoute><Notification /></ProtectedRoute> },
+        { path: "/addPost", element: <ProtectedRoute><AddPost /></ProtectedRoute> }
       ],
     },
     { path: "*", element: <Navigate to="/" /> },

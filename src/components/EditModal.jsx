@@ -6,55 +6,70 @@ function EditModal({ closeModal, UserId, data }) {
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState("");
     const [error, setError] = useState("")
-    async function handleSubmit() {
-        if (!name && !email && !bio) {
-            setError("Hech bo'lmaganda bitta qatorni to'ldiring");
-            return;
-        }
 
+    async function handleSubmit() {
         const updatedData = {};
 
         if (name) updatedData.name = name;
-        if (email) updatedData.email = email;
+
+        if (email) {
+            const trimmedEmail = email.trim();
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+                updatedData.email = trimmedEmail;
+                setError("");
+            } else {
+                setError("Invalid email adress");
+                return;
+            };
+        };
+
         if (bio) updatedData.bio = bio;
 
-        try {
-            const response = await fetch(
-                `http://localhost:3000/users/${UserId}`,
-                {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(updatedData)
-                }
-            );
+        if (Object.keys(updatedData).length > 0 && !error) {
+            try {
+                const response = await fetch(
+                    `http://localhost:3000/users/${UserId}`,
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(updatedData)
+                    }
+                );
 
-            const result = await response.json();
-            localStorage.setItem("loginConf", JSON.stringify({ user: result }))
-            data(result)
-            closeModal(false);
-        } catch (error) {
-            setError(`Xatolik: ${error}`);
-        }
-    }
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                localStorage.setItem("loginConf", JSON.stringify({ user: result }));
+                data(result);
+                closeModal(false);
+            } catch (err) {
+                setError(`Error: ${err.message}`);
+            };
+        };
+    };
+
     function handleIgnore() {
-        setBio("")
-        setEmail("")
-        setName("")
-        closeModal(false)
-    }
+        setBio("");
+        setEmail("");
+        setName("");
+        closeModal(false);
+    };
+
     return <dialog open className="dialog">
-        <h2>Foydalanuvchi ma'lumotlarini tahrirlash</h2>
-        <input type="text" placeholder="Login..." onChange={(e) => setName(e.target.value)} />
-        <input type="text" placeholder="bio..." onChange={(e) => setBio(e.target.value)} />
-        <input type="email" placeholder="emailni o'zgartirish" onChange={(e) => setEmail(e.target.value)} />
+        <h2>Edit user's info</h2>
+        <input type="text" placeholder="New login" onChange={(e) => setName(e.target.value)} />
+        <input type="text" placeholder="New bio" onChange={(e) => setBio(e.target.value)} />
+        <input type="email" placeholder="New email" onChange={(e) => setEmail(e.target.value)} />
         {error && <p style={{ color: "red" }}>{error}</p>}
         <div className="modal__btns">
-            <button onClick={handleSubmit}>Qo'shish</button>
-            <button onClick={handleIgnore}>Bekor qilish</button>
+            <button onClick={handleSubmit}>Change</button>
+            <button onClick={handleIgnore}>Cancel</button>
         </div>
     </dialog>
 }
 
-export default EditModal
+export default EditModal;

@@ -3,6 +3,7 @@
     max-width: 14400px;
     height: 80vh;
     margin: 40px auto;
+    margin-top: 0px;
     padding: 20px;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background-color: #f0f2f5;
@@ -128,7 +129,7 @@
     color: #777;
     font-size: 1rem;
     border: 1px solid #ddd;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Responsive - Telefonlar uchun */
@@ -137,11 +138,11 @@
         flex-direction: column;
         text-align: center;
     }
-    
+
     .avatar {
         margin-bottom: 10px;
     }
-    
+
     .following {
         justify-content: center;
     }
