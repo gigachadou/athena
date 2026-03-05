@@ -6,34 +6,31 @@ function Search() {
     const [elements, setElements] = useState([]);
 
     async function handleSearch(v) {
-        const response = localStorage.getItem("loginConf");
-        const token = JSON.parse(response).accessToken;
-
         try {
             const res = await fetch(
                 `http://localhost:5000/users?search=${v}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+                // {                                            // tegma xozircha ishlayapti!
+                //     headers: {
+                //         Authorization: `Bearer ${token}`,
+                //     },
+                // }
             );
 
-            if (!res.ok) throw new Error("User olishda xatolik ketdi");
-
+            if (!res.ok) throw new Error("Server is not responding");
+            console.log(res);
             const data = await res.json();
             setElements(data.users || []);
         } catch (error) {
             console.log(error);
-        }
-    }
+        };
+    };
 
     return (
         <div>
             <div className="search__header">
                 <input
                     type="search"
-                    placeholder="Do'stlaringizni qidiring..."
+                    placeholder="Search for your friends..."
                     id="searchInput"
                     onInput={(e) => handleSearch(e.target.value)}
                 />
@@ -46,12 +43,12 @@ function Search() {
                 {elements.map((item) => (
                     <div key={item.id}>
                         <h2>Name: {item.name}</h2>
-                        <p>email: {item.email}</p>
+                        <p>Email: {item.email}</p>
                     </div>
                 ))}
             </div>
         </div>
     );
-}
+};
 
 export default Search;
