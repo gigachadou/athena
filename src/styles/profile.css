@@ -59,7 +59,6 @@
 .profile-buttons {
     display: flex;
     width: 10%;
-   justify-content:right;
 }
 
 .avatar img {
