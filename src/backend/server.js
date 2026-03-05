@@ -13,16 +13,34 @@ const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, "db.json"));
 const middlewares = jsonServer.defaults();
 
+// 🔥 DB ni auth ga ulash
 server.db = router.db;
 
-const rules = auth.rewriter({
-    users: 600,
-    posts: 640
-});
-
+// 🔥 Middleware tartibi MUHIM
 server.use(middlewares);
-server.use(rules);
 server.use(auth);
+
+// ================= CUSTOM ROUTE =================
+// ⚠️ Routerdan OLDIN bo‘lishi shart
+server.get("/users", (req, res) => {
+    const { search } = req.query;
+
+    let users = server.db.get("users").value();
+
+    if (search) {
+        const lowerSearch = search.toLowerCase();
+
+        users = users.filter(user =>
+            (user.name && user.name.toLowerCase().includes(lowerSearch)) ||
+            (user.email && user.email.toLowerCase().includes(lowerSearch))
+        );
+    }
+
+    res.json({ users });
+});
+// =================================================
+
+// 🔥 Router ENG OXIRIDA bo‘lishi shart
 server.use(router);
 
 const PORT = 5000;

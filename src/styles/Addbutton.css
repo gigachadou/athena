@@ -1,0 +1,94 @@
+/* Asosiy konteynerni markazlash va soya berish */
+.Inputdiv {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Har bir blokni chiroyli joylashtirish */
+.selector__divs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Label va Ikonka stili */
+.selector__divs label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.selector__divs:hover label {
+    color: #007bff;
+}
+
+/* Text inputni zamonaviylashtirish */
+.selector__divs input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #edf2f7;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.selector__divs input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+}
+
+/* File inputni tugmacha ko'rinishiga keltirish */
+.selector__divs input[type="file"] {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e0;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* Qo'shish tugmasi - Premium ko'rinish */
+.added-btn {
+    margin-top: 10px;
+    padding: 14px;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s transform;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.added-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    filter: brightness(1.1);
+}
+
+.added-btn:active {
+    transform: translateY(0);
+}
+
+/* Kichik FaPlus ikonkasini kattalashtirish */
+.selector__divs svg {
+    font-size: 1.1rem;
+}

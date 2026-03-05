@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import "../styles/editModal.css"
 
-function EditModal({ closeModal, UserId , data}) {
+function EditModal({ closeModal, UserId, data }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState("");
@@ -31,14 +31,14 @@ function EditModal({ closeModal, UserId , data}) {
             );
 
             const result = await response.json();
-            localStorage.setItem("loginConf" , JSON.stringify({user:result}))
+            localStorage.setItem("loginConf", JSON.stringify({ user: result }))
             data(result)
             closeModal(false);
         } catch (error) {
             setError(`Xatolik: ${error}`);
         }
     }
-    function handleIgnore(){
+    function handleIgnore() {
         setBio("")
         setEmail("")
         setName("")
@@ -50,8 +50,10 @@ function EditModal({ closeModal, UserId , data}) {
         <input type="text" placeholder="bio..." onChange={(e) => setBio(e.target.value)} />
         <input type="email" placeholder="emailni o'zgartirish" onChange={(e) => setEmail(e.target.value)} />
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <button onClick={handleSubmit}>Qo'shish</button>
-        <button onClick={handleIgnore}>Bekor qilish</button>
+        <div className="modal__btns">
+            <button onClick={handleSubmit}>Qo'shish</button>
+            <button onClick={handleIgnore}>Bekor qilish</button>
+        </div>
     </dialog>
 }
 
