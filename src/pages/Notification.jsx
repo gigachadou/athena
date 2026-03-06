@@ -1,5 +1,5 @@
 function Notification(){
-    return <div>Bildirishnomalar</div>
-}
+    return <div>Notifications</div>
+};
 
-export default Notification
+export default Notification;
