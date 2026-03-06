@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import "../styles/editModal.css"
 
 function EditModal({ closeModal, UserId, data }) {
@@ -11,20 +11,7 @@ function EditModal({ closeModal, UserId, data }) {
         const updatedData = {};
 
         if (name) updatedData.name = name;
-
-        if (email) {
-            const trimmedEmail = email.trim();
-            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-                updatedData.email = trimmedEmail;
-                setError("");
-            } else {
-                setError("Invalid email adress");
-                return;
-            };
-        };
-
         if (bio) updatedData.bio = bio;
-
         if (Object.keys(updatedData).length > 0 && !error) {
             try {
                 const response = await fetch(
@@ -40,7 +27,7 @@ function EditModal({ closeModal, UserId, data }) {
 
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.status}`);
-                }
+                };
 
                 const result = await response.json();
                 localStorage.setItem("loginConf", JSON.stringify({ user: result }));
@@ -61,9 +48,8 @@ function EditModal({ closeModal, UserId, data }) {
 
     return <dialog open className="dialog">
         <h2>Edit user's info</h2>
-        <input type="text" placeholder="New login" onChange={(e) => setName(e.target.value)} />
+        <input type="text" placeholder="New name" onChange={(e) => setName(e.target.value)} />
         <input type="text" placeholder="New bio" onChange={(e) => setBio(e.target.value)} />
-        <input type="email" placeholder="New email" onChange={(e) => setEmail(e.target.value)} />
         {error && <p style={{ color: "red" }}>{error}</p>}
         <div className="modal__btns">
             <button onClick={handleSubmit}>Change</button>

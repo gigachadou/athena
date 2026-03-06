@@ -28,7 +28,7 @@ export default function Signin() {
             const res = await fetch("http://localhost:5000/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts:[] ,followers: [], followings: [], likes: [] , comments:[] }),
+                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts: [], followers: [], followings: [], likes: [], comments: [], bio: "" }),
             });
 
             const data = await res.json();
@@ -94,7 +94,7 @@ export default function Signin() {
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? <FaEye/> : <FaEyeSlash/>}
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
                         </button>
                     </div>
                 </div>

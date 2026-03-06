@@ -10,21 +10,24 @@ export default function ProtectedRoot() {
             try {
                 const local = localStorage.getItem("loginConf");
                 if (!local) {
-                    throw new Error("No login data found");
-                }
+                    setUserData(null);
+                    navigate("/login");
+                };
 
                 const { user } = JSON.parse(local);
                 if (!user?.id) {
-                    throw new Error("Invalid login data structure");
-                }
+                    setUserData(null);
+                    navigate("/login");
+                };
 
                 const response = await fetch(`http://localhost:3000/users/${user.id}`);
 
                 if (!response.ok) {
                     if (response.status === 401) {
                         localStorage.removeItem("loginConf");
+                        navigate("/login")
                         throw new Error("Session expired");
-                    }
+                    };
 
                     const errorData = await response.json().catch(() => ({}));
                     throw new Error(errorData.message || `Server error: ${response.status}`);
@@ -38,7 +41,7 @@ export default function ProtectedRoot() {
                 if (err.message.includes("Session expired") || err.message.includes("Unauthorized")) {
                     localStorage.removeItem("loginConf");
                 };
-
+                setUserData(null);
                 navigate("/login");
                 alert("Error at auto authentication");
             };

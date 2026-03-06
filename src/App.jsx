@@ -25,12 +25,12 @@ function App() {
       element: <ProtectedRoot />,
       children: [
         { path: "/home", element: <Home /> },
-        { path: "/", element: <ProtectedRoute><Home /></ProtectedRoute> },
-        { path: "/profile", element: <ProtectedRoute><Profile /></ProtectedRoute> },
-        { path: "/settings", element: <ProtectedRoute><Settings /> </ProtectedRoute> },
-        { path: "/search", element: <ProtectedRoute><Search /> </ProtectedRoute> },
-        { path: "/notification", element: <ProtectedRoute><Notification /></ProtectedRoute> },
-        { path: "/addPost", element: <ProtectedRoute><AddPost /></ProtectedRoute> }
+        { path: "/", element: <Home /> },
+        { path: "/profile", element: <Profile /> },
+        { path: "/settings", element: <Settings /> },
+        { path: "/search", element: <Search /> },
+        { path: "/notification", element: <Notification /> },
+        { path: "/addPost", element: <AddPost /> }
       ],
     },
     { path: "*", element: <Navigate to="/" /> },
