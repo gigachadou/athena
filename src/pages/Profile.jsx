@@ -12,9 +12,9 @@ function Profile() {
         return <div>Loading...</div>
     }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-    }, [userData])
+    // }, [userData])
 
     return <div className="profile-page">
         <div className="profile-buttons">
