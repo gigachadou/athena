@@ -3,18 +3,27 @@ import { FaCog, FaEdit, FaHamburger, FaServer, FaUser } from "react-icons/fa"
 import "../styles/profile.css"
 import EditModal from "../components/EditModal";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import getPostsByIds from "../utils/getPostsByIds";
+import PostCard from "../components/PostCard";
 
 function Profile() {
     const { userData, setUserData } = useOutletContext();
+    const [posts, setPosts] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        (async function () {
+            if (userData) {
+                const response = await getPostsByIds(userData.posts);
+                setPosts(response);
+            };
+        })();
+    }, [userData]);
+
     if (!userData) {
         return <div>Loading...</div>
-    }
-
-    // useEffect(() => {
-
-    // }, [userData])
+    };
 
     return <div className="profile-page">
         <div className="profile-buttons">
@@ -40,7 +49,8 @@ function Profile() {
         </div>
         <h2 className="posts-h2">Posts</h2>
         <div className="posts">
-            {!userData.posts?.[0] ? <Link to={"/addPost"}>Create your first post</Link> : ""} {/*< hali tugamadi tegma yoki utils/checkUserExistance.js bilan tugatib qo'y */}
+            {!userData.posts?.[0] ? <Link to={"/addPost"}>Create your first post</Link>
+                : posts.map(e => <PostCard post={e} key={e.id}/>)} {/*< hali tugamadi tegma yoki utils/getPostsById.js bilan tugatib qo'y */}
         </div>
     </div>
 };

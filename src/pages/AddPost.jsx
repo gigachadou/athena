@@ -22,6 +22,9 @@ export default function AddPost() {
                 body: JSON.stringify({
                     header: header.trim(),
                     text: text.trim(),
+                    likes: [],
+                    comments: [],
+                    views: 0,
                     id: postId,
                     userId: userData.id,
                     createdAt: new Date().toISOString()

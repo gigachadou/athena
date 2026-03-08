@@ -3,7 +3,6 @@ import './App.css'
 import Home from './pages/Home';
 import PublicRoot from './PublicRoot';
 import ProtectedRoot from './ProtectedRoot';
-import ProtectedRoute from './ProtectedRoute';
 import Login from './pages/Login';
 import Signin from './pages/Signin';
 import Profile from './pages/Profile';
