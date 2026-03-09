@@ -1,7 +1,7 @@
-import { FaComment, FaEye, FaHeart, FaRegComment } from 'react-icons/fa';
+import { FaComment, FaEye, FaHeart, FaUser } from 'react-icons/fa';
 import '../styles/PostCard.css';
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post , userData}) => {
     const {
         header,
         text,
@@ -9,11 +9,10 @@ const PostCard = ({ post }) => {
         comments,
         views,
         id,
-        userId,
+        userName,
         createdAt,
     } = post;
 
-    // Format date nicely
     const timeAgo = createdAt
         ? new Date(createdAt).toLocaleString('en-US', {
             month: 'short',
@@ -30,11 +29,11 @@ const PostCard = ({ post }) => {
             <div className="post-header">
                 <div className="user-info">
                     <div className="avatar">
-                        {/* You can replace with real avatar later */}
+                        <img src={!userData?.avatar ? <FaUser/> : userData.avatar} alt="" />
                     </div>
                     <div className="meta">
-                        <span className="username">User {userId}</span>
-                        <span className="timestamp">· {timeAgo}</span>
+                        <span className="username">{userData.name}</span>
+                        <span className="timestamp"> {timeAgo}</span>
                     </div>
                 </div>
                 <button className="more-btn">⋯</button>

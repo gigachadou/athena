@@ -1,89 +1,249 @@
+
+
+/* ---------- Search Header ---------- */
 .search__header {
-    position: relative;
-    width: 400px;
-    max-width: 90%;
-    margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
 }
 
-.search__header input {
-    width: 100%;
-    padding: 10px 40px 10px 15px;
-    /* o'ng tomonga joy qoldiramiz */
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 14px;
-    transition: 0.2s ease;
+/* Search input */
+#searchInput {
+  flex: 1;
+  max-width: 500px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 2rem 0 0 2rem;
+  outline: none;
+  background: white;
+  color: black;
+  transition: box-shadow 0.2s;
 }
 
-.search__header input:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+#searchInput:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
+/* Search label / button */
 .search__header label {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #888;
-    cursor: pointer;
-    font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  background: white;
+  color: #764ba2;
+  border-radius: 0 2rem 2rem 0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
-.search__header input:focus+label {
-    color: #4a90e2;
+.search__header label:hover {
+  background: #f0f0f0;
+  color: #667eea;
 }
 
-/* Natijalar konteyneri */
+.search__header svg {
+  font-size: 1.2rem;
+}
+
+/* ---------- Results Container ---------- */
 .results {
-    width: 400px;
-    max-width: 90%;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    /* Kartochkalar orasidagi masofa */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* Har bir foydalanuvchi kartochkasi */
-.results>div {
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* ---------- User Card ---------- */
+.results > div {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #eaeaea;
 }
 
-/* Kartochka ustiga sichqoncha borganda */
-.results>div:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: #4a90e2;
+.results > div:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Ism uchun stil */
-.results h2 {
-    margin: 0 0 5px 0;
-    font-size: 18px;
-    color: #333;
-    font-weight: 600;
+/* Avatar container */
+.searchImg {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e1e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Email uchun stil */
-.results p {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
+/* Actual image */
+.searchImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-/* Natija topilmaganda yoki bo'sh bo'lganda */
-.results:empty::before {
-    content: "No result...";
-    display: block;
-    text-align: center;
-    color: #999;
-    font-style: italic;
-    margin-top: 20px;
+/* Fallback icon styling (used when no image) */
+.searchImg svg {
+  font-size: 2rem;
+  color: #a0aec0;
 }
+
+/* User info */
+.searchInfo {
+  flex: 1;
+}
+
+.searchInfo h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.searchInfo p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #718096;
+  word-break: break-word;
+}
+
+/* ---------- Responsive Enhancements ---------- */
+
+/* Tablet (min-width: 600px) */
+@media (min-width: 600px) {
+  .search__header {
+    padding: 1.5rem;
+  }
+
+  #searchInput {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    max-width: 550px;
+  }
+
+  .search__header label {
+    padding: 1rem 2rem;
+  }
+
+  .search__header svg {
+    font-size: 1.3rem;
+  }
+
+  .results {
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .results > div {
+    padding: 1.25rem;
+  }
+
+  .searchImg {
+    width: 70px;
+    height: 70px;
+  }
+
+  .searchImg svg {
+    font-size: 2.3rem;
+  }
+
+  .searchInfo h2 {
+    font-size: 1.2rem;
+  }
+
+  .searchInfo p {
+    font-size: 1rem;
+  }
+}
+
+/* Desktop (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .search__header {
+    padding: 2rem;
+  }
+
+  #searchInput {
+    padding: 1.2rem 2rem;
+    font-size: 1.2rem;
+    max-width: 600px;
+  }
+
+  .search__header label {
+    padding: 1.2rem 2.5rem;
+  }
+
+  .search__header svg {
+    font-size: 1.5rem;
+  }
+
+  .results {
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  .results > div {
+    padding: 1.5rem;
+  }
+
+  .searchImg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .searchImg svg {
+    font-size: 2.8rem;
+  }
+
+  .searchInfo h2 {
+    font-size: 1.3rem;
+  }
+
+  .searchInfo p {
+    font-size: 1.1rem;
+  }
+}
+
+/* Large desktop (min-width: 1400px) */
+@media (min-width: 1400px) {
+  .results {
+    max-width: 1000px;
+  }
+
+  .searchImg {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+/* ---------- Loading / Empty State (optional) ---------- */
+/* You can add styles for when there are no results or a loading indicator */
+.results:empty::after {
+  content: 'No users found';
+  display: block;
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+  font-style: italic;
+}
+
+/* If you add a loading spinner later, style it here */

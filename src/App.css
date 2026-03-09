@@ -1,56 +1,144 @@
-/* 1. Umumiy sozlamalar */
+/* ===== 1. Global o'zgaruvchilar va sozlamalar ===== */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Asosiy shrift va o'lchamlar */
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+
+  /* Ranglar (default light mode) */
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547;
+  background-color: #ffffff;
+
+  /* Shrift silliqligi */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Animatsiya tezligi */
+  --transition-speed: 0.25s;
+
+  /* Container kengligi */
+  --container-max-width: 1280px;
+  --container-padding: 1.5rem;
 }
 
-/* 2. Body - Ekranni to'ldirish va markazlash */
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  }
+}
+
+/* ===== 2. Reset va asos ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
 body {
   margin: 0;
-  display: flex;
-  justify-content: center; /* Gorizontal markazlash */
-  align-items: center;    /* Vertikal markazlash */
   min-width: 320px;
-  min-height: 100vh;      /* Ekranning 100% balandligi */
-  width: 100vw;           /* Ekranning 100% kengligi */
-  overflow-x: hidden;     /* Yon tomonga chiqib ketmasligi uchun */
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Kontentni yuqoridan boshlash */
+  background-color: inherit;
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  overflow-x: hidden;
 }
 
-/* 3. Root konteyneri - Kontentni chegaralash */
+/* ===== 3. Root konteyner ===== */
 #root {
   width: 100%;
-  max-width: 1280px;      /* Maksimal kenglik */
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  text-align: center;     /* Ichidagi matnlarni markazlaydi */
-  box-sizing: border-box;
+  padding: clamp(1rem, 5vw, 2.5rem) clamp(1rem, 4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* 4. Tipografiya va Elementlar */
+/* ===== 4. Tipografiya ===== */
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  margin: 0 0 1rem 0;
+  font-size: clamp(2rem, 8vw, 3.2rem);
+  line-height: 1.2;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  text-wrap: balance;
+  word-break: break-word;
 }
 
+h2 {
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
+  line-height: 1.3;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  line-height: 1.4;
+  margin: 0 0 0.75rem 0;
+  font-weight: 500;
+}
+
+p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+small, .text-small {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+@media (prefers-color-scheme: dark) {
+  small, .text-small {
+    color: #aaa;
+  }
+}
+
+/* ===== 5. Linklar ===== */
 a {
   font-weight: 500;
   color: #646cff;
-  text-decoration: inherit;
-  transition: color 0.25s;
+  text-decoration: none;
+  transition: color var(--transition-speed) ease;
 }
 
 a:hover {
   color: #535bf2;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+@media (prefers-color-scheme: dark) {
+  a {
+    color: #8b8cff;
+  }
+  a:hover {
+    color: #a0a1ff;
+  }
+}
+
+/* ===== 6. Tugmalar ===== */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -58,31 +146,279 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f0f0f0;
+  color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s;
+  transition: all var(--transition-speed) ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 button:hover {
   border-color: #646cff;
+  background-color: #e4e4e4;
 }
 
-/* Qo'shimcha klass */
+button:focus-visible {
+  outline: 2px solid #646cff;
+  outline-offset: 2px;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  button {
+    background-color: #2a2a2a;
+    color: #ffffff;
+  }
+  button:hover {
+    background-color: #3a3a3a;
+    border-color: #8b8cff;
+  }
+}
+
+/* ===== 7. Yordamchi klasslar ===== */
+.text-center {
+  text-align: center;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
 .read-the-docs {
   color: #888;
   margin-top: 2rem;
+  text-align: center;
+  font-size: 0.9rem;
 }
 
-/* 5. Light Mode (Yorug'lik rejimi) */
-@media (prefers-color-scheme: light) {
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+
+.mt-auto {
+  margin-top: auto;
+}
+
+/* ===== 8. Media so'rovlar (barcha ekranlar uchun) ===== */
+
+/* Mobile (kichik telefonlar) */
+@media (max-width: 480px) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --container-padding: 1rem;
   }
+  
+  #root {
+    padding: 1rem;
+  }
+
   button {
-    background-color: #f9f9f9;
+    padding: 0.5em 1em;
+    font-size: 0.9rem;
+    white-space: normal; /* Matn uzun bo'lsa, qator tashlash */
   }
-  a:hover {
-    color: #747bff;
+
+  h1 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Planshet (vertikal) */
+@media (min-width: 481px) and (max-width: 768px) {
+  :root {
+    --container-padding: 1.5rem;
+  }
+  
+  #root {
+    padding: 1.5rem;
+  }
+}
+
+/* Kichik desktop va planshet (gorizontal) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --container-padding: 2rem;
+  }
+  
+  #root {
+    padding: 2rem;
+  }
+}
+
+/* Katta desktop */
+@media (min-width: 1025px) {
+  :root {
+    --container-padding: 2rem;
+  }
+  
+  #root {
+    padding: 2.5rem 2rem;
+  }
+}
+
+/* Juda katta ekranlar */
+@media (min-width: 1600px) {
+  :root {
+    --container-max-width: 1440px;
+  }
+}
+
+/* Landshaft (gorizontal) mobil */
+@media (max-height: 600px) and (orientation: landscape) {
+  #root {
+    padding: 1rem 1.5rem;
+  }
+  
+  h1 {
+    margin-bottom: 1rem;
+    font-size: clamp(1.8rem, 6vh, 2.5rem);
+  }
+  
+  button {
+    padding: 0.4em 1em;
+  }
+}
+
+/* ===== 9. Print (bosma) stillari ===== */
+@media print {
+  body {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+  
+  button, a {
+    text-decoration: none !important;
+    color: #000 !important;
+    background: none !important;
+    border: none !important;
+  }
+  
+  #root {
+    max-width: 100%;
+    padding: 0.5in;
+    min-height: auto;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ===== 10. Qo'shimcha elementlar (ixtiyoriy) ===== */
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+blockquote {
+  border-left: 4px solid #646cff;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  blockquote {
+    color: #ccc;
+    border-left-color: #8b8cff;
+  }
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1.5rem 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  hr {
+    border-top-color: #444;
+  }
+}
+
+/* ===== 11. Animatsiyalar ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* ===== 12. Scrollbar (ixtiyoriy) ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #333;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #666;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #888;
   }
 }

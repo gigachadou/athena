@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 import Search from './pages/Search';
 import Notification from './pages/Notification';
 import AddPost from './pages/AddPost';
+import SearchProfile from './components/SearchProfile';
 
 function App() {
   const router = createBrowserRouter([
@@ -29,7 +30,8 @@ function App() {
         { path: "/settings", element: <Settings /> },
         { path: "/search", element: <Search /> },
         { path: "/notification", element: <Notification /> },
-        { path: "/addPost", element: <AddPost /> }
+        { path: "/addPost", element: <AddPost /> },
+        {path:"/searchresultusers/:usersID" , element:<SearchProfile/>}
       ],
     },
     { path: "*", element: <Navigate to="/" /> },

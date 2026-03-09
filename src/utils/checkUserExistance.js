@@ -15,7 +15,6 @@ export default async function checkUserExistance() {
 
         if (res.ok) {
             const user = await res.json();
-            console.log(user);
             return true;
         } else if (res.status === 401 || res.status === 403) {
             return false;
