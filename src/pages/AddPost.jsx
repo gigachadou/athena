@@ -50,7 +50,7 @@ export default function AddPost() {
             const user = await userRes.json();
 
             // 2. Append the new post ID to the array
-            const updatedPosts = [...user.posts, postId];
+            const updatedPosts = [...(user.posts || []), postId];
 
             const patchRes = await fetch(`http://localhost:3000/users/${userData.id}`, {
                 method: "PATCH",
@@ -65,8 +65,6 @@ export default function AddPost() {
                 console.log(await patchRes.text());
                 return;
             }
-
-            console.log("Posted successfully!");
             setHeader("");
             setText("");
         } catch (err) {
