@@ -51,7 +51,7 @@ const PostCard = ({ post }) => {
                         <img src={!userInfo?.avatar ? <FaUser /> : userInfo.avatar} alt="" />
                     </div>
                     <div className="meta">
-                        <span className="username">{!serverError ? userInfo.name : "User not found"}</span>
+                        <span className="username">{!userInfo?.name ? "User" : userInfo.name}</span>
                         <span className="timestamp"> {timeAgo}</span>
                     </div>
                 </div>
