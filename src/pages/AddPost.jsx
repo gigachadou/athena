@@ -1,18 +1,29 @@
 import { useState } from "react";
 import "../styles/AddPost.css";
 import { useOutletContext } from "react-router-dom";
+import { convertToBase64 } from "../utils/convertToBase64";
 
 export default function AddPost() {
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
+    const [media, setMedia] = useState(null)
     const [error, setError] = useState("");
     const { userData } = useOutletContext();
+
     async function handleSubmit(e) {
         e.preventDefault();
         try {
             setError("");
             // posting to /posts
             const postId = `${userData.email}-${Date.now()}`;
+
+            if (media) {
+                var base64media = await convertToBase64(media);
+                if (!base64media) {
+                    setError("Could not convert image to a form needed, choose different media or try again");
+                    throw new Error("Error at converting to Base 64");
+                };
+            };
 
             const postResponse = await fetch("http://localhost:3000/posts", {
                 method: "POST",
@@ -27,6 +38,7 @@ export default function AddPost() {
                     views: 0,
                     id: postId,
                     userId: userData.id,
+                    media: base64media ? base64media : null,
                     createdAt: new Date().toISOString()
                 })
             });
@@ -67,6 +79,7 @@ export default function AddPost() {
             }
             setHeader("");
             setText("");
+            setMedia(null);
         } catch (err) {
             setError(`General error: ${err.message}`);
             console.error(err);
@@ -76,7 +89,7 @@ export default function AddPost() {
     return (
         <div className="add-post-page">
             <div className="add-post-card">
-                <h2 className="add-post-title">Create Post</h2>
+                <h2 className="add-post-title">Create a post</h2>
                 {error && <p>{error}</p>}
                 <p className="add-post-subtitle">Share an update with your community.</p>
                 <form onSubmit={e => handleSubmit(e)} className="add-post-form">
@@ -107,6 +120,15 @@ export default function AddPost() {
                             maxLength={300}
                         />
                         <div className="add-post-meta">{text.length}/300</div>
+                    </div>
+                    <div>
+                        <label className="add-post-label">Media: </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setMedia(e.target.files[0])}
+                        />
+                        {media && <p style={{ color: "black", marginTop: "15px", marginBottom: "0px" }}>File chosen</p>}
                     </div>
                     <button type="submit" className="add-post-submit">Post</button>
                 </form>

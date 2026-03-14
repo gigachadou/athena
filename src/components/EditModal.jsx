@@ -1,20 +1,12 @@
 import { useState } from "react";
 import "../styles/editModal.css";
+import { convertToBase64 } from "../utils/convertToBase64";
 
 function EditModal({ closeModal, UserId, data }) {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState("");
-
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
 
   async function handleSubmit() {
     if (!name.trim() && !bio.trim() && !avatar) {
@@ -30,7 +22,7 @@ function EditModal({ closeModal, UserId, data }) {
       if (avatar) {
         const base64Avatar = await convertToBase64(avatar);
         updateData.avatar = base64Avatar;
-      }
+      };
 
       const response = await fetch(`http://localhost:3000/users/${UserId}`, {
         method: "PATCH",
@@ -73,11 +65,14 @@ function EditModal({ closeModal, UserId, data }) {
         value={bio}
         onChange={(e) => setBio(e.target.value)}
       />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setAvatar(e.target.files[0])}
-      />
+      <div>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setAvatar(e.target.files[0])}
+        />
+        {avatar && <p style={{ color: "black", marginTop: "15px", marginBottom: "0px" }}>File chosen</p>}
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div className="modal__btns">
         <button onClick={handleSubmit}>Change</button>
