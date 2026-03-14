@@ -3,13 +3,20 @@ import "../styles/settings.css"
 
 function Settings() {
     const navigate = useNavigate();
-    return <div className="settings">
-        <button>Ma'lumotlarni tahrirlash</button>
-        <button>Biz haqimizda</button>
-        <button>Hisobni o'chirish</button>
-        <button>Log out</button>
-        <button onClick={()=>navigate('/profile')}>Orqaga</button>
-    </div>
-}
 
-export default Settings
+    function logOutHandler(e) {
+        e.preventDefault();
+        localStorage.clear();
+        location.reload();
+    };
+
+    return <div className="settings">
+        <button>Edit informations</button>
+        <button>About the developers</button>
+        <button>Delete the account</button>
+        <button onClick={logOutHandler}>Log out</button>
+        <button onClick={() => navigate('/profile')}>Back</button>
+    </div>
+};
+
+export default Settings;

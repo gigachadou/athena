@@ -2,19 +2,18 @@ import { FaUser } from "react-icons/fa";
 import "../styles/home.css"
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
+import { useOutletContext } from "react-router-dom";
 
 export default function Home() {
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
+    const { userData } = useOutletContext();
 
     useEffect(() => {
         async function getData() {
             try {
-                let local = localStorage.getItem("loginConf");
-                if (!local) throw new Error("User not found please login");
-
-                let data = JSON.parse(local)?.user;
+                let data = userData;
 
                 let postRes = await fetch(`http://localhost:3000/posts?_limit=15`);
                 let userRes = await fetch(`http://localhost:3000/users`);
@@ -42,8 +41,8 @@ export default function Home() {
             }
         }
 
-        getData();
-    }, []);
+        if (userData) getData();
+    }, [userData]);
 
     if (error) {
         return <h2>{error}</h2>
