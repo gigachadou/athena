@@ -1,0 +1,58 @@
+.friends{
+    width:180px;
+    height:220px;
+    background:#333;
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    color:white;
+    flex-shrink:0;
+    padding:15px;
+    box-sizing:border-box;
+}
+
+/* avatar */
+.friends svg,
+.friends img{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:#ddd;
+    color:#333;
+    padding:10px;
+    object-fit:cover;
+}
+
+/* text container */
+.friends-about{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+}
+
+/* name */
+.friends-about h2{
+    font-size:16px;
+    margin:0;
+    text-align:center;
+}
+
+/* follow button */
+.friends-about button{
+    padding:6px 18px;
+    border:none;
+    border-radius:6px;
+    background:#4da3ff;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.friends-about button:hover{
+    background:#2f89e8;
+}

@@ -38,7 +38,7 @@ const PostCard = ({ post }) => {
             <div className="post-header">
                 <div className="user-info">
                     <div className="avatar">
-                        <img src={!userInfo?.avatar ? <FaUser /> : userInfo.avatar} alt="" />
+                        {!userInfo?.avatar ? <FaUser/> : <img src={userInfo.avatar} alt='user avatar'/>}
                     </div>
                     <div className="meta">
                         <span className="username">{!userInfo?.name ? "User" : userInfo.name}</span>

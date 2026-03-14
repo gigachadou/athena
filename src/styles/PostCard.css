@@ -33,23 +33,26 @@
   gap: 12px;
 }
 
-/* Avatar (hozircha bo'sh, lekin stillar tayyor) */
 .avatar {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #f09433, #d62976, #962fbf);
-  flex-shrink: 0;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4e6eb;
 }
 
-/* Agar avatar ichiga rasm qo'yilsa */
 .avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%;
+}
+
+.avatar svg {
+  font-size: 20px;
+  color: #65676b;
 }
 
 .meta {
