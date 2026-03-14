@@ -80,6 +80,7 @@ export default function AddPost() {
             setHeader("");
             setText("");
             setMedia(null);
+            location.reload();
         } catch (err) {
             setError(`General error: ${err.message}`);
             console.error(err);

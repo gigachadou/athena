@@ -1,19 +1,20 @@
 import { FaSearch, FaUser } from "react-icons/fa";
 import "../styles/searchPage.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import Friends from "../components/Friends";
 
 function Search() {
     const [friends, setFriends] = useState([]);
     const [elements, setElements] = useState([]);
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
+    const { userData } = useOutletContext();
     let navigate = useNavigate();
 
     useEffect(() => {
         async function getFriends() {
             try {
-                let id = JSON.parse(localStorage.getItem("loginConf"))?.user?.id;
+                let id = userData.id;
                 let friendRes = await fetch(`http://localhost:3000/users?_limit=10`);
                 if (!friendRes.ok) throw new Error("Friends not found");
                 let dataFriend = await friendRes.json();
@@ -23,21 +24,20 @@ function Search() {
                 setError("")
             } catch (error) {
                 setError(error.message)
-            }
-
-
-        }
-        getFriends()
-    }, [])
+            };
+        };
+        if (userData) getFriends();
+    }, [userData]);
 
     async function handleSearch(v) {
         if (v.length === 0) {
             setElements([]);
             return;
         }
-        let response = localStorage.getItem("loginConf");
-        let parsed = JSON.parse(response);
-        let id = parsed.user.id
+
+        if (!userData) return;
+
+        let id = userData.id;
         try {
             const res = await fetch(
                 `http://localhost:5000/users?search=${v}`
@@ -53,8 +53,8 @@ function Search() {
     };
 
     function results(id) {
-        navigate(`/searchresultusers/${id}`)
-    }
+        navigate(`/searchresultusers/${id}`);
+    };
     return (
         <div>
             <div className="search__header">

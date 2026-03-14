@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaUser } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom"
 import "../styles/searchresultuser.css"
 import PostCard from "./PostCard";
@@ -32,7 +32,7 @@ function SearchProfile() {
         return <div>Loading...</div>
     };
     return <div className="profile-page">
-        <button onClick={() => navigate("/search")} className="back">Ortga</button>
+        <button onClick={() => navigate("/search")} className="back"><FaArrowLeft /></button>
         <div className="UserInfo">
             <div className="avatar">
                 {!data?.avatar ? <FaUser /> : <img src={data.avatar} />}

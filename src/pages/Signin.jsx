@@ -28,7 +28,7 @@ export default function Signin() {
             const res = await fetch("http://localhost:5000/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts: [], likes: [], comments: [], bio: "" }),
+                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts: [], likes: [], comments: [], bio: "", followers: [], followings: [] }),
             });
 
             const data = await res.json();
