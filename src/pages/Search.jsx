@@ -1,11 +1,34 @@
 import { FaSearch, FaUser } from "react-icons/fa";
 import "../styles/searchPage.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Friends from "../components/Friends";
 
 function Search() {
+    const [friends, setFriends] = useState([]);
     const [elements, setElements] = useState([]);
+    const [error, setError] = useState("")
     let navigate = useNavigate();
+
+    useEffect(() => {
+        async function getFriends() {
+            try {
+                let id = JSON.parse(localStorage.getItem("loginConf"))?.user?.id;
+                let friendRes = await fetch(`http://localhost:3000/users?_limit=10`);
+                if (!friendRes.ok) throw new Error("Friends not found");
+                let dataFriend = await friendRes.json();
+                let filteredFriends = dataFriend.filter(item => item.id !== id);
+
+                setFriends(filteredFriends);
+                setError("")
+            } catch (error) {
+                setError(error.message)
+            }
+
+
+        }
+        getFriends()
+    }, [])
 
     async function handleSearch(v) {
         if (v.length === 0) {
@@ -29,7 +52,7 @@ function Search() {
         };
     };
 
-    function results(id){
+    function results(id) {
         navigate(`/searchresultusers/${id}`)
     }
     return (
@@ -46,11 +69,17 @@ function Search() {
                 </label>
             </div>
 
+            <div className="search-friends">
+                {friends.map(friend => {
+                    return (<Friends friendsData={friend} key={friend.id} />)
+                })}
+            </div>
+
             <div className="results">
                 {elements.map((item) => (
-                    <div key={item.id} onClick={()=>results(item.id)}>
+                    <div key={item.id} onClick={() => results(item.id)}>
                         <div className="searchImg">
-                            {!item?.avatar ? <FaUser/> : <img src={item.avatar} alt="Users avatar" />}
+                            {!item?.avatar ? <FaUser /> : <img src={item.avatar} alt="Users avatar" />}
                         </div>
                         <div className="searchInfo">
                             <h2>{item.name}</h2>

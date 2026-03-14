@@ -1,35 +1,34 @@
 .header {
     display: flex;
-    justify-content: space-around; /* Iconlarni teng masofada taqsimlaydi */
+    justify-content: space-around;
     align-items: center;
-    background-color: #ffffff;
-    padding: 10px 0;
+    background: #ffffff;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    border-top: 1px solid #dbdbdb;
-    height: 40px; /* Balandlikni chegaralaymiz */
-    z-index: 1000;
+    height: 55px;
+    border-top: 1px solid #ddd;
+    z-index: 100000;
 }
 
 .header a {
+    flex: 1;
+    text-align: center;
+    font-size: 23px;
     color: #262626;
-    font-size: 24px; /* Iconlar kattaligi */
-    display: flex;
-    justify-content: center;
-    align-items: center;
     text-decoration: none;
-    flex: 1; /* Har bir icon bir xil joy egallaydi */
+    opacity: 0.4;
+    transition: 0.2s;
 }
 
-/* O'rtadagi + tugmasini biroz ajratib ko'rsatish (ixtiyoriy) */
-.header a:nth-child(3) {
-    font-size: 28px;
-    color: #000000;
+/* active icon */
+.header a.active {
+    opacity: 1;
+    color: black;
 }
 
-/* Bosilgandagi effekt */
-.header a:active {
-    opacity: 0.5;
+/* hover effekti */
+.header a:hover {
+    opacity: 0.8;
 }
