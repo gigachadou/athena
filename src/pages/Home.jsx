@@ -75,7 +75,6 @@ export default function Home() {
                             <div className="post" key={post.id}>
                                 <PostCard
                                     post={post}
-                                    userData={post.userData}
                                 />
                             </div>
                         ))

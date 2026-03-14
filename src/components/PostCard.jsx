@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
     const [userInfo, setUserInfo] = useState(null);
-    const [serverError, setServerError] = useState(null);
+    // const [serverError, setServerError] = useState(null);
     const {
         header,
         text,
@@ -48,7 +48,7 @@ const PostCard = ({ post }) => {
             <div className="post-header">
                 <div className="user-info">
                     <div className="avatar">
-                        <img src={!userData?.avatar ? <FaUser/> : userData.avatar} alt="" />
+                        {!userInfo?.avatar ? <FaUser/> : <img src={userInfo.avatar} alt='user avatar'/>}
                     </div>
                     <div className="meta">
                         <span className="username">{!userInfo?.name ? "User" : userInfo.name}</span>
