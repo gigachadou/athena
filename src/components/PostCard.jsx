@@ -1,7 +1,11 @@
 import { FaComment, FaEye, FaHeart, FaUser } from 'react-icons/fa';
 import '../styles/PostCard.css';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const PostCard = ({ post , userData}) => {
+const PostCard = ({ post }) => {
+    const [userInfo, setUserInfo] = useState(null);
+    const [serverError, setServerError] = useState(null);
     const {
         header,
         text,
@@ -9,9 +13,24 @@ const PostCard = ({ post , userData}) => {
         comments,
         views,
         id,
-        userName,
+        userId,
         createdAt,
     } = post;
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        async function getUserInfo() {
+            const res = await fetch(`http://localhost:3000/users/${userId}`);
+            if (!res.ok) {
+                setServerError("User not found");
+                return
+            }
+            const data = await res.json();
+            setUserInfo(data);
+        };
+        getUserInfo();
+    }, [post]);
 
     const timeAgo = createdAt
         ? new Date(createdAt).toLocaleString('en-US', {
@@ -25,14 +44,14 @@ const PostCard = ({ post , userData}) => {
         : 'just now';
 
     return (
-        <div className="post-card">
+        <div className="post-card" onClick={() => navigate(`/posts/${id}`)}>
             <div className="post-header">
                 <div className="user-info">
                     <div className="avatar">
-                        {!userData?.avatar ? <FaUser/> : <img src={userData.avatar} alt='User Avatar'/>}
+                        <img src={!userData?.avatar ? <FaUser/> : userData.avatar} alt="" />
                     </div>
                     <div className="meta">
-                        <span className="username">{userData.name}</span>
+                        <span className="username">{!userInfo?.name ? "User" : userInfo.name}</span>
                         <span className="timestamp"> {timeAgo}</span>
                     </div>
                 </div>
@@ -49,7 +68,7 @@ const PostCard = ({ post , userData}) => {
             <div className="post-footer">
                 <div className="action-btns">
                     <button className="action like">
-                        <span className="icon"><FaHeart/></span>
+                        <span className="icon"><FaHeart /></span>
                         <span>{likes.length}</span>
                     </button>
 

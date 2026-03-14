@@ -11,6 +11,7 @@ import Search from './pages/Search';
 import Notification from './pages/Notification';
 import AddPost from './pages/AddPost';
 import SearchProfile from './components/SearchProfile';
+import PostPage from './pages/PostPage';
 
 function App() {
   const router = createBrowserRouter([
@@ -31,7 +32,8 @@ function App() {
         { path: "/search", element: <Search /> },
         { path: "/notification", element: <Notification /> },
         { path: "/addPost", element: <AddPost /> },
-        {path:"/searchresultusers/:usersID" , element:<SearchProfile/>}
+        { path: "/searchresultusers/:usersID", element: <SearchProfile /> },
+        { path: "/posts/:postId", element: <PostPage /> }
       ],
     },
     { path: "*", element: <Navigate to="/" /> },
