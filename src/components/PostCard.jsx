@@ -5,23 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
     const [userInfo, setUserInfo] = useState(null);
-    // const [serverError, setServerError] = useState(null);
-    const {
-        header,
-        text,
-        likes,
-        comments,
-        views,
-        id,
-        userId,
-        createdAt,
-    } = post;
+    const [serverError, setServerError] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         async function getUserInfo() {
-            const res = await fetch(`http://localhost:3000/users/${userId}`);
+            const res = await fetch(`http://localhost:3000/users/${post.userId}`);
             if (!res.ok) {
                 setServerError("User not found");
                 return
@@ -32,8 +22,8 @@ const PostCard = ({ post }) => {
         getUserInfo();
     }, [post]);
 
-    const timeAgo = createdAt
-        ? new Date(createdAt).toLocaleString('en-US', {
+    const timeAgo = post.createdAt
+        ? new Date(post.createdAt).toLocaleString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
@@ -44,7 +34,7 @@ const PostCard = ({ post }) => {
         : 'just now';
 
     return (
-        <div className="post-card" onClick={() => navigate(`/posts/${id}`)}>
+        <div className="post-card" onClick={() => navigate(`/posts/${post.id}`)}>
             <div className="post-header">
                 <div className="user-info">
                     <div className="avatar">
@@ -59,27 +49,28 @@ const PostCard = ({ post }) => {
             </div>
 
             <div className="post-content">
-                {header && header !== "1" && (
-                    <h2 className="post-title">{header}</h2>
+                {post.header && (
+                    <h2 className="post-title">{post.header}</h2>
                 )}
-                <p className="post-text">{text}</p>
+                <p className="post-text">{post.text}</p>
+                {post.media && <img src={post.media} alt='Media'/>}
             </div>
 
             <div className="post-footer">
                 <div className="action-btns">
                     <button className="action like">
                         <span className="icon"><FaHeart /></span>
-                        <span>{likes.length}</span>
+                        <span>{post.likes.length}</span>
                     </button>
 
                     <button className="action comment">
                         <span className="icon"><FaComment /></span>
-                        <span>{comments.length}</span>
+                        <span>{post.comments.length}</span>
                     </button>
 
                     <button className="action view">
                         <span className="icon"><FaEye /></span>
-                        <span>{views.toLocaleString()}</span>
+                        <span>{post.views.toLocaleString()}</span>
                     </button>
                 </div>
             </div>
