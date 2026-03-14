@@ -6,7 +6,7 @@ import { convertToBase64 } from "../utils/convertToBase64";
 export default function AddPost() {
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
-    const [media, setMedia] = useState(null)
+    const [media, setMedia] = useState(null);
     const [error, setError] = useState("");
     const { userData } = useOutletContext();
 
