@@ -75,7 +75,7 @@
 
 
 .input {
-  color: #fff;
+  color: #2c2b2b;
   font-size: 0.9rem;
   background-color: transparent;
   width: 100%;
@@ -130,4 +130,102 @@
 .post{
   margin: auto;
   margin-top: 30px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* TABLET */
+@media (max-width: 1024px){
+
+  .home-header{
+    flex-direction: column;
+    gap:15px;
+    align-items:flex-start;
+  }
+
+  .home-search{
+    width:100%;
+  }
+
+  .home-post > *{
+    width:100%;
+    max-width:420px;
+  }
+
+}
+
+/* KATTA TELEFON */
+@media (max-width: 768px){
+
+  .home{
+    padding:15px;
+  }
+
+  .home-about svg,
+  .home-about img{
+    width:55px;
+    height:55px;
+  }
+
+  .home-user h2{
+    font-size:14px;
+  }
+
+  .home-user p{
+    font-size:12px;
+  }
+
+  .home-post{
+    margin-top:25px;
+  }
+
+  .home-post > *{
+    width:100%;
+    max-width:100%;
+  }
+
+}
+
+/* TELEFON */
+@media (max-width: 480px){
+
+  .home-header{
+    padding:12px 15px;
+  }
+
+  .home-about{
+    gap:10px;
+  }
+
+  .home-about svg,
+  .home-about img{
+    width:45px;
+    height:45px;
+  }
+
+  .home-user h2{
+    font-size:13px;
+  }
+
+  .home-user p{
+    font-size:11px;
+  }
+
+  .home-search{
+    width:100%;
+  }
+
+  .form-control{
+    width:100%;
+  }
+
+  .home-post > *{
+    width:100%;
+    border-radius:14px;
+  }
+
+  .post{
+    margin-top:20px;
+  }
+
 }

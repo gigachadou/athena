@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { FaCog, FaEdit, FaHamburger, FaServer, FaUser } from "react-icons/fa"
+import { FaCog, FaEdit, FaUser } from "react-icons/fa"
 import "../styles/profile.css"
 import EditModal from "../components/EditModal";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
@@ -42,8 +42,8 @@ function Profile() {
                     <p>{!userData.bio ? "..." : userData.bio}</p>
                 </div>
                 <div className="following">
-                    <p>Followers: {userData.followers.length}</p>
-                    <p>Followings: {userData.followings.length}</p>
+                    <button className="follow-btns" onClick={()=> navigate(`/followers/${userData.id}`)}>Followers: {userData.followers.length}</button>
+                    <button className="follow-btns">Followings: {userData.followings.length}</button>
                 </div>
             </div>
         </div>

@@ -129,18 +129,14 @@
   border-top: 1px solid #efefef;
 }
 
-.following p {
-  font-size: 16px;
-  color: #262626;
-  margin: 0;
+.follow-btns{
+  border: none;
+  background-color: #007bff;
 }
 
-.following p strong {
-  font-weight: 600;
-  color: #1a1a1b;
-  margin-right: 5px;
+.follow-btns:hover{
+  background-color: #0056b3;
 }
-
 /* Posts sarlavhasi */
 .posts-h2 {
   font-size: 18px;

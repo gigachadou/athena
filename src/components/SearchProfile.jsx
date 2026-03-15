@@ -4,17 +4,32 @@ import { useNavigate, useParams } from "react-router-dom"
 import "../styles/searchresultuser.css"
 import PostCard from "./PostCard";
 import getPostsByIds from "../utils/getPostsByIds";
+import following from "../utils/following";
+import unfollow from "../utils/unfollow";
 
 function SearchProfile() {
     const [data, setData] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [stateFollow, setStateFollow] = useState(false)
     const [posts, setPosts] = useState([]);
     const { usersID } = useParams();
     let navigate = useNavigate();
+
+    useEffect(() => {
+        if (currentUser && data) {
+            setStateFollow(currentUser.followings.includes(data.id));
+        }
+    }, [currentUser, data]);
+
     useEffect(() => {
         async function getUsers(id) {
+            let current = JSON.parse(localStorage.getItem("loginConf")).user.id;
+            const current_user = await fetch(`http://localhost:3000/users/${current}`);
             const response = await fetch(`http://localhost:3000/users/${id}`);
             const data = await response.json();
+            const userData = await current_user.json();
             setData(data);
+            setCurrentUser(userData)
         }
         getUsers(usersID)
     }, [usersID])
@@ -44,7 +59,7 @@ function SearchProfile() {
                     <p>{data?.bio ? data.bio : "not bio yet"}</p>
                 </div>
                 <div className="following">
-                    <button>Follow</button>
+                    {stateFollow ? <button onClick={() => unfollow(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => { following(currentUser.id, data.id, setStateFollow) }} className="follow-btn">Follow</button>}
                 </div>
             </div>
         </div>

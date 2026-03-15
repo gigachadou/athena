@@ -133,36 +133,32 @@
   border-left: 4px solid #007bff;
 }
 
-/* Following statistikasi */
-.following {
-  display: flex;
-  gap: 30px;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid #efefef;
+/* Follow button */
+.follow-btn{
+  background-color: #0095f6;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-.following p {
-  font-size: 16px;
+.follow-btn:hover{
+  background-color: #1877f2;
+}
+
+/* Unfollow button */
+.unfollow-btn{
+  background-color: #efefef;
   color: #262626;
-  margin: 0;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-.following button{
-  background-color: #007bff;
-  transition: 0.1s ease-in-out;
-  border: none;
-}
-
-.following button:hover{
-  background-color: #0056b3;
-  border: none;
-}
-
-.following p strong {
-  font-weight: 600;
-  color: #1a1a1b;
-  margin-right: 5px;
+.unfollow-btn:hover{
+  background-color: #dbdbdb;
 }
 
 /* Posts sarlavhasi */
