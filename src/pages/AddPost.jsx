@@ -2,13 +2,27 @@ import { useState } from "react";
 import "../styles/AddPost.css";
 import { useOutletContext } from "react-router-dom";
 import { convertToBase64 } from "../utils/convertToBase64";
+import { FaX } from "react-icons/fa6";
 
 export default function AddPost() {
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
-    const [media, setMedia] = useState(null);
+    const [media, setMedia] = useState([]);
     const [error, setError] = useState("");
     const { userData } = useOutletContext();
+    console.log(media);
+    async function handleAddMedia(e) {
+        if (media.length == 10) {
+            setError("You can not add anymore");
+            return;
+        };
+        const base64media = await convertToBase64(e.target.files[0]);
+        if (!base64media) {
+            setError("Could not convert image to a form needed, choose different image or try again");
+            return;
+        };
+        setMedia(prev => [...prev, { base64: base64media, id: Date.now() }]);
+    };
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -17,13 +31,7 @@ export default function AddPost() {
             // posting to /posts
             const postId = `${userData.email}-${Date.now()}`;
 
-            if (media) {
-                var base64media = await convertToBase64(media);
-                if (!base64media) {
-                    setError("Could not convert image to a form needed, choose different media or try again");
-                    throw new Error("Error at converting to Base 64");
-                };
-            };
+            const mediaSet = media.map(e => e.base64);
 
             const postResponse = await fetch("http://localhost:3000/posts", {
                 method: "POST",
@@ -38,7 +46,7 @@ export default function AddPost() {
                     views: 0,
                     id: postId,
                     userId: userData.id,
-                    media: base64media ? base64media : null,
+                    media: mediaSet.length ? mediaSet : null,
                     createdAt: new Date().toISOString()
                 })
             });
@@ -47,7 +55,7 @@ export default function AddPost() {
                 const errText = await postResponse.text();
                 setError(`Error at loading your post to the server: ${postResponse.status} - ${errText}`);
                 return;
-            }
+            };
 
             // adding postId to user/posts
 
@@ -57,7 +65,7 @@ export default function AddPost() {
             if (!userRes.ok) {
                 setError("Couldn't get user's data");
                 return;
-            }
+            };
 
             const user = await userRes.json();
 
@@ -76,7 +84,7 @@ export default function AddPost() {
                 setError("Error at adding post's id to user");
                 console.log(await patchRes.text());
                 return;
-            }
+            };
             setHeader("");
             setText("");
             setMedia(null);
@@ -92,7 +100,7 @@ export default function AddPost() {
             <div className="add-post-card">
                 <h2 className="add-post-title">Create a post</h2>
                 {error && <p>{error}</p>}
-                <p className="add-post-subtitle">Share an update with your community.</p>
+                <h3 className="add-post-subtitle">Share an update with your community.</h3>
                 <form onSubmit={e => handleSubmit(e)} className="add-post-form">
                     <div className="add-post-field">
                         {error && <div className="add-post-error">{error}</div>}
@@ -123,13 +131,35 @@ export default function AddPost() {
                         <div className="add-post-meta">{text.length}/300</div>
                     </div>
                     <div>
-                        <label className="add-post-label">Media: </label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setMedia(e.target.files[0])}
-                        />
-                        {media && <p style={{ color: "black", marginTop: "15px", marginBottom: "0px" }}>File chosen</p>}
+                        <label className="add-post-label">Media: (limit 10 images)</label>
+                        <label className="add-post-add-media-label">
+                            <input
+                                type="file"
+                                accept="image/*,video/*"
+                                multiple
+                                onChange={handleAddMedia}
+                                className="add-post-add-media"
+                            />
+                            <span className="plus-icon">+</span>
+                            <span className="upload-text">Add media (images/videos)</span>
+                        </label>
+                        {media.map((obj) => (
+                            <div className="add-post-media-preview" key={obj.id}>
+                                <img
+                                    src={obj.base64}
+                                    alt="Uploaded preview"
+                                    className="add-post-media-img"
+                                />
+                                <button
+                                    type="button"
+                                    className="remove-btn"
+                                    onClick={() => setMedia(prev => prev.filter((e) => e.id !== obj.id))}
+                                    aria-label="Remove media"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        ))}
                     </div>
                     <button type="submit" className="add-post-submit">Post</button>
                 </form>
