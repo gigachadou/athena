@@ -2,10 +2,11 @@ import { FaUser } from "react-icons/fa";
 import "../styles/home.css"
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 export default function Home() {
     const [user, setUser] = useState(null);
+    const navigate = useNavigate()
     const [posts, setPosts] = useState([]);
     const [error, setError] = useState("");
     const { userData } = useOutletContext();
@@ -60,7 +61,7 @@ export default function Home() {
                 </div>
                 <div className="home-search">
                     <div className="form-control">
-                        <input className="input input-alt" placeholder="Search friends" required="" type="text" />
+                        <input className="input input-alt" placeholder="Search friends" required="" type="text" onChange={(e)=>{navigate(`/search/${e.target.value}`)}}/>
                         <span className="input-border input-border-alt"></span>
                     </div>
 

@@ -1,12 +1,14 @@
 import { FaSearch, FaUser } from "react-icons/fa";
 import "../styles/searchPage.css";
 import { useEffect, useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import Friends from "../components/Friends";
 
 function Search() {
     const [friends, setFriends] = useState([]);
+    let { name } = useParams();
     const [elements, setElements] = useState([]);
+    const [query, setQuery] = useState(name || "");
     const [error, setError] = useState("");
     const { userData } = useOutletContext();
     let navigate = useNavigate();
@@ -60,9 +62,12 @@ function Search() {
             <div className="search__header">
                 <input
                     type="search"
+                    value={query}
                     placeholder="Search for your friends..."
-                    id="searchInput"
-                    onInput={(e) => handleSearch(e.target.value)}
+                    onChange={(e) => {
+                        setQuery(e.target.value);
+                        handleSearch(e.target.value);
+                    }}
                 />
                 <label htmlFor="searchInput">
                     <FaSearch />

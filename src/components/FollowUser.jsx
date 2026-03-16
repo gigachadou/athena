@@ -1,16 +1,31 @@
-function FollowPeople(){
+import { useEffect, useState } from "react"
+import { FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+function FollowPeople({ id }){
+    const [followerData , setFollowerData] = useState(null);
+    let navigate = useNavigate();
+
+    useEffect(()=>{
+        async function getFollowerData() {
+            const response = await fetch(`http://localhost:3000/users/${id}`);
+            let followerData = await response.json();
+
+            setFollowerData(followerData)
+        }
+        getFollowerData()
+    } , [])
     
-    //Hali tegma endi boshladim
     return (
         <div className="followerCard">
             <div className="img">
-                <img src="" alt="" />
+                {!followerData?.avatar ? <FaUser/> : <img src={followerData.avatar} alt="Follower avatar" />}
             </div>
             <div className="follower-info">
-                <h2>UserName</h2>
-                <p>UserEmail</p>
+                <h2>{!followerData?.name ? "Loading..." : followerData.name}</h2>
+                <p>{!followerData?.email ? "Loading..." : followerData.email}</p>
             </div>
-            <button>View Follower</button>
+            <button onClick={()=>{navigate(`/searchresultusers/${id}`)}}>View Follower</button>
         </div>)
 }
 

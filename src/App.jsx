@@ -35,7 +35,8 @@ function App() {
         { path: "/addPost", element: <AddPost /> },
         { path: "/searchresultusers/:usersID", element: <SearchProfile /> },
         { path: "/posts/:postId", element: <PostPage /> },
-        {path:'/followers/:userID' , element: <FollowerPage/>}
+        {path:'/followers/:order/:userID' , element: <FollowerPage/>},
+        {path:'/search/:name' , element: <Search/>}
       ],
     },
     { path: "*", element: <Navigate to="/" /> },

@@ -47,7 +47,7 @@ function SearchProfile() {
         return <div>Loading...</div>
     };
     return <div className="profile-page">
-        <button onClick={() => navigate("/search")} className="back"><FaArrowLeft /></button>
+        <button onClick={() => navigate("/profile")} className="back"><FaArrowLeft /></button>
         <div className="UserInfo">
             <div className="avatar">
                 {!data?.avatar ? <FaUser /> : <img src={data.avatar} />}
