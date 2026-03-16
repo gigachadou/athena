@@ -53,7 +53,7 @@ const PostCard = ({ post }) => {
                     <h2 className="post-title">{post.header}</h2>
                 )}
                 <p className="post-text">{post.text}</p>
-                {post.media && <img src={post.media} alt='Media'/>}
+                {post.media && <img src={post.media[0]} alt='Media'/>}
             </div>
 
             <div className="post-footer">
