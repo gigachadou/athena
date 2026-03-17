@@ -3,7 +3,7 @@
  * @param {string} postId - post IDsi
  * @param {number} userId - login qilingan user IDsi
  */
-export default async function actionLike(postId, userId) {
+export default async function actionDislike(postId, userId) {
     //postga likeni joylash:
 
     const res = await fetch(`http://localhost:3000/posts/${postId}`);

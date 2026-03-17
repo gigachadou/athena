@@ -33,23 +33,23 @@ export default function PostPage() {
             }
         }
         getPost();
-    }, [postId, userData.id, isLiked]); // ← added .id (more correct)
+    }, [postId, userData.id, isLiked]);
 
     useEffect(() => {
-        if (!data) return; // ← prevent running when data is null
+        if (!data) return;
 
         if (!isViewed && data.post.userId !== userData.id) {
             actionView(postId).then(() => setIsViewed(true)).catch(err => console.log("View action failed:", err.message));
         };
-    }, [data, postId, userData.id]); // ← added proper deps
+    }, [data, postId, userData.id]);
 
-    async function toggleLike() {          // ← made async
+    async function toggleLike() {
         try {
             if (isLiked) {
-                await actionDislike(postId, userData.id); // ← await
+                await actionDislike(postId, userData.id);
                 setIsLiked(false);
             } else {
-                await actionLike(postId, userData.id);   // ← await
+                await actionLike(postId, userData.id);
                 setIsLiked(true);
             }
         } catch (error) {
@@ -85,7 +85,7 @@ export default function PostPage() {
                         <p className="post-text">{data.text}</p>
                         {data.post.media?.length > 0 &&
                             data.post.media.map((e, i) => (
-                                <img src={e} alt="Post media" key={i} />   // or use better unique id if available
+                                <img src={e} alt="Post media" key={i} />
                             ))}
 
                         <div className="post-stats">
@@ -96,7 +96,7 @@ export default function PostPage() {
                                     isLiked
                                         ? { color: "#e41e3f" }
                                         : {}
-                                }   // ← use isLiked state (more reliable)
+                                }
                             >
                                 <span className="icon">
                                     <FaHeart /> Likes: {data.post.likes.length}
