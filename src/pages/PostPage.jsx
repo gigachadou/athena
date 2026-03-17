@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import "../styles/PostPage.css";
-import { FaComment, FaEye, FaHeart } from "react-icons/fa6";
+import { FaComment, FaEye, FaHeart, FaPaperPlane } from "react-icons/fa6";
 import { actionView } from "../utils/postActions/actionView";
 import actionDislike from "../utils/postActions/actionDislike";
 import actionLike from "../utils/postActions/actionLike";
+import actionComment from "../utils/postActions/actionComment";
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -13,6 +14,8 @@ export default function PostPage() {
     const [isLiked, setIsLiked] = useState(false);
     const { userData } = useOutletContext();
     const [isViewed, setIsViewed] = useState(false);
+    const [trigger, setTrigger] = useState(0);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         async function getPost() {
@@ -33,29 +36,41 @@ export default function PostPage() {
             }
         }
         getPost();
-    }, [postId, userData.id, isLiked]); // ← added .id (more correct)
+    }, [postId, userData.id, isLiked, trigger]);
 
     useEffect(() => {
-        if (!data) return; // ← prevent running when data is null
+        if (!data) return;
 
         if (!isViewed && data.post.userId !== userData.id) {
             actionView(postId).then(() => setIsViewed(true)).catch(err => console.log("View action failed:", err.message));
         };
-    }, [data, postId, userData.id]); // ← added proper deps
+    }, [data, postId, userData.id]);
 
-    async function toggleLike() {          // ← made async
+    async function toggleLike() {
         try {
             if (isLiked) {
-                await actionDislike(postId, userData.id); // ← await
+                await actionDislike(postId, userData.id);
                 setIsLiked(false);
             } else {
-                await actionLike(postId, userData.id);   // ← await
+                await actionLike(postId, userData.id);
                 setIsLiked(true);
             }
         } catch (error) {
             alert("Something went wrong, please try again later");
             console.error(error);
         };
+    };
+
+    async function handleAddComment() {
+        const text = inputRef.current.value;
+        if (!text.trim()) return;
+        try {
+            await actionComment(postId, userData.id, text);
+            inputRef.current.value = "";
+            setTrigger(prev => prev + 1);
+        } catch (error) {
+            setServerError(error.message);
+        }
     };
 
     return (
@@ -85,7 +100,7 @@ export default function PostPage() {
                         <p className="post-text">{data.text}</p>
                         {data.post.media?.length > 0 &&
                             data.post.media.map((e, i) => (
-                                <img src={e} alt="Post media" key={i} />   // or use better unique id if available
+                                <img src={e} alt="Post media" key={i} />
                             ))}
 
                         <div className="post-stats">
@@ -96,7 +111,7 @@ export default function PostPage() {
                                     isLiked
                                         ? { color: "#e41e3f" }
                                         : {}
-                                }   // ← use isLiked state (more reliable)
+                                }
                             >
                                 <span className="icon">
                                     <FaHeart /> Likes: {data.post.likes.length}
@@ -117,7 +132,10 @@ export default function PostPage() {
 
                     <section className="comments">
                         <h2>Comments</h2>
-
+                        <div className="post-page-add-comment-container">
+                            <input ref={inputRef} type="text" placeholder="Share your thoughts" />
+                            <button onClick={handleAddComment}><FaPaperPlane /></button>
+                        </div>
                         {data.post.comments.length === 0 ? (
                             <p>No comments yet</p>
                         ) : (

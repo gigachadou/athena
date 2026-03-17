@@ -1,0 +1,34 @@
+/**
+ * Komment qo'shish uchun async funksiya, try...catchda ishlatilsin
+ * @param {string} postId - post IDsi
+ * @param {number} userId - login qilingan user IDsi
+ * @param {string} text - komment teksti
+ */
+export default async function actionComment(postId, userId, text) {
+    //postga commentni joylash:
+
+    const res = await fetch(`http://localhost:3000/posts/${postId}`);
+    if (!res.ok) throw new Error("Error at actionComment - GET1");
+    const post = await res.json();
+
+    const res2 = await fetch(`http://localhost:3000/posts/${postId}`, {
+        method: "PATCH",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ comments: [...post.comments, { user: userId, text: text }] })
+    });
+
+    if (!res2.ok) throw new Error("Error at actionComment - PATCH1");
+
+    //userga commentni joylash ------------------------------------------>>>
+
+    const res3 = await fetch(`http://localhost:3000/users/${userId}`);
+    if (!res3.ok) throw new Error("Error at actionComment - GET2");
+    const user = await res3.json();
+
+    const res4 = await fetch(`http://localhost:3000/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ comments: [...user.comments, { post: postId, text: text }] })
+    });
+    if (!res4.ok) throw new Error("Error at actionComment - PATCH2");
+};

@@ -3,8 +3,8 @@
  * @param {string} postId - post IDsi
  * @param {number} userId - login qilingan user IDsi
  */
-export default async function actionLike(postId, userId) {
-    //postga likeni joylash:
+export default async function actionDislike(postId, userId) {
+    //postdan like ni olib tashlash:
 
     const res = await fetch(`http://localhost:3000/posts/${postId}`);
     if (!res.ok) throw new Error("Error at actionDislike - GET1");
@@ -18,7 +18,7 @@ export default async function actionLike(postId, userId) {
 
     if (!res2.ok) throw new Error("Error at actionDislike - PATCH1");
 
-    //userga dislikeni joylash ------------------------------------------>>>
+    //userdan like ni olib tashlash ------------------------------------------>>>
 
     const res3 = await fetch(`http://localhost:3000/users/${userId}`);
     if (!res3.ok) throw new Error("Error at actionDislike - GET2");
