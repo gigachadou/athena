@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import "../styles/PostPage.css";
-import { FaComment, FaEye, FaHeart } from "react-icons/fa6";
+import { FaComment, FaEye, FaHeart, FaPaperPlane } from "react-icons/fa6";
 import { actionView } from "../utils/postActions/actionView";
 import actionDislike from "../utils/postActions/actionDislike";
 import actionLike from "../utils/postActions/actionLike";
+import actionComment from "../utils/postActions/actionComment";
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -13,6 +14,8 @@ export default function PostPage() {
     const [isLiked, setIsLiked] = useState(false);
     const { userData } = useOutletContext();
     const [isViewed, setIsViewed] = useState(false);
+    const [trigger, setTrigger] = useState(0);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         async function getPost() {
@@ -33,7 +36,7 @@ export default function PostPage() {
             }
         }
         getPost();
-    }, [postId, userData.id, isLiked]);
+    }, [postId, userData.id, isLiked, trigger]);
 
     useEffect(() => {
         if (!data) return;
@@ -56,6 +59,18 @@ export default function PostPage() {
             alert("Something went wrong, please try again later");
             console.error(error);
         };
+    };
+
+    async function handleAddComment() {
+        const text = inputRef.current.value;
+        if (!text.trim()) return;
+        try {
+            await actionComment(postId, userData.id, text);
+            inputRef.current.value = "";
+            setTrigger(prev => prev + 1);
+        } catch (error) {
+            setServerError(error.message);
+        }
     };
 
     return (
@@ -117,7 +132,10 @@ export default function PostPage() {
 
                     <section className="comments">
                         <h2>Comments</h2>
-
+                        <div className="post-page-add-comment-container">
+                            <input ref={inputRef} type="text" placeholder="Share your thoughts" />
+                            <button onClick={handleAddComment}><FaPaperPlane /></button>
+                        </div>
                         {data.post.comments.length === 0 ? (
                             <p>No comments yet</p>
                         ) : (

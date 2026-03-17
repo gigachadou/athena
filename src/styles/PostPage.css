@@ -261,3 +261,105 @@
         font-size: 1.75rem;
     }
 }
+
+
+/* Comment input area - at the bottom of post page */
+.post-page-add-comment-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.05),
+        0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Input field */
+.post-page-add-comment-container input[type="text"] {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #111827;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.post-page-add-comment-container input[type="text"]::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+.post-page-add-comment-container input[type="text"]:focus {
+    background: #f9fafb;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Send button */
+.post-page-add-comment-container button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.post-page-add-comment-container button:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.post-page-add-comment-container button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.post-page-add-comment-container button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Optional: when input is empty / focused states */
+.post-page-add-comment-container input:placeholder-shown+button {
+    background: #d1d5db;
+}
+
+.post-page-add-comment-container input:placeholder-shown+button:hover {
+    background: #9ca3af;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    .post-page-add-comment-container {
+        padding: 0.6rem 0.9rem;
+        gap: 0.6rem;
+    }
+
+    .post-page-add-comment-container input[type="text"] {
+        font-size: 0.95rem;
+        padding: 0.65rem 0.9rem;
+    }
+
+    .post-page-add-comment-container button {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+}
