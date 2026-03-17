@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
-    const [userInfo, setUserInfo] = useState(null);
+    const [ownerInfo, setOwnerInfo] = useState(null);
     const [serverError, setServerError] = useState(null);
 
     const navigate = useNavigate();
@@ -14,10 +14,10 @@ const PostCard = ({ post }) => {
             const res = await fetch(`http://localhost:3000/users/${post.userId}`);
             if (!res.ok) {
                 setServerError("User not found");
-                return
+                return;
             }
             const data = await res.json();
-            setUserInfo(data);
+            setOwnerInfo(data);
         };
         getUserInfo();
     }, [post]);
@@ -38,10 +38,10 @@ const PostCard = ({ post }) => {
             <div className="post-header">
                 <div className="user-info">
                     <div className="avatar">
-                        {!userInfo?.avatar ? <FaUser/> : <img src={userInfo.avatar} alt='user avatar'/>}
+                        {!ownerInfo?.avatar ? <FaUser/> : <img src={ownerInfo.avatar} alt='user avatar'/>}
                     </div>
                     <div className="meta">
-                        <span className="username">{!userInfo?.name ? "User" : userInfo.name}</span>
+                        <span className="username">{!ownerInfo?.name ? "User" : ownerInfo.name}</span>
                         <span className="timestamp"> {timeAgo}</span>
                     </div>
                 </div>

@@ -51,8 +51,10 @@ export default function ProtectedRoot() {
     console.log(userData);
     return (
         <div>
-            <Header />
-            <Outlet context={{ userData, setUserData }} />
+            {userData && (<>
+                <Header />
+                <Outlet context={{ userData, setUserData }} />
+            </>)}
         </div>
     );
 };
