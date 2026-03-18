@@ -4,7 +4,7 @@ import "../styles/NoteCard.css"
 function NoteCard({ header, text, time, noteID, status }) {
 
     async function handleChangeNoteStatus() {
-        const res = await fetch(`http://localhost:3000/notefication`);
+        const res = await fetch(`http://localhost:3000/notification`);
         if (!res.ok) throw new Error("Server not found please try again");
         let notes = await res.json();
 
@@ -12,7 +12,7 @@ function NoteCard({ header, text, time, noteID, status }) {
         let otherNotes = notes.filter(note => note.noteID !== noteID);
         let nextCurrentStatus = { ...currentStatus[0], status: "read" };
         let uploadNotes = [...otherNotes, nextCurrentStatus];
-        const patch = await fetch(`http://localhost:3000/notefication`, {
+        const patch = await fetch(`http://localhost:3000/notification`, {
             method: "POST",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify(uploadNotes)
