@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import "../styles/PostPage.css";
 import { FaComment, FaEye, FaHeart, FaPaperPlane } from "react-icons/fa6";
 import { actionView } from "../utils/postActions/actionView";
@@ -17,6 +17,7 @@ export default function PostPage() {
     const [isViewed, setIsViewed] = useState(false);
     const [trigger, setTrigger] = useState(0);
     const inputRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getPost() {
@@ -37,7 +38,7 @@ export default function PostPage() {
             }
         }
         getPost();
-    }, [postId, userData.id, trigger , isViewed , isLiked]);
+    }, [postId, userData.id, trigger, isViewed, isLiked]);
 
     useEffect(() => {
         if (!data) return;
@@ -80,10 +81,10 @@ export default function PostPage() {
             ) : data ? (
                 <div className="post-page">
                     <article className="post">
-                        <div className="post-page-header">
+                        <div className="post-page-header" onClick={() => navigate(`/searchresultusers/${data.owner.id}`)}>
                             <div className="post-page-user-info">
                                 <div className="post-page-avatar">
-                                    {!data.owner?.avatar ? <FaUser/> : <img src={data.owner.avatar} alt='user avatar' />}
+                                    {!data.owner?.avatar ? <FaUser /> : <img src={data.owner.avatar} alt='user avatar' />}
                                 </div>
                                 <div className="meta">
                                     <span className="post-page-username">{!data.owner?.name ? "User" : data.owner.name}</span>
