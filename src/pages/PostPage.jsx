@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import "../styles/PostPage.css";
 import { FaComment, FaEye, FaHeart, FaPaperPlane } from "react-icons/fa6";
 import { actionView } from "../utils/postActions/actionView";
@@ -16,7 +16,9 @@ export default function PostPage() {
     const { userData } = useOutletContext();
     const [isViewed, setIsViewed] = useState(false);
     const [trigger, setTrigger] = useState(0);
+    const [commentOwners, setCommentOwners] = useState([]);
     const inputRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getPost() {
@@ -35,10 +37,34 @@ export default function PostPage() {
             } catch (error) {
                 setServerError(error.message);
             }
-        }
+        };
         getPost();
-    }, [postId, userData.id, trigger , isViewed , isLiked]);
+        // Comment egalarini olish
 
+
+        const fetchUsers = async () => {
+            const uniqueUserIds = [...new Set(data.post.comments.map(c => c.user))];
+            if (!uniqueUserIds.length) return;
+            const promises = uniqueUserIds.map(id =>
+                fetch(`http://localhost:3000/users/${id}`)
+                    .then(res => res.ok ? res.json() : Promise.reject())
+                    .catch(() => ({ id, name: "User not found", _error: true }))
+            );
+
+            const results = await Promise.all(promises);
+            const usersMap = results.reduce((acc, user) => {
+                acc[user.id] = user;
+                return acc;
+            }, {});
+
+            setCommentOwners(usersMap);
+        };
+
+        if (data?.post) {
+            fetchUsers();
+        }
+    }, [postId, userData.id, trigger, isViewed, isLiked]);
+    console.log(commentOwners);
     useEffect(() => {
         if (!data) return;
 
@@ -46,6 +72,7 @@ export default function PostPage() {
             actionView(postId).then(() => setIsViewed(true)).catch(err => console.log("View action failed:", err.message));
         };
     }, [data, postId, userData.id]);
+
 
     async function toggleLike() {
         try {
@@ -80,10 +107,10 @@ export default function PostPage() {
             ) : data ? (
                 <div className="post-page">
                     <article className="post">
-                        <div className="post-page-header">
+                        <div className="post-page-header" onClick={() => navigate(`/searchresultusers/${data.owner.id}`)}>
                             <div className="post-page-user-info">
                                 <div className="post-page-avatar">
-                                    {!data.owner?.avatar ? <FaUser/> : <img src={data.owner.avatar} alt='user avatar' />}
+                                    {!data.owner?.avatar ? <FaUser /> : <img src={data.owner.avatar} alt='user avatar' />}
                                 </div>
                                 <div className="meta">
                                     <span className="post-page-username">{!data.owner?.name ? "User" : data.owner.name}</span>
@@ -136,15 +163,25 @@ export default function PostPage() {
                             <input ref={inputRef} type="text" placeholder="Share your thoughts" />
                             <button onClick={handleAddComment}><FaPaperPlane /></button>
                         </div>
-                        {data.post.comments.length === 0 ? (
-                            <p>No comments yet</p>
-                        ) : (
-                            data.post.comments.map((comment, index) => (
-                                <div key={index} className="post-page-comment">
+                        {data.post.comments.map((comment, index) => {
+                            const owner = commentOwners[comment.user] || { name: "Loading...", id: null };
+
+                            return (
+                                <div key={comment.id || index} className="post-page-comment">
+                                    <div
+                                        className="post-page-comment-owner"
+                                        onClick={() => {
+                                            if (owner.id) owner.id !== userData.id ? navigate(`/searchresultusers/${owner.id}`) : navigate(`/profile`)
+                                        }}
+                                        style={{ cursor: owner.id ? "pointer" : "default", color: "lightblue" }}
+                                    > {/* style qo'shish kerak */}
+                                        <img src={owner.avatar} alt="Avatar" width={60} height={60} style={{ border: "1px transparent", borderRadius: "50%" }} /> {/* style qo'shish kerak */}
+                                        <p>{owner.name}</p>
+                                    </div>
                                     {comment.text}
                                 </div>
-                            ))
-                        )}
+                            );
+                        })}
                     </section>
                 </div>
             ) : null}

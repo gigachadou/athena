@@ -1,8 +1,8 @@
 /**
  * Async funksiya, notifikatsya yuborish uchun. Try... catchni funksiya ishlatilinadigan joyda ishlatiladi!
- * @param {string} header 
- * @param {string} text 
- * @param {number} userID 
+ * @param {string} header - header
+ * @param {string} text - text
+ * @param {number} userID - userID
  */
 async function addNote(header, text, userID) {
         let note = {

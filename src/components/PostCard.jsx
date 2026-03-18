@@ -1,4 +1,4 @@
-import { FaComment, FaEye, FaHeart, FaUser } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import '../styles/PostCard.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -34,11 +34,11 @@ const PostCard = ({ post }) => {
         : 'just now';
 
     return (
-        <div className="post-card" onClick={() => navigate(`/posts/${post.id}`)}>
-            <div className="post-header">
+        <div className="post-card">
+            <div className="post-header" onClick={() => navigate(`/searchresultusers/${userInfo.id}`)}>
                 <div className="user-info">
                     <div className="avatar">
-                        {!userInfo?.avatar ? <FaUser/> : <img src={userInfo.avatar} alt='user avatar'/>}
+                        {!userInfo?.avatar ? <FaUser /> : <img src={userInfo.avatar} alt='user avatar' />}
                     </div>
                     <div className="meta">
                         <span className="username">{!userInfo?.name ? "User" : userInfo.name}</span>
@@ -48,15 +48,15 @@ const PostCard = ({ post }) => {
                 <button className="more-btn">⋯</button>
             </div>
 
-            <div className="post-content">
+            <div className="post-content" onClick={() => navigate(`/posts/${post.id}`)}>
                 {post.header && (
                     <h2 className="post-title">{post.header}</h2>
                 )}
                 <p className="post-text">{post.text}</p>
-                {post.media && <img src={post.media[0]} alt='Media'/>}
+                {post.media && <img src={post.media[0]} alt='Media' />}
             </div>
 
-            <div className="post-footer">
+            {/* <div className="post-footer">
                 <div className="action-btns">
                     <button className="action like">
                         <span className="icon"><FaHeart /></span>
@@ -73,7 +73,7 @@ const PostCard = ({ post }) => {
                         <span>{post.views.toLocaleString()}</span>
                     </button>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
