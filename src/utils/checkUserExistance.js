@@ -20,7 +20,6 @@ export default async function checkUserExistance() {
             return false;
         }
     } catch (err) {
-        console.error(err);
         return false;
     };
 };

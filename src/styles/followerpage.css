@@ -1,137 +1,124 @@
-/* PAGE */
-.followers-page{
-    width:100%;
-    min-height:100vh;
-    background:#f5f5f5;
-    padding:30px 20px;
-    box-sizing:border-box;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+@import "./theme.css";
+
+.followers-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: clamp(1.5rem, 2vw, 2.75rem);
+  background: radial-gradient(circle at 20% 0%, rgba(194, 70, 61, 0.18), transparent 45%),
+    var(--tranquil-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* HEADER / CONTROLLER */
-.controller{
-    width:100%;
-    max-width:700px;
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:30px;
+.controller {
+  width: min(900px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #f9fafb;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.controller svg{
-    font-size:20px;
-    cursor:pointer;
-    color:#333;
-    transition:0.2s;
+.controller svg {
+  font-size: 1.2rem;
+  color: var(--steel-red);
+  cursor: pointer;
+  transition: color var(--tranquil-transition);
 }
 
-.controller svg:hover{
-    color:#007bff;
+.controller svg:hover {
+  color: #e07568;
 }
 
-.controller h2{
-    margin:0;
-    font-size:22px;
-    color:#333;
+.controller h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2rem);
 }
 
-/* FOLLOWER CARD */
-.followerCard{
-    width:100%;
-    max-width:700px;
-    background:white;
-    border-radius:12px;
-    padding:15px 20px;
-    display:flex;
-    align-items:center;
-    gap:15px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
-    margin-bottom:15px;
-    transition:0.2s;
+.followerCard {
+  width: min(900px, 100%);
+  padding: 1.2rem 1.4rem;
+  border-radius: 22px;
+  background: rgba(8, 9, 18, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--tranquil-shadow);
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
 }
 
-.followerCard:hover{
-    transform:translateY(-2px);
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+.followerCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 60px rgba(5, 6, 10, 0.5);
 }
 
-/* AVATAR */
-.followerCard .img{
-    width:55px;
-    height:55px;
-    border-radius:50%;
-    overflow:hidden;
-    background:#ddd;
-    flex-shrink:0;
+.followerCard .img {
+  width: clamp(48px, 4vw, 64px);
+  height: clamp(48px, 4vw, 64px);
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.followerCard .img img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.followerCard .img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* INFO */
-.follower-info{
-    flex:1;
+.follower-info {
+  flex: 1;
 }
 
-.follower-info h2{
-    margin:0;
-    font-size:16px;
-    color:#222;
+.follower-info h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #ffffff;
 }
 
-.follower-info p{
-    margin:3px 0 0 0;
-    font-size:13px;
-    color:#777;
+.follower-info p {
+  margin: 0.3rem 0 0 0;
+  font-size: 0.9rem;
+  color: var(--tranquil-muted);
 }
 
-/* BUTTON */
-.followerCard button{
-    background:#007bff;
-    border:none;
-    color:white;
-    padding:8px 16px;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:14px;
-    transition:0.2s;
+.followerCard button {
+  background: linear-gradient(130deg, var(--steel-red), #d56556);
+  color: #05060a;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
 }
 
-.followerCard button:hover{
-    background:#0056b3;
+.followerCard button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 15px 35px rgba(194, 70, 61, 0.35);
 }
 
-/* RESPONSIVE */
-@media (max-width:600px){
+@media (max-width: 620px) {
+  .controller {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .controller h2{
-        font-size:18px;
-    }
+  .followerCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .followerCard{
-        padding:12px 15px;
-    }
-
-    .followerCard .img{
-        width:45px;
-        height:45px;
-    }
-
-    .follower-info h2{
-        font-size:14px;
-    }
-
-    .follower-info p{
-        font-size:12px;
-    }
-
-    .followerCard button{
-        padding:6px 12px;
-        font-size:12px;
-    }
+  .followerCard button {
+    width: 100%;
+    text-align: center;
+  }
 }
+
+

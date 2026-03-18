@@ -31,9 +31,7 @@ async function following(userID, followerID, changeFollowState) {
 
         changeFollowState(true);
 
-    } catch (error) {
-        console.error("Follow error:", error);
-    }
+    } catch (error) {}
 }
 
 export default following;

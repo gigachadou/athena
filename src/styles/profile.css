@@ -1,311 +1,172 @@
-/* Profile sahifasi asosiy stillari */
+@import "./theme.css";
+
 .profile-page {
-  max-width: 935px; /* Instagramga o'xshash kenglik */
-  margin: 0 auto;
-  padding: 30px 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #fafafa;
+  width: 100%;
   min-height: 100vh;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  background: radial-gradient(circle at top left, rgba(194, 70, 61, 0.14), transparent 45%),
+    var(--tranquil-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: #fefdfc;
 }
 
-/* Profil tugmalari (o'ng tomonda) */
 .profile-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-bottom: 30px;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .profile-buttons button {
-  background: transparent;
-  border: 1px solid #dbdbdb;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 16px;
-  color: #262626;
+  padding: 0.7rem 1.4rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fefefe;
+  font-weight: 600;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  background-color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+  transition: border var(--tranquil-transition), background var(--tranquil-transition);
 }
 
 .profile-buttons button svg {
-  font-size: 18px;
+  font-size: 1rem;
 }
 
 .profile-buttons button:hover {
-  background-color: #f8f9fa;
-  border-color: #bdbdbd;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(194, 70, 61, 0.8);
 }
 
-.profile-buttons button:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-/* UserInfo qismi (avatar va bio) */
 .UserInfo {
-  display: flex;
-  gap: 50px;
-  padding: 30px 20px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  border: 1px solid #efefef;
-  margin-bottom: 40px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  width: 100%;
+  background: rgba(10, 10, 18, 0.9);
+  border-radius: var(--tranquil-radius);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: clamp(1.25rem, 2vw, 1.8rem);
+  display: grid;
+  grid-template-columns: minmax(140px, 180px) 1fr;
+  gap: 1.5rem;
+  box-shadow: var(--tranquil-shadow);
 }
 
-/* Avatar */
 .UserInfo .avatar {
-  width: 150px;
-  height: 150px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #f09433, #d62976, #962fbf);
+  background: radial-gradient(circle, var(--steel-red), #8c2e2f);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  border: 3px solid #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 3px solid rgba(255, 255, 255, 0.2);
   overflow: hidden;
 }
 
+.UserInfo .avatar img,
 .UserInfo .avatar svg {
-  font-size: 60px;
-  color: #ffffff;
-  opacity: 0.8;
-}
-
-.UserInfo .avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* Bio qismi */
-.UserInfo .bio {
-  flex: 1;
+.UserInfo .avatar svg {
+  font-size: 3rem;
+  color: #ffffff;
+}
+
+.bio {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0.3rem;
 }
 
-.UserInfo .name h2 {
-  font-size: 28px;
-  font-weight: 500;
-  margin: 0 0 8px 0;
-  color: #1a1a1b;
+.name h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.6rem);
 }
 
-.UserInfo .name p {
-  font-size: 16px;
-  color: #8e8e8e;
-  margin: 4px 0;
+.name p {
+  margin: 0;
+  color: var(--tranquil-muted);
   line-height: 1.5;
 }
 
-.UserInfo .name p:last-of-type {
-  color: #262626;
-  font-size: 15px;
-  background-color: #f8f9fa;
-  padding: 8px 12px;
+.name p:last-of-type {
+  margin-top: 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.65rem 1rem;
+  border-left: 4px solid var(--steel-red);
   border-radius: 12px;
-  margin-top: 10px;
-  border-left: 4px solid #007bff;
 }
 
-/* Following statistikasi */
 .following {
   display: flex;
-  gap: 30px;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid #efefef;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.follow-btns{
-  border: none;
-  background-color: #007bff;
+.following span {
+  font-size: 0.95rem;
+  color: var(--tranquil-muted);
 }
 
-.follow-btns:hover{
-  background-color: #0056b3;
-}
-/* Posts sarlavhasi */
 .posts-h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #8e8e8e;
+  font-size: 0.95rem;
+  letter-spacing: 0.3rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 25px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #dbdbdb;
+  color: var(--tranquil-muted);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.75rem;
 }
 
 .posts-h2::before {
   content: '';
-  width: 4px;
-  height: 20px;
-  background: #007bff;
-  border-radius: 2px;
-  display: inline-block;
+  width: 30px;
+  height: 2px;
+  background: var(--steel-red);
+  border-radius: 1px;
 }
 
-/* Postlar grid */
 .posts {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
 }
 
 .posts > a {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  border: 2px dashed #dbdbdb;
-  color: #007bff;
+  padding: clamp(1.25rem, 2vw, 1.5rem);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: var(--steel-red);
   text-decoration: none;
-  font-size: 18px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  text-align: center;
+  transition: background var(--tranquil-transition), border-color var(--tranquil-transition);
 }
 
 .posts > a:hover {
-  background-color: #f0f7ff;
-  border-color: #007bff;
-  color: #0056b3;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--steel-red);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .profile-page {
-    padding: 20px 15px;
-  }
-
   .UserInfo {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
-    padding: 25px 15px;
-  }
-
-  .UserInfo .avatar {
-    width: 120px;
-    height: 120px;
-  }
-
-  .UserInfo .name h2 {
-    font-size: 24px;
-  }
-
-  .following {
-    justify-content: center;
-  }
-
-  .posts {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .profile-buttons {
-    justify-content: center;
-  }
-
-  .profile-buttons button {
-    padding: 8px 16px;
-  }
-
-  .UserInfo .avatar {
-    width: 100px;
-    height: 100px;
-  }
-
-  .UserInfo .name h2 {
-    font-size: 20px;
-  }
-
-  .following {
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .posts {
     grid-template-columns: 1fr;
-  }
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .profile-page {
-    background-color: #000;
-  }
-
-  .profile-buttons button {
-    background-color: #1e1e1e;
-    border-color: #2e2e2e;
-    color: #e4e6eb;
-  }
-
-  .profile-buttons button:hover {
-    background-color: #333;
-  }
-
-  .UserInfo {
-    background-color: #1e1e1e;
-    border-color: #2e2e2e;
-  }
-
-  .UserInfo .name h2 {
-    color: #e4e6eb;
-  }
-
-  .UserInfo .name p {
-    color: #b0b3b8;
-  }
-
-  .UserInfo .name p:last-of-type {
-    background-color: #2d2d2d;
-    color: #e4e6eb;
-    border-left-color: #4a9eff;
+    text-align: center;
   }
 
   .following {
-    border-top-color: #2e2e2e;
-  }
-
-  .following p {
-    color: #b0b3b8;
-  }
-
-  .posts-h2 {
-    color: #b0b3b8;
-    border-bottom-color: #2e2e2e;
-  }
-
-  .posts > a {
-    background-color: #1e1e1e;
-    border-color: #2e2e2e;
-    color: #4a9eff;
-  }
-
-  .posts > a:hover {
-    background-color: #2d2d2d;
-    border-color: #4a9eff;
+    justify-content: center;
   }
 }
+
+

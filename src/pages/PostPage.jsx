@@ -6,6 +6,7 @@ import { actionView } from "../utils/postActions/actionView";
 import actionDislike from "../utils/postActions/actionDislike";
 import actionLike from "../utils/postActions/actionLike";
 import actionComment from "../utils/postActions/actionComment";
+import { FaUser } from "react-icons/fa";
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -36,7 +37,7 @@ export default function PostPage() {
             }
         }
         getPost();
-    }, [postId, userData.id, isLiked, trigger]);
+    }, [postId, userData.id, trigger , isViewed , isLiked]);
 
     useEffect(() => {
         if (!data) return;
@@ -57,7 +58,6 @@ export default function PostPage() {
             }
         } catch (error) {
             alert("Something went wrong, please try again later");
-            console.error(error);
         };
     };
 
@@ -83,7 +83,7 @@ export default function PostPage() {
                         <div className="post-page-header">
                             <div className="post-page-user-info">
                                 <div className="post-page-avatar">
-                                    {!data.owner?.avatar ? <FaUser /> : <img src={data.owner.avatar} alt='user avatar' />}
+                                    {!data.owner?.avatar ? <FaUser/> : <img src={data.owner.avatar} alt='user avatar' />}
                                 </div>
                                 <div className="meta">
                                     <span className="post-page-username">{!data.owner?.name ? "User" : data.owner.name}</span>
@@ -91,13 +91,13 @@ export default function PostPage() {
                             </div>
                             <button className="post-page-more-btn">⋯</button>
                         </div>
-                        <h1 className="post-page-header">{data.post.header}</h1>
+                        <h1 className="post-page-title">{data.post.header}</h1>
 
                         <div className="post-meta">
                             <span>{new Date(data.post.createdAt).toLocaleString()}</span>
                         </div>
 
-                        <p className="post-text">{data.text}</p>
+                        <p className="post-text">{data.post.text}</p>
                         {data.post.media?.length > 0 &&
                             data.post.media.map((e, i) => (
                                 <img src={e} alt="Post media" key={i} />
@@ -114,12 +114,12 @@ export default function PostPage() {
                                 }
                             >
                                 <span className="icon">
-                                    <FaHeart /> Likes: {data.post.likes.length}
+                                    <FaHeart /> Likes: {data.post.likes?.length}
                                 </span>
                             </div>
                             <div className="action comment">
                                 <span className="icon">
-                                    <FaComment /> Comments: {data.post.comments.length}
+                                    <FaComment /> Comments: {data.post.comments?.length}
                                 </span>
                             </div>
                             <div className="action view">

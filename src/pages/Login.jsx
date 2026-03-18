@@ -24,6 +24,7 @@ export default function Login() {
                 throw new Error("server not responding!")
             };
             const data = await res.json();
+            
             localStorage.setItem("loginConf", JSON.stringify(data));
             navigate("/home");
         } catch (error) { }

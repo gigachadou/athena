@@ -49,9 +49,7 @@ function Search() {
             const info = await res.json();
             const data = info.users.filter(item => item.id != id)
             setElements(data || []);
-        } catch (error) {
-            console.log(error);
-        };
+        } catch (error) {};
     };
 
     function results(id) {

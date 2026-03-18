@@ -1,132 +1,120 @@
-/* Asosiy konteyner */
+@import "./theme.css";
+
 .signin-container {
-    max-width: 420px;
-    margin: 60px auto;
-    padding: 2.5rem;
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    font-family: 'Inter', -apple-system, sans-serif;
+  max-width: 460px;
+  margin: clamp(3rem, 4vw, 4.5rem) auto;
+  padding: clamp(1.75rem, 3vw, 2.6rem);
+  border-radius: var(--tranquil-radius);
+  background: rgba(7, 8, 14, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--tranquil-shadow);
+  font-family: var(--tranquil-font);
+  color: #fefdfc;
 }
 
-/* Sarlavha */
 .signin-header h2 {
-    text-align: center;
-    color: #2d3436;
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.75rem;
+  font-size: clamp(1.9rem, 3vw, 2.4rem);
 }
 
-/* Form guruhlari */
 .form-group {
-    margin-bottom: 1.2rem;
+  margin-bottom: 1.2rem;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 0.6rem;
-    font-weight: 500;
-    color: #636e72;
-    font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--tranquil-muted);
 }
 
-/* Inputlar */
 .signin-form input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1.5px solid #dfe6e9;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  font-size: 1rem;
+  transition: border var(--tranquil-transition), box-shadow var(--tranquil-transition);
 }
 
 .signin-form input:focus {
-    outline: none;
-    border-color: #0984e3;
-    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+  outline: none;
+  border-color: var(--steel-red);
+  box-shadow: 0 0 0 3px rgba(194, 70, 61, 0.2);
 }
 
 .signin-form input:disabled {
-    background-color: #f5f6fa;
-    cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
 }
 
-/* Parol qismi */
 .password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    transition: opacity 0.2s;
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: var(--tranquil-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
 }
 
-.toggle-password:hover {
-    opacity: 0.7;
-}
-
-/* Tugma */
 .submit-btn {
-    width: 100%;
-    padding: 13px;
-    background-color: #0984e3;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 1rem;
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  background: linear-gradient(140deg, var(--steel-red), #d8685b);
+  color: #05060a;
+  box-shadow: 0 14px 30px rgba(194, 70, 61, 0.3);
+  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
+  margin-top: 1.25rem;
 }
 
 .submit-btn:hover:not(:disabled) {
-    background-color: #0773c5;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 35px rgba(194, 70, 61, 0.4);
 }
 
 .submit-btn:disabled {
-    background-color: #b2bec3;
-    cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--tranquil-muted);
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* Xatolik xabari */
 .error-message {
-    background-color: #fff5f5;
-    color: #e74c3c;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    font-size: 0.85rem;
-    text-align: center;
-    border-left: 4px solid #e74c3c;
+  background: rgba(255, 0, 0, 0.1);
+  color: #e07770;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(255, 0, 0, 0.25);
+  text-align: center;
 }
 
-/* Pastki link */
 .signin-link {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: #636e72;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--tranquil-muted);
 }
 
 .signin-link a {
-    color: #0984e3;
-    text-decoration: none;
-    font-weight: 600;
+  color: var(--steel-red);
+  font-weight: 600;
 }
 
-.signin-link a:hover {
-    text-decoration: underline;
-}
+

@@ -20,10 +20,8 @@ export default async function getPostsByIds(postIds) {
         );
 
         const posts = responses.filter(post => post !== null);
-        console.log(posts);
         return posts;
     } catch (err) {
-        console.error("Failed to load posts:", err);
         return [];
     };
 };

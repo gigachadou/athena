@@ -31,9 +31,7 @@ async function unfollow(userID, followerID, changeFollowState) {
 
         changeFollowState(false);
 
-    } catch (error) {
-        console.error("Unfollow error:", error);
-    }
+    } catch (error) {}
 }
 
 export default unfollow;

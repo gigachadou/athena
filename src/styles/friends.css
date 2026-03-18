@@ -1,58 +1,62 @@
-.friends{
-    width:180px;
-    height:220px;
-    background:#333;
-    border-radius:12px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-    color:white;
-    flex-shrink:0;
-    padding:15px;
-    box-sizing:border-box;
+@import "./theme.css";
+
+.friends {
+  width: 180px;
+  height: 220px;
+  background: rgba(12, 13, 23, 0.95);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  color: #fdfdfd;
+  flex-shrink: 0;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 30px rgba(5, 6, 10, 0.6);
 }
 
-/* avatar */
 .friends svg,
-.friends img{
-    width:80px;
-    height:80px;
-    border-radius:50%;
-    background:#ddd;
-    color:#333;
-    padding:10px;
-    object-fit:cover;
+.friends img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--steel-red);
+  padding: 0.4rem;
+  object-fit: cover;
 }
 
-/* text container */
-.friends-about{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
+.friends-about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-/* name */
-.friends-about h2{
-    font-size:16px;
-    margin:0;
-    text-align:center;
+.friends-about h2 {
+  font-size: 1rem;
+  margin: 0;
+  text-align: center;
+  color: #ffffff;
 }
 
-/* follow button */
-.friends-about button{
-    padding:6px 18px;
-    border:none;
-    border-radius:6px;
-    background:#4da3ff;
-    color:white;
-    font-size:14px;
-    cursor:pointer;
-    transition:0.2s;
+.friends-about button {
+  padding: 0.45rem 1.35rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(130deg, var(--steel-red), #d56556);
+  color: #05060a;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
 }
 
-.friends-about button:hover{
-    background:#2f89e8;
+.friends-about button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(194, 70, 61, 0.35);
 }
+
+

@@ -1,0 +1,53 @@
+@import "./theme.css";
+
+.notification {
+  min-height: 100vh;
+  padding: clamp(1.5rem, 3vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: radial-gradient(circle at 20% 0%, rgba(194, 70, 61, 0.2), transparent 50%),
+    var(--tranquil-black);
+}
+
+.State {
+  width: min(960px, 100%);
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--tranquil-radius);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(9, 10, 20, 0.95);
+  box-shadow: var(--tranquil-shadow);
+}
+
+.State h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0;
+  color: #ffffff;
+}
+
+.State button {
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(140deg, var(--steel-red), #d8685b);
+  color: #05060a;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(194, 70, 61, 0.35);
+  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
+}
+
+.State button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 35px rgba(194, 70, 61, 0.5);
+}
+
+.notification > *:not(.State) {
+  width: min(960px, 100%);
+  align-self: center;
+}

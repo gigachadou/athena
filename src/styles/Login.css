@@ -1,114 +1,105 @@
-/* Asosiy konteynerni markazga joylash */
+@import "./theme.css";
+
 .login-container {
-    max-width: 400px;
-    margin: 80px auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 420px;
+  margin: clamp(3rem, 4vw, 5rem) auto;
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+  border-radius: var(--tranquil-radius);
+  background: rgba(6, 6, 11, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--tranquil-shadow);
+  color: #fefcfb;
 }
 
-/* Sarlavha */
 .login-header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #333;
-    font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: clamp(1.75rem, 3vw, 2.2rem);
+  color: #ffffff;
 }
 
-/* Form elementlari oralig'i */
 .form-group {
-    margin-bottom: 1.2rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--tranquil-muted);
 }
 
-/* Inputlar */
-input {
-    width: 100%;
-    padding: 12px;
-    border: 1.5px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box; /* Padding bilan o'lcham buzilmasligi uchun */
+.form-group input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fdfcfb;
+  font-size: 1rem;
+  transition: border var(--tranquil-transition), box-shadow var(--tranquil-transition);
 }
 
-input:focus {
-    outline: none;
-    border-color: #007bff;
+.form-group input:focus {
+  outline: none;
+  border-color: var(--steel-red);
+  box-shadow: 0 0 0 3px rgba(194, 70, 61, 0.2);
 }
 
-/* Parol inputi va ko'zcha tugmasi uchun */
 .password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--tranquil-muted);
+  cursor: pointer;
+  font-size: 1rem;
 }
 
-/* Kirish tugmasi */
 .submit-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 10px;
+  width: 100%;
+  padding: 0.95rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  background: linear-gradient(140deg, var(--steel-red) 0%, #d8685b 90%);
+  color: #05060a;
+  box-shadow: 0 15px 35px rgba(194, 70, 61, 0.4);
+  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
 }
 
 .submit-btn:hover {
-    background-color: #0056b3;
+  transform: translateY(-1px);
 }
 
-/* Xatolik xabari */
 .error-message {
-    background-color: #ffeef0;
-    color: #d73a49;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
-    text-align: center;
-    border: 1px solid #ffcfd2;
+  background: rgba(194, 70, 61, 0.12);
+  color: #e07770;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(194, 70, 61, 0.4);
 }
 
-/* Sign in qismi */
 .signup-link {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: #666;
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.95rem;
+  color: var(--tranquil-muted);
 }
 
 .signup-link a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 600;
+  color: var(--steel-red);
+  font-weight: 600;
 }
 
-.signup-link a:hover {
-    text-decoration: underline;
-}
+

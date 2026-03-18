@@ -36,7 +36,6 @@ export default function ProtectedRoot() {
                 const data = await response.json();
                 setUserData(data);
             } catch (err) {
-                console.error("getUserData failed:", err);
 
                 if (err.message.includes("Session expired") || err.message.includes("Unauthorized")) {
                     localStorage.removeItem("loginConf");
@@ -48,7 +47,6 @@ export default function ProtectedRoot() {
         };
         getUserData();
     }, []);
-    console.log(userData);
     return (
         <div>
             {userData && (<>

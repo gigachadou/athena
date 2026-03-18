@@ -15,5 +15,4 @@ export async function actionView(id) {
         body: JSON.stringify({ views: post.views + 1 })
     });
     if (!res2.ok) throw new Error("Error at actionView - PATCH");
-    console.log("Incremented");
 };
