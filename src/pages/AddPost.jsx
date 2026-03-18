@@ -3,7 +3,7 @@ import "../styles/AddPost.css";
 import { useOutletContext } from "react-router-dom";
 import { convertToBase64 } from "../utils/convertToBase64";
 import { FaX } from "react-icons/fa6";
-import addNote from "../utils/addNotefication";
+import addNote from "../utils/addNotification";
 
 export default function AddPost() {
     const [header, setHeader] = useState("");
@@ -89,7 +89,7 @@ export default function AddPost() {
             setHeader("");
             setText("");
             setMedia(null);
-            addNote("Post added successfully." , "Thank you again for staying with us." , userData.id)
+            addNote("Post added successfully.", "Thank you again for staying with us.", userData.id);
             location.reload();
         } catch (err) {
             setError(`General error: ${err.message}`);
