@@ -1,16 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/AddPost.css";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { convertToBase64 } from "../utils/convertToBase64";
 import { FaX } from "react-icons/fa6";
 import addNote from "../utils/addNotification";
 
 export default function AddPost() {
+    const { postId } = useParams();
+    const [error, setError] = useState("");
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [media, setMedia] = useState([]);
-    const [error, setError] = useState("");
     const { userData } = useOutletContext();
+
+    useEffect(() => {
+        async function getInitial() {
+            try {
+                const res = await fetch(`http://localhost:3000/posts/${postId}`);
+                if (!res.ok) throw new Error("Couldn't get the post to edit, please come back later or try to refresh the page");
+                const data = await res.json();
+                setHeader(data.header);
+                setText(data.text);
+                setMedia(media);
+            } catch (error) {
+                setError(error.message);
+            };
+        };
+        if (postId) {
+            getInitial();
+        }
+    }, [postId])
+
     console.log(media);
     async function handleAddMedia(e) {
         if (media.length == 10) {

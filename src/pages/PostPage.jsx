@@ -117,7 +117,7 @@ export default function PostPage() {
             ) : data ? (
                 <div className="post-page">
                     <article className="post">
-                        <div className="post-page-header" onClick={() => navigate(`/searchresultusers/${data.owner.id}`)}>
+                        <div className="post-page-header" onClick={() => data.post.userId === userData.id ? navigate("/profile") : navigate(`/searchresultusers/${data.owner.id}`)}>
                             <div className="post-page-user-info">
                                 <div className="post-page-avatar">
                                     {!data.owner?.avatar ? <FaUser /> : <img src={data.owner.avatar} alt='user avatar' />}
