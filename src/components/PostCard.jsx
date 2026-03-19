@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const PostCard = ({ post }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [serverError, setServerError] = useState(null);
+    const [moreBtn, setMoreBtn] = useState(false);
 
     const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ const PostCard = ({ post }) => {
 
     return (
         <div className="post-card">
-            <div className="post-header" onClick={() => navigate(`/searchresultusers/${userInfo.id}`)}>
+            <div className="post-header" onClick={() => post.userId === userInfo.id ? navigate("/profile") : navigate(`/searchresultusers/${userInfo.id}`)}>
                 <div className="user-info">
                     <div className="avatar">
                         {!userInfo?.avatar ? <FaUser /> : <img src={userInfo.avatar} alt='user avatar' />}
@@ -45,7 +46,11 @@ const PostCard = ({ post }) => {
                         <span className="timestamp"> {timeAgo}</span>
                     </div>
                 </div>
-                <button className="more-btn">⋯</button>
+                <button className="more-btn" onClick={() => setMoreBtn(prev => !prev)}>⋯</button>
+                <div className="post-more-btn" style={{ display: moreBtn ? "block" : "none" }}>
+                    <button onClick={() => { alert("sth "); navigate(`/editPost/${post.id}`) }}>Edit</button>
+                    <button>Delete</button>
+                </div>
             </div>
 
             <div className="post-content" onClick={() => navigate(`/posts/${post.id}`)}>

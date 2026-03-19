@@ -33,6 +33,7 @@ function App() {
         { path: "/search", element: <Search /> },
         { path: "/notification", element: <Notification /> },
         { path: "/addPost", element: <AddPost /> },
+        { path: "/editPost/:postId", element: <AddPost /> },
         { path: "/searchresultusers/:usersID", element: <SearchProfile /> },
         { path: "/posts/:postId", element: <PostPage /> },
         {path:'/followers/:order/:userID' , element: <FollowerPage/>},

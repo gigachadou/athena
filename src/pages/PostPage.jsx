@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import "../styles/PostPage.css";
-import { FaComment, FaEye, FaHeart, FaPaperPlane } from "react-icons/fa6";
+import { FaComment, FaEye, FaHeart, FaPaperPlane, FaTrash, FaU } from "react-icons/fa6";
 import { actionView } from "../utils/postActions/actionView";
 import actionDislike from "../utils/postActions/actionDislike";
 import actionLike from "../utils/postActions/actionLike";
 import actionComment from "../utils/postActions/actionComment";
 import { FaUser } from "react-icons/fa";
+import actionDeleteComment from "../utils/postActions/actionDeleteComment";
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -100,6 +101,15 @@ export default function PostPage() {
         }
     };
 
+    async function handleCommentDelete(postId, userId, commentId) {
+        try {
+            await actionDeleteComment(postId, userId, commentId);
+            setTrigger(prev => prev + 1);
+        } catch (error) {
+            alert("Couldn't delete the comment, please try again later.");
+        };
+    };
+
     return (
         <div>
             {serverError ? (
@@ -107,7 +117,7 @@ export default function PostPage() {
             ) : data ? (
                 <div className="post-page">
                     <article className="post">
-                        <div className="post-page-header" onClick={() => navigate(`/searchresultusers/${data.owner.id}`)}>
+                        <div className="post-page-header" onClick={() => data.post.userId === userData.id ? navigate("/profile") : navigate(`/searchresultusers/${data.owner.id}`)}>
                             <div className="post-page-user-info">
                                 <div className="post-page-avatar">
                                     {!data.owner?.avatar ? <FaUser /> : <img src={data.owner.avatar} alt='user avatar' />}
@@ -165,7 +175,7 @@ export default function PostPage() {
                         </div>
                         {data.post.comments.map((comment, index) => {
                             const owner = commentOwners[comment.user] || { name: "Loading...", id: null };
-
+                            console.log(comment);
                             return (
                                 <div key={comment.id || index} className="post-page-comment">
                                     <div
@@ -175,10 +185,11 @@ export default function PostPage() {
                                         }}
                                         style={{ cursor: owner.id ? "pointer" : "default", color: "lightblue" }}
                                     > {/* style qo'shish kerak */}
-                                        <img src={owner.avatar} alt="Avatar" width={60} height={60} style={{ border: "1px transparent", borderRadius: "50%" }} /> {/* style qo'shish kerak */}
+                                        {!owner?.avatar ? <FaUser width={60} height={60} /> : <img src={owner.avatar} alt="Avatar" width={60} style={{ border: "1px transparent", borderRadius: "50%" }} />} {/* style qo'shish kerak */}
                                         <p>{owner.name}</p>
                                     </div>
                                     {comment.text}
+                                    {(owner.id === userData.id || data.post.userId === userData.id) && <FaTrash onClick={() => handleCommentDelete(data.post.id, userData.id, comment.id)} />}
                                 </div>
                             );
                         })}
