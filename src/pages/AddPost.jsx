@@ -1,76 +1,122 @@
 import { useEffect, useState } from "react";
 import "../styles/AddPost.css";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { convertToBase64 } from "../utils/convertToBase64";
-import { FaX } from "react-icons/fa6";
 import addNote from "../utils/addNotification";
 
 export default function AddPost() {
-    const { postId } = useParams();
+    const { postId: routePostId } = useParams();
     const [error, setError] = useState("");
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [media, setMedia] = useState([]);
     const { userData } = useOutletContext();
-
+    const navigate = useNavigate();
     useEffect(() => {
-        async function getInitial() {
+        async function loadPostForEdit() {
             try {
-                const res = await fetch(`http://localhost:3000/posts/${postId}`);
-                if (!res.ok) throw new Error("Couldn't get the post to edit, please come back later or try to refresh the page");
+                setError("");
+                const res = await fetch(`http://localhost:3000/posts/${routePostId}`);
+                if (!res.ok) {
+                    throw new Error("Couldn't load post");
+                }
                 const data = await res.json();
-                setHeader(data.header);
-                setText(data.text);
-                setMedia(media);
-            } catch (error) {
-                setError(error.message);
-            };
-        };
-        if (postId) {
-            getInitial();
+                if (data.userId !== userData.id) navigate("/");
+                setHeader(data.header || "");
+                setText(data.text || "");
+                const loadedMedia = (data.media || []).map(base64 => ({
+                    base64,
+                    id: Date.now() + Math.random()
+                }));
+                setMedia(loadedMedia);
+            } catch (err) {
+                setError(err.message);
+            }
         }
-    }, [postId])
 
-    console.log(media);
+        if (routePostId) {
+            loadPostForEdit();
+        } else {
+            setHeader("");
+            setText("");
+            setMedia([]);
+            setError("");
+        }
+    }, [routePostId]);
+
     async function handleAddMedia(e) {
-        if (media.length == 10) {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+
+        if (media.length >= 10) {
             setError("You can not add anymore");
             return;
         };
-        const base64media = await convertToBase64(e.target.files[0]);
-        if (!base64media) {
+
+        const availableSlots = 10 - media.length;
+        const selectedFiles = files.slice(0, availableSlots);
+
+        try {
+            const converted = await Promise.all(
+                selectedFiles.map(async (file) => {
+                    const base64 = await convertToBase64(file);
+                    return {
+                        base64,
+                        id: Date.now() + Math.random()
+                    };
+                })
+            );
+            setMedia(prev => [...prev, ...converted]);
+            setError("");
+        } catch {
             setError("Could not convert image to a form needed, choose different image or try again");
-            return;
-        };
-        setMedia(prev => [...prev, { base64: base64media, id: Date.now() }]);
+        }
     };
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
             setError("");
-            // posting to /posts
-            const postId = `${userData.email}-${Date.now()}`;
+            const isEditMode = Boolean(routePostId);
+            const newPostId = `${userData.email}-${Date.now()}`;
 
             const mediaSet = media.map(e => e.base64);
 
-            const postResponse = await fetch("http://localhost:3000/posts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    header: header.trim(),
-                    text: text.trim(),
-                    likes: [],
-                    comments: [],
-                    views: 0,
-                    id: postId,
-                    userId: userData.id,
-                    media: mediaSet.length ? mediaSet : null,
-                    createdAt: new Date().toISOString()
-                })
-            });
+            let postResponse;
+
+            if (!isEditMode) {
+                postResponse = await fetch("http://localhost:3000/posts", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        header: header.trim(),
+                        text: text.trim(),
+                        likes: [],
+                        comments: [],
+                        views: 0,
+                        id: newPostId,
+                        userId: userData.id,
+                        media: mediaSet.length ? mediaSet : null,
+                        createdAt: new Date().toISOString(),
+                        lastEdited: new Date().toISOString()
+                    })
+                });
+            } else {
+                postResponse = await fetch(`http://localhost:3000/posts/${routePostId}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        header: header.trim(),
+                        text: text.trim(),
+                        media: mediaSet.length ? mediaSet : null,
+                        lastEdited: new Date().toISOString()
+                    })
+                });
+            }
 
             if (!postResponse.ok) {
                 const errText = await postResponse.text();
@@ -81,36 +127,43 @@ export default function AddPost() {
             // adding postId to user/posts
 
             // 1. Get current user data
-            const userRes = await fetch(`http://localhost:3000/users/${userData.id}`);
+            if (!isEditMode) {
+                const userRes = await fetch(`http://localhost:3000/users/${userData.id}`);
 
-            if (!userRes.ok) {
-                setError("Couldn't get user's data");
-                return;
+                if (!userRes.ok) {
+                    setError("Couldn't get user's data");
+                    return;
+                };
+
+                const user = await userRes.json();
+
+                // 2. Append the new post ID to the array
+                const updatedPosts = [...(user.posts || []), newPostId];
+
+                const patchRes = await fetch(`http://localhost:3000/users/${userData.id}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ posts: updatedPosts })
+                });
+
+                if (!patchRes.ok) {
+                    setError("Error at adding post's id to user");
+                    console.log(await patchRes.text());
+                    return;
+                };
             };
 
-            const user = await userRes.json();
-
-            // 2. Append the new post ID to the array
-            const updatedPosts = [...(user.posts || []), postId];
-
-            const patchRes = await fetch(`http://localhost:3000/users/${userData.id}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ posts: updatedPosts })
-            });
-
-            if (!patchRes.ok) {
-                setError("Error at adding post's id to user");
-                console.log(await patchRes.text());
-                return;
-            };
             setHeader("");
             setText("");
-            setMedia(null);
-            addNote("Post added successfully.", "Thank you again for staying with us.", userData.id);
-            location.reload();
+            setMedia([]);
+            addNote(
+                isEditMode ? "Post updated successfully." : "Post added successfully.",
+                "Thank you again for staying with us.",
+                userData.id
+            );
+            navigate("/profile");
         } catch (err) {
             setError(`General error: ${err.message}`);
         };
@@ -166,11 +219,19 @@ export default function AddPost() {
                         </label>
                         {media.map((obj) => (
                             <div className="add-post-media-preview" key={obj.id}>
-                                <img
-                                    src={obj.base64}
-                                    alt="Uploaded preview"
-                                    className="add-post-media-img"
-                                />
+                                {obj.base64.startsWith("data:video/") ? (
+                                    <video
+                                        src={obj.base64}
+                                        controls
+                                        className="add-post-media-img"
+                                    />
+                                ) : (
+                                    <img
+                                        src={obj.base64}
+                                        alt="Uploaded preview"
+                                        className="add-post-media-img"
+                                    />
+                                )}
                                 <button
                                     type="button"
                                     className="remove-btn"

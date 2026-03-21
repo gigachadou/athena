@@ -1,14 +1,29 @@
 import { FaUser } from 'react-icons/fa';
 import '../styles/PostCard.css';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
-    const [userInfo, setUserInfo] = useState(null);
+    const [ownerInfo, setOwnerInfo] = useState(null);
     const [serverError, setServerError] = useState(null);
     const [moreBtn, setMoreBtn] = useState(false);
+    const { userData } = useOutletContext();
 
     const navigate = useNavigate();
+
+    function handleHeaderNavigation() {
+        if (!ownerInfo?.id) return;
+        if (post.userId === ownerInfo.id) {
+            navigate("/profile");
+            return;
+        }
+        navigate(`/searchresultusers/${ownerInfo.id}`);
+    }
+
+    function handlePostNavigation() {
+        if (!post?.id) return;
+        navigate(`/posts/${post.id}`);
+    }
 
     useEffect(() => {
         async function getUserInfo() {
@@ -18,7 +33,7 @@ const PostCard = ({ post }) => {
                 return
             }
             const data = await res.json();
-            setUserInfo(data);
+            setOwnerInfo(data);
         };
         getUserInfo();
     }, [post]);
@@ -36,30 +51,52 @@ const PostCard = ({ post }) => {
 
     return (
         <div className="post-card">
-            <div className="post-header" onClick={() => post.userId === userInfo.id ? navigate("/profile") : navigate(`/searchresultusers/${userInfo.id}`)}>
+            {ownerInfo && (<><div className="post-header" onClick={handleHeaderNavigation}>
                 <div className="user-info">
                     <div className="avatar">
-                        {!userInfo?.avatar ? <FaUser /> : <img src={userInfo.avatar} alt='user avatar' />}
+                        {!ownerInfo?.avatar ? <FaUser /> : <img src={ownerInfo.avatar} alt='user avatar' />}
                     </div>
                     <div className="meta">
-                        <span className="username">{!userInfo?.name ? "User" : userInfo.name}</span>
+                        <span className="username">{!ownerInfo?.name ? "User" : ownerInfo.name}</span>
                         <span className="timestamp"> {timeAgo}</span>
                     </div>
                 </div>
-                <button className="more-btn" onClick={() => setMoreBtn(prev => !prev)}>⋯</button>
-                <div className="post-more-btn" style={{ display: moreBtn ? "block" : "none" }}>
-                    <button onClick={() => { alert("sth "); navigate(`/editPost/${post.id}`) }}>Edit</button>
-                    <button>Delete</button>
+                <button
+                    className="more-btn"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setMoreBtn(prev => !prev);
+                    }}
+                >
+                    ⋯
+                </button>
+                <div
+                    className="post-more-btn"
+                    style={{ display: moreBtn ? "block" : "none" }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {ownerInfo.id === userData.id && <div className="post-more-btn-forOwner">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (!post?.id) return;
+                                navigate(`/editPost/${post.id}`);
+                            }}
+                        >
+                            Edit
+                        </button>
+                        <button>Delete</button>
+                    </div>}
                 </div>
             </div>
 
-            <div className="post-content" onClick={() => navigate(`/posts/${post.id}`)}>
-                {post.header && (
-                    <h2 className="post-title">{post.header}</h2>
-                )}
-                <p className="post-text">{post.text}</p>
-                {post.media && <img src={post.media[0]} alt='Media' />}
-            </div>
+                <div className="post-content" onClick={handlePostNavigation}>
+                    {post.header && (
+                        <h2 className="post-title">{post.header}</h2>
+                    )}
+                    <p className="post-text">{post.text}</p>
+                    {post.media && <img src={post.media[0]} alt='Media' />}
+                </div> </>)}
 
             {/* <div className="post-footer">
                 <div className="action-btns">
