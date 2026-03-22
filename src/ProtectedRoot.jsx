@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import { useEffect, useState } from "react";
+import checkUserExistance from "./utils/checkUserExistance";
 
 export default function ProtectedRoot() {
     const [userData, setUserData] = useState(null);
@@ -8,41 +9,33 @@ export default function ProtectedRoot() {
     useEffect(() => {
         async function getUserData() {
             try {
-                const local = localStorage.getItem("loginConf");
-                if (!local) {
-                    setUserData(null);
-                    navigate("/login");
-                };
+                const locale = localStorage.getItem("loginConf");
+                if (!locale) throw new Error("No data for auto-login");
 
-                const { user } = JSON.parse(local);
-                if (!user?.id) {
-                    setUserData(null);
-                    navigate("/login");
-                };
+                const { user, accessToken } = JSON.parse(locale);
+                console.log("Access Token: " + accessToken);
+                await checkUserExistance(accessToken);
+
+                if (!user?.id) throw new Error("Invalid data for auto-login")
 
                 const response = await fetch(`http://localhost:3000/users/${user.id}`);
 
                 if (!response.ok) {
                     if (response.status === 401) {
-                        localStorage.removeItem("loginConf");
-                        navigate("/login")
                         throw new Error("Session expired");
                     };
 
-                    const errorData = await response.json().catch(() => ({}));
+                    const errorData = await response.json()
                     throw new Error(errorData.message || `Server error: ${response.status}`);
                 }
 
                 const data = await response.json();
                 setUserData(data);
             } catch (err) {
-
-                if (err.message.includes("Session expired") || err.message.includes("Unauthorized")) {
-                    localStorage.removeItem("loginConf");
-                };
+                localStorage.removeItem("loginConf");
                 setUserData(null);
                 navigate("/login");
-                alert("Error at auto authentication");
+                console.warn(err.message);
             };
         };
         getUserData();

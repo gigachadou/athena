@@ -1,25 +1,17 @@
-export default async function checkUserExistance() {
+/**
+ * User haqiqatdan ham database'da bormi yo'qmi tekshirish uchun async funksiya
+ * @returns {Promise<Error>}
+ */
+export default async function checkUserExistance(token) {
     console.log("Function is working");
-    const token = localStorage.getItem("access_token");
+    // const token = localStorage.getItem("access_token");
 
-    if (!token) {
-        return false;
-    };
+    if (!token) throw new Error("Token is missing for checkUserExistance");
 
-    try {
-        const res = await fetch("http://localhost:5000/users/me", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        if (res.ok) {
-            const user = await res.json();
-            return true;
-        } else if (res.status === 401 || res.status === 403) {
-            return false;
+    const res = await fetch("http://localhost:5000/users/me", {
+        headers: {
+            Authorization: `Bearer ${token}`
         }
-    } catch (err) {
-        return false;
-    };
+    });
+    if (!res.ok) throw new Error("Invalid access token")
 };

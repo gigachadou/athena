@@ -46,6 +46,23 @@ function SearchProfile() {
     if (!data) {
         return <div>Loading...</div>
     };
+    // faqat funksiyalarni handlerga ko'chirdim, error handling u-n! Boshqa joyi o'zgarmagan
+    async function followHandler(currUserId, dataId, setStateFollow) {
+        try {
+            following(currUserId, dataId, setStateFollow);
+        } catch (error) {
+            alert("Couldn't follow, please try again");
+        };
+    };
+
+    async function unfollowHandler(currUserId, dataId, setStateFollow) {
+        try {
+            unfollow(currUserId, dataId, setStateFollow);
+        } catch (error) {
+            alert("Couldn't unfollow, please try again");
+        };
+    };
+
     return <div className="profile-page">
         <button onClick={() => navigate("/profile")} className="back"><FaArrowLeft /></button>
         <div className="UserInfo">
@@ -59,7 +76,7 @@ function SearchProfile() {
                     <p>{data?.bio ? data.bio : "not bio yet"}</p>
                 </div>
                 <div className="following">
-                    {stateFollow ? <button onClick={() => unfollow(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => { following(currentUser.id, data.id, setStateFollow) }} className="follow-btn">Follow</button>}
+                    {stateFollow ? <button onClick={() => unfollowHandler(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>}
                 </div>
             </div>
         </div>
