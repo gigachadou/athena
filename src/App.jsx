@@ -13,6 +13,7 @@ import AddPost from './pages/AddPost';
 import SearchProfile from './components/SearchProfile';
 import PostPage from './pages/PostPage';
 import FollowerPage from './pages/FollowerPage';
+import AboutUs from './pages/AboutUs';
 
 function App() {
   const router = createBrowserRouter([
@@ -37,7 +38,8 @@ function App() {
         { path: "/searchresultusers/:usersID", element: <SearchProfile /> },
         { path: "/posts/:postId", element: <PostPage /> },
         {path:'/followers/:order/:userID' , element: <FollowerPage/>},
-        {path:'/search/:name' , element: <Search/>}
+        {path:'/search/:name' , element: <Search/>},
+        {path:"/aboutapplicationinformation" , element: <AboutUs/>}
       ],
     },
     { path: "*", element: <Navigate to="/" /> },

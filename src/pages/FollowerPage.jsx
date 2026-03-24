@@ -13,6 +13,11 @@ function FollowerPage() {
 
     useEffect(() => {
         async function getUserFollowerID() {
+            let id = JSON.parse(localStorage.getItem("loginConf")).user.id;
+            if(Number(userID) !== id) {
+                setError("unauthorized access to other people's profiles is prohibited");
+                return;
+            }
             try {
                 if (order) {
                     const response = await fetch(`http://localhost:3000/users/${userID}`);
@@ -21,7 +26,7 @@ function FollowerPage() {
                     let user = await response.json();
 
                     let followersID = user[order] || [];
-                    if (!followersID) throw new Error('Not follower')
+                    if (followersID.length === 0) throw new Error('Not follower')
                     setUser(user)
                     setFollowsID(followersID);
                     setError('')
@@ -34,6 +39,9 @@ function FollowerPage() {
         getUserFollowerID()
     }, [userID])
 
+    if(error) return <div>
+        <h2>{error}</h2>
+    </div>
     if (!user) return <div>
         <h2>Loading...</h2>
         <p>please wait</p>

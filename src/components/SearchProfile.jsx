@@ -6,6 +6,7 @@ import PostCard from "./PostCard";
 import getPostsByIds from "../utils/getPostsByIds";
 import following from "../utils/following";
 import unfollow from "../utils/unfollow";
+import addNote from "../utils/addNotification";
 
 function SearchProfile() {
     const [data, setData] = useState(null);
@@ -50,17 +51,16 @@ function SearchProfile() {
     async function followHandler(currUserId, dataId, setStateFollow) {
         try {
             following(currUserId, dataId, setStateFollow);
-        } catch (error) {
-            alert("Couldn't follow, please try again");
-        };
+            addNote("Succes Follow" , "The follow operation was successful." , currUserId);
+            addNote("New Follower" , `You have new follower` , dataId)
+        } catch (error) { };
     };
 
     async function unfollowHandler(currUserId, dataId, setStateFollow) {
         try {
             unfollow(currUserId, dataId, setStateFollow);
-        } catch (error) {
-            alert("Couldn't unfollow, please try again");
-        };
+            addNote("Succes unfollow" , "The unfollow operation was successful." , currUserId)
+        } catch (error) { };
     };
 
     return <div className="profile-page">
@@ -76,7 +76,7 @@ function SearchProfile() {
                     <p>{data?.bio ? data.bio : "not bio yet"}</p>
                 </div>
                 <div className="following">
-                    {stateFollow ? <button onClick={() => unfollowHandler(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>}
+                    {stateFollow ? <button onClick={() => unfollowHandler(currentUser.id, data.id , setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>}
                 </div>
             </div>
         </div>
