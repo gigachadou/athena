@@ -65,7 +65,7 @@ export default function Signin() {
                         disabled={loading}
                         maxLength={40}
                         minLength={4}
-                        placeholder="login"
+                        placeholder="name"
                     />
                 </div>
 

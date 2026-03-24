@@ -1,27 +1,54 @@
+/**
+ * 
+ * @param {Array} postIds - post id laridan tuzilgan array
+ * @returns {Array}
+ */
 export default async function getPostsByIds(postIds) {
     if (!postIds?.length) return [];
 
     try {
-        const responses = await Promise.all(
-            postIds.map(id =>
-                fetch(`http://localhost:3000/posts/${id}`)
-                    .then(res => {
-                        if (!res.ok) {
-                            if (res.status === 404) return null;
-                            throw new Error(`Post ${id} fetch failed: ${res.status}`);
-                        }
-                        return res.json();
-                    })
-                    .catch(err => {
-                        console.warn(`Post ${id} error:`, err);
-                        return null;
-                    })
-            )
+        const params = new URLSearchParams();
+        postIds.forEach(id => params.append("id", id));
+
+        const res = await fetch(`http://localhost:3000/posts?${params.toString()}`);
+        if (!res.ok) {
+            throw new Error(`Posts fetch failed: ${res.status}`);
+        }
+        const posts = await res.json();
+
+        const mediaIds = [...new Set(
+            posts
+                .map(post => post.media)
+                .filter(mediaId => mediaId !== null && mediaId !== undefined)
+        )];
+
+        let mediaById = new Map();
+        if (mediaIds.length) {
+            const mediaParams = new URLSearchParams();
+            mediaIds.forEach(id => mediaParams.append("id", id));
+
+            const mediaRes = await fetch(`http://localhost:3000/media?${mediaParams.toString()}`);
+            if (!mediaRes.ok) {
+                throw new Error(`Media fetch failed: ${mediaRes.status}`);
+            }
+
+            const media = await mediaRes.json();
+            mediaById = new Map(media.map(item => [item.id, item.media]));
+        }
+
+        const postsById = new Map(
+            posts.map(post => [
+                post.id,
+                {
+                    ...post,
+                    media: mediaById.get(post.media) ?? [],
+                },
+            ])
         );
 
-        const posts = responses.filter(post => post !== null);
-        return posts;
+        return postIds.map(id => postsById.get(id)).filter(Boolean);
     } catch (err) {
+        console.warn("Posts fetch error:", err);
         return [];
-    };
-};
+    }
+}

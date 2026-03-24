@@ -25,11 +25,18 @@ export default function PostPage() {
         async function getPost() {
             try {
                 const res = await fetch(`http://localhost:3000/posts/${postId}`);
-                if (!res.ok) throw new Error("Could not get the post needed");
+                if (!res.ok) throw new Error("Couldn't get the post needed");
                 const post = await res.json();
+                //mediani yuklash   
+                const resMedia = await fetch(`http://localhost:3000/media/${post.media}`);
+                if (!resMedia.ok) throw new Error("Couldn't load the media");
+                const media = await resMedia.json();
+                post.media = media.media;
+
                 const res2 = await fetch(`http://localhost:3000/users/${post.userId}`);
-                if (!res2.ok) throw new Error("Could not get the information");
+                if (!res2.ok) throw new Error("Couldn't get the information");
                 const owner = await res2.json();
+
                 if (post.likes.includes(userData.id)) setIsLiked(true);
                 else setIsLiked(false);
 

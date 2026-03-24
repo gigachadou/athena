@@ -14,7 +14,7 @@ function Settings() {
                 let id = JSON.parse(localStorage.getItem("loginConf")).user.id;
                 if(!id) throw new Error('User not logging yet')
                 let res = await fetch(`http://localhost:3000/users/${id}`);
-                if(!res.ok) throw new Error('User not found please login or upload page.')
+                if(!res.ok) throw new Error('Server error, please reload the page, or try again later');
                 let data = await res.json();
                 setUserData(data);
                 setError('');

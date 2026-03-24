@@ -10,6 +10,7 @@ export default function AddPost() {
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [media, setMedia] = useState([]);
+    const [mediaId, setMediaId] = useState(null);
     const { userData } = useOutletContext();
     const navigate = useNavigate();
     useEffect(() => {
@@ -24,6 +25,7 @@ export default function AddPost() {
                 if (data.userId !== userData.id) navigate("/");
                 setHeader(data.header || "");
                 setText(data.text || "");
+                setMediaId(data.media);
                 const loadedMedia = (data.media || []).map(base64 => ({
                     base64,
                     id: Date.now() + Math.random()
@@ -83,8 +85,23 @@ export default function AddPost() {
             const mediaSet = media.map(e => e.base64);
 
             let postResponse;
-
+            let mediaResponse;
             if (!isEditMode) {
+                let mediaResData = null;
+                if (mediaSet?.length) {
+                    mediaResponse = await fetch("http://localhost:3000/media", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            media: mediaSet
+                        })
+                    });
+                    if (!mediaResponse.ok) throw new Error("Couldn't load the media given to the server");
+                    mediaResData = await mediaResponse.json();
+                };
+
                 postResponse = await fetch("http://localhost:3000/posts", {
                     method: "POST",
                     headers: {
@@ -98,12 +115,25 @@ export default function AddPost() {
                         views: 0,
                         id: newPostId,
                         userId: userData.id,
-                        media: mediaSet.length ? mediaSet : null,
+                        media: mediaResData ? mediaResData.id : null,
                         createdAt: new Date().toISOString(),
                         lastEdited: new Date().toISOString()
                     })
                 });
             } else {
+                //EDITING ------------------------------------------------------------------------
+                if (mediaId) {
+                    mediaResponse = await fetch(`http://localhost:3000/media/${mediaId}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            media: mediaSet
+                        })
+                    });
+                };
+
                 postResponse = await fetch(`http://localhost:3000/posts/${routePostId}`, {
                     method: "PATCH",
                     headers: {
@@ -112,7 +142,6 @@ export default function AddPost() {
                     body: JSON.stringify({
                         header: header.trim(),
                         text: text.trim(),
-                        media: mediaSet.length ? mediaSet : null,
                         lastEdited: new Date().toISOString()
                     })
                 });
@@ -120,8 +149,7 @@ export default function AddPost() {
 
             if (!postResponse.ok) {
                 const errText = await postResponse.text();
-                setError(`Error at loading your post to the server: ${postResponse.status} - ${errText}`);
-                return;
+                throw new Error(`Error at loading your post to the server: ${postResponse.status} - ${errText}`);
             };
 
             // adding postId to user/posts
@@ -130,10 +158,7 @@ export default function AddPost() {
             if (!isEditMode) {
                 const userRes = await fetch(`http://localhost:3000/users/${userData.id}`);
 
-                if (!userRes.ok) {
-                    setError("Couldn't get user's data");
-                    return;
-                };
+                if (!userRes.ok) throw new Error("Couldn't get user's data");
 
                 const user = await userRes.json();
 
@@ -149,9 +174,7 @@ export default function AddPost() {
                 });
 
                 if (!patchRes.ok) {
-                    setError("Error at adding post's id to user");
-                    console.log(await patchRes.text());
-                    return;
+                    throw new Error("Error at adding post's id to user");
                 };
             };
 

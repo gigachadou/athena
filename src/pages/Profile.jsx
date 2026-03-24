@@ -39,11 +39,11 @@ function Profile() {
                 <div className="name">
                     <h2>{userData.name}</h2>
                     <p>{userData.email}</p>
-                    <p>{!userData.bio ? "..." : userData.bio}</p>
+                    <p>{!userData.bio ? "" : userData.bio}</p>
                 </div>
                 <div className="following">
-                    <button className="follow-btns" onClick={()=> navigate(`/followers/followers/${userData.id}`)}>Followers: {userData.followers.length}</button>
-                    <button className="follow-btns" onClick={()=> navigate(`/followers/followings/${userData.id}`)}>Followings: {userData.followings.length}</button>
+                    <button className="follow-btns" onClick={() => navigate(`/followers/followers/${userData.id}`)}>Followers: {userData.followers.length}</button>
+                    <button className="follow-btns" onClick={() => navigate(`/followers/followings/${userData.id}`)}>Followings: {userData.followings.length}</button>
                 </div>
             </div>
         </div>
