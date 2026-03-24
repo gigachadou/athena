@@ -27,6 +27,36 @@ function Notification() {
         getNotes()
     }, [])
 
+    async function handleMarkAllAsRead() {
+    try {
+        const id = JSON.parse(localStorage.getItem("loginConf")).user.id;
+
+        const res = await fetch(`http://localhost:3000/notification?userID=${id}`);
+        if (!res.ok) throw new Error("Failed to fetch notifications");
+
+        const notes = await res.json();
+
+        const unreadNotes = notes.filter(note => note.status !== "read");
+
+        await Promise.all(
+            unreadNotes.map(note =>
+                fetch(`http://localhost:3000/notification/${note.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-type": "application/json" },
+                    body: JSON.stringify({ status: "read" })
+                })
+            )
+        );
+
+        setNotification(prev =>
+            prev.map(note => ({ ...note, status: "read" }))
+        );
+
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
     if(error) return (
         <div className="notification-error">
             <FaXmark/>
@@ -37,7 +67,7 @@ function Notification() {
     return <div className="notification">
         <div className="State">
             <h2>Notifications:</h2>
-            <button>Mark as read</button>
+            <button onClick={handleMarkAllAsRead}>Mark as read</button>
         </div>
         {
             notification.length === 0 ? <h2>No notifications yet</h2> : notification.map(note => <NoteCard key={note.noteID} header={note.header} text={note.text} time={note.creadetAt} noteID={note.noteID} status={note.status}/>)

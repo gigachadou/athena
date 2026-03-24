@@ -3,22 +3,25 @@ import "../styles/NoteCard.css"
 
 function NoteCard({ header, text, time, noteID, status }) {
 
-    async function handleChangeNoteStatus() {
-        const res = await fetch(`http://localhost:3000/notification`);
+   async function handleChangeNoteStatus() {
+    try {
+        const res = await fetch(`http://localhost:3000/notification?noteID=${noteID}`);
         if (!res.ok) throw new Error("Server not found please try again");
-        let notes = await res.json();
 
-        let currentStatus = notes.filter(note => note.noteID === noteID);
-        let otherNotes = notes.filter(note => note.noteID !== noteID);
-        let nextCurrentStatus = { ...currentStatus[0], status: "read" };
-        let uploadNotes = [...otherNotes, nextCurrentStatus];
-        const patch = await fetch(`http://localhost:3000/notification`, {
-            method: "POST",
+        const note = await res.json();
+
+        const updatedNote = { ...note[0], status: "read" };
+
+        const patch = await fetch(`http://localhost:3000/notification/${note[0].id}`, {
+            method: "PATCH",
             headers: { "Content-type": "application/json" },
-            body: JSON.stringify(uploadNotes)
-        })
-        const newStatus = await patch.json()
-    }
+            body: JSON.stringify(updatedNote)
+        });
+
+        if (!patch.ok) throw new Error("Failed to update note");
+
+    } catch (err) {}
+}
 
     function formatTime(dateString) {
         const date = new Date(dateString)
@@ -34,7 +37,7 @@ function NoteCard({ header, text, time, noteID, status }) {
         <h2>{header}</h2>
         <p>{text}</p>
         <p>{formatTime(time)}</p>
-        <button onClick={handleChangeNoteStatus}>{status}</button>
+        <button onClick={handleChangeNoteStatus} disabled={status==="read"}>{status}</button>
     </div>
 }
 
