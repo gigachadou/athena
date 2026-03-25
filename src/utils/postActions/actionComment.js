@@ -14,7 +14,7 @@ export default async function actionComment(postId, userId, text) {
     const res2 = await fetch(`http://localhost:3000/posts/${postId}`, {
         method: "PATCH",
         headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ comments: [...post.comments, { id: commentId, user: userId, text: text }] })
+        body: JSON.stringify({ comments: [...post.comments, { id: commentId, user: userId, text: text, post: postId }] })
     });
 
     if (!res2.ok) throw new Error("Error at actionComment - PATCH1");

@@ -10,6 +10,8 @@ function Profile() {
     const { userData, setUserData } = useOutletContext();
     const [posts, setPosts] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [trigger, setTrigger] = useState(0);
+    const [notification, setNotification] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,7 +21,7 @@ function Profile() {
                 setPosts(response);
             };
         })();
-    }, [userData]);
+    }, [userData, trigger]);
 
     if (!userData) {
         return <div>Loading...</div>
@@ -50,7 +52,7 @@ function Profile() {
         <h2 className="posts-h2">Posts</h2>
         <div className="posts">
             {!userData.posts?.[0] ? <Link to={"/addPost"}>Create your first post</Link>
-                : posts.map(e => <PostCard post={e} key={e.id} />)}
+                : posts.map(e => <PostCard post={e} key={e.id}  setTrigger={setTrigger}/>)}
         </div>
     </div>
 };

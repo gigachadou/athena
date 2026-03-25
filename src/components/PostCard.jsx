@@ -2,8 +2,10 @@ import { FaUser } from 'react-icons/fa';
 import '../styles/PostCard.css';
 import { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { deletePost } from '../utils/postActions/deletePost';
+import addNote from '../utils/addNotification';
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, setTrigger }) => {
     const [ownerInfo, setOwnerInfo] = useState(null);
     const [serverError, setServerError] = useState(null);
     const [moreBtn, setMoreBtn] = useState(false);
@@ -49,6 +51,17 @@ const PostCard = ({ post }) => {
         })
         : 'just now';
 
+    async function handleDelete(postId) {
+        try {
+            await deletePost(postId, userData.id);
+            addNote("Post got removed successfully", "", userData.id);
+            if (setTrigger) setTrigger(prev => ++prev);
+        } catch (error) {
+            console.error(error.message);
+            setServerError(error.message);
+        };
+    };
+
     return (
         <div className="post-card">
             {ownerInfo && (<><div className="post-header" onClick={handleHeaderNavigation}>
@@ -85,7 +98,7 @@ const PostCard = ({ post }) => {
                         >
                             Edit
                         </button>
-                        <button>Delete</button>
+                        <button onClick={(e) => { e.stopPropagation(); handleDelete(post.id) }}>Delete</button>
                     </div>}
                 </div>
             </div>
