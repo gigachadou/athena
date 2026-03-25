@@ -95,10 +95,10 @@ const PostCard = ({ post }) => {
                         <h2 className="post-title">{post.header}</h2>
                     )}
                     <p className="post-text">{post.text}</p>
-                    {post.media && <img src={post.media[0]} alt='Media' />}
+                    {post.media?.length ? <img src={post.media[0]} alt='Media' /> : <></>}
                 </div> </>)}
 
-            
+
         </div>
     );
 };
