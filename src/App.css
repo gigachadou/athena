@@ -1,424 +1,195 @@
-/* ===== 1. Global o'zgaruvchilar va sozlamalar ===== */
+/* ===== 1. Global o'zgaruvchilar (Design System) ===== */
 :root {
-  /* Asosiy shrift va o'lchamlar */
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Ranglar palitrasi - Athena Blue Theme */
+  --primary-color: #1e88e5;
+  --primary-dark: #1565c0;
+  --primary-light: #e3f2fd;
+  --accent-color: #e41e3f;
+  
+  /* Neytral ranglar (Light Mode) */
+  --bg-color: #ffffff;
+  --bg-soft: #f8f9fa;
+  --text-main: #213547;
+  --text-muted: #666666;
+  --border-color: #eeeeee;
 
-  /* Ranglar (default light mode) */
-  color-scheme: light dark;
-  color: #213547;
-  background-color: #ffffff;
-
-  /* Shrift silliqligi */
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  /* Animatsiya tezligi */
-  --transition-speed: 0.25s;
-
-  /* Container kengligi */
-  --container-max-width: 1280px;
-  --container-padding: 1.5rem;
+  /* Shriftlar */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  
+  /* Effektlar */
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark mode */
+/* Dark Mode ranglari */
 @media (prefers-color-scheme: dark) {
   :root {
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+    --bg-color: #121212;
+    --bg-soft: #1e1e1e;
+    --text-main: #f5f5f5;
+    --text-muted: #aaaaaa;
+    --border-color: #333333;
+    --primary-light: rgba(30, 136, 229, 0.1);
   }
 }
 
-/* ===== 2. Reset va asos ===== */
-*,
-*::before,
-*::after {
+/* ===== 2. Reset va Asosiy stillar ===== */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
-  height: 100%;
-}
-
 body {
   margin: 0;
-  min-width: 320px;
   min-height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Kontentni yuqoridan boshlash */
-  background-color: inherit;
-  color: inherit;
-  font-family: inherit;
-  line-height: inherit;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* ===== 3. Root konteyner ===== */
 #root {
   width: 100%;
-  max-width: var(--container-max-width);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: clamp(1rem, 5vw, 2.5rem) clamp(1rem, 4vw, 2rem);
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  padding: 0 1rem;
 }
 
-/* ===== 4. Tipografiya ===== */
-h1 {
-  font-size: clamp(2rem, 8vw, 3.2rem);
+/* ===== 3. Tipografiya ===== */
+h1, h2, h3 {
+  font-weight: 800;
   line-height: 1.2;
-  font-weight: 600;
-  margin: 0 0 1.5rem 0;
-  text-wrap: balance;
-  word-break: break-word;
-}
-
-h2 {
-  font-size: clamp(1.5rem, 6vw, 2.2rem);
-  line-height: 1.3;
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-}
-
-h3 {
-  font-size: clamp(1.2rem, 5vw, 1.8rem);
-  line-height: 1.4;
-  margin: 0 0 0.75rem 0;
-  font-weight: 500;
-}
-
-p {
   margin-bottom: 1rem;
-  line-height: 1.6;
-  word-break: break-word;
-}
-
-small, .text-small {
-  font-size: 0.875rem;
-  color: #666;
+  color: var(--primary-dark);
 }
 
 @media (prefers-color-scheme: dark) {
-  small, .text-small {
-    color: #aaa;
-  }
+  h1, h2, h3 { color: var(--primary-color); }
 }
 
-/* ===== 5. Linklar ===== */
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+
+p { margin-bottom: 1rem; }
+
 a {
-  font-weight: 500;
-  color: #646cff;
+  color: var(--primary-color);
   text-decoration: none;
-  transition: color var(--transition-speed) ease;
+  font-weight: 600;
+  transition: var(--transition);
 }
 
 a:hover {
-  color: #535bf2;
+  color: var(--primary-dark);
   text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
-@media (prefers-color-scheme: dark) {
-  a {
-    color: #8b8cff;
-  }
-  a:hover {
-    color: #a0a1ff;
-  }
-}
-
-/* ===== 6. Tugmalar ===== */
+/* ===== 4. Tugmalar (Buttons) ===== */
 button {
-  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius);
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #f0f0f0;
-  color: #1a1a1a;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-speed) ease;
+  background-color: var(--primary-color);
+  color: white;
+  transition: var(--transition);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5em;
-  line-height: 1;
-  white-space: nowrap;
+  gap: 0.5rem;
 }
 
 button:hover {
-  border-color: #646cff;
-  background-color: #e4e4e4;
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(30, 136, 229, 0.3);
 }
 
-button:focus-visible {
-  outline: 2px solid #646cff;
-  outline-offset: 2px;
-}
-
-button:active {
-  transform: scale(0.98);
-}
+button:active { transform: scale(0.98); }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
-  pointer-events: none;
-  transform: none;
+  transform: none !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  button {
-    background-color: #2a2a2a;
-    color: #ffffff;
-  }
-  button:hover {
-    background-color: #3a3a3a;
-    border-color: #8b8cff;
-  }
+/* Ikkinchi darajali tugma */
+.btn-secondary {
+  background-color: var(--bg-soft);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
-/* ===== 7. Yordamchi klasslar ===== */
-.text-center {
-  text-align: center;
+/* ===== 5. Input va Form elementlari ===== */
+input, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--border-color);
+  background: var(--bg-soft);
+  color: var(--text-main);
+  font-family: inherit;
+  transition: var(--transition);
+  outline: none;
 }
 
+input:focus {
+  border-color: var(--primary-color);
+  background: var(--bg-color);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* ===== 6. Yordamchi klasslar ===== */
 .container {
   width: 100%;
-  max-width: var(--container-max-width);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
+  padding: 2rem 0;
 }
 
-.read-the-docs {
-  color: #888;
-  margin-top: 2rem;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.flex {
+.flex-center {
   display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.items-center {
   align-items: center;
-}
-
-.justify-center {
   justify-content: center;
 }
 
-.gap-1 { gap: 0.5rem; }
-.gap-2 { gap: 1rem; }
-.gap-3 { gap: 1.5rem; }
-
-.mt-auto {
-  margin-top: auto;
+.card {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
 }
 
-/* ===== 8. Media so'rovlar (barcha ekranlar uchun) ===== */
-
-/* Mobile (kichik telefonlar) */
-@media (max-width: 480px) {
-  :root {
-    --container-padding: 1rem;
-  }
-  
-  #root {
-    padding: 1rem;
-  }
-
-  button {
-    padding: 0.5em 1em;
-    font-size: 0.9rem;
-    white-space: normal; /* Matn uzun bo'lsa, qator tashlash */
-  }
-
-  h1 {
-    margin-bottom: 1rem;
-  }
-}
-
-/* Planshet (vertikal) */
-@media (min-width: 481px) and (max-width: 768px) {
-  :root {
-    --container-padding: 1.5rem;
-  }
-  
-  #root {
-    padding: 1.5rem;
-  }
-}
-
-/* Kichik desktop va planshet (gorizontal) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  :root {
-    --container-padding: 2rem;
-  }
-  
-  #root {
-    padding: 2rem;
-  }
-}
-
-/* Katta desktop */
-@media (min-width: 1025px) {
-  :root {
-    --container-padding: 2rem;
-  }
-  
-  #root {
-    padding: 2.5rem 2rem;
-  }
-}
-
-/* Juda katta ekranlar */
-@media (min-width: 1600px) {
-  :root {
-    --container-max-width: 1440px;
-  }
-}
-
-/* Landshaft (gorizontal) mobil */
-@media (max-height: 600px) and (orientation: landscape) {
-  #root {
-    padding: 1rem 1.5rem;
-  }
-  
-  h1 {
-    margin-bottom: 1rem;
-    font-size: clamp(1.8rem, 6vh, 2.5rem);
-  }
-  
-  button {
-    padding: 0.4em 1em;
-  }
-}
-
-/* ===== 9. Print (bosma) stillari ===== */
-@media print {
-  body {
-    background-color: #fff !important;
-    color: #000 !important;
-  }
-  
-  button, a {
-    text-decoration: none !important;
-    color: #000 !important;
-    background: none !important;
-    border: none !important;
-  }
-  
-  #root {
-    max-width: 100%;
-    padding: 0.5in;
-    min-height: auto;
-  }
-  
-  .no-print {
-    display: none !important;
-  }
-}
-
-/* ===== 10. Qo'shimcha elementlar (ixtiyoriy) ===== */
-img, video {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-ul, ol {
-  padding-left: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-blockquote {
-  border-left: 4px solid #646cff;
-  padding-left: 1rem;
-  margin: 1rem 0;
-  font-style: italic;
-  color: #555;
-}
-
-@media (prefers-color-scheme: dark) {
-  blockquote {
-    color: #ccc;
-    border-left-color: #8b8cff;
-  }
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 1.5rem 0;
-}
-
-@media (prefers-color-scheme: dark) {
-  hr {
-    border-top-color: #444;
-  }
-}
-
-/* ===== 11. Animatsiyalar ===== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.3s ease forwards;
-}
-
-/* ===== 12. Scrollbar (ixtiyoriy) ===== */
+/* ===== 7. Scrollbar dizayni ===== */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-color);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
+  background: #ccc;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--primary-color);
 }
 
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-track {
-    background: #333;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #666;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #888;
-  }
+/* ===== 8. Animatsiyalar ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
 }

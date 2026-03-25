@@ -41,7 +41,6 @@ export default function PostPage() {
                 else setIsLiked(false);
 
                 setData({ post: post, owner: owner });
-                console.log(post);
             } catch (error) {
                 setServerError(error.message);
             }
@@ -72,7 +71,6 @@ export default function PostPage() {
             fetchUsers();
         }
     }, [postId, userData.id, trigger, isViewed, isLiked]);
-    console.log(commentOwners);
     useEffect(() => {
         if (!data) return;
 

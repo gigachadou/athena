@@ -1,0 +1,139 @@
+/* 1. O'zgaruvchilarni qayta ishlatamiz (Root allaqachon mavjud deb hisoblaymiz) */
+:root {
+  --primary-blue: #1E88E5;
+  --dark-blue: #1565C0;
+  --light-blue: #42A5F5;
+  --text-main: #0D47A1;
+  --bg-soft: #F5F5F5;
+  --white: #FFFFFF;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. Asosiy karta konteyneri */
+.followerCard {
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  gap: 20px;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.followerCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(13, 71, 161, 0.12);
+  border-color: var(--light-blue);
+}
+
+/* 3. Avatar va Rasm qismi */
+.followerCard .img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--light-blue);
+  flex-shrink: 0;
+}
+
+.followerCard .img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.followerCard:hover .img img {
+  transform: scale(1.1);
+}
+
+.followerCard .img svg {
+  font-size: 24px;
+  color: var(--dark-blue);
+}
+
+/* 4. Ma'lumotlar qismi */
+.follower-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.follower-info h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.follower-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666; /* Yumshoqroq matn uchun */
+}
+
+/* 5. View Follower tugmasi */
+.followerCard button {
+  padding: 8px 18px;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.followerCard button:hover {
+  background-color: var(--dark-blue);
+  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.4);
+}
+
+.followerCard button:active {
+  transform: scale(0.95);
+}
+
+/* 6. Responsiv dizayn */
+@media (max-width: 600px) {
+  .followerCard {
+    flex-wrap: wrap; /* Elementlar sig'masa pastga tushadi */
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .followerCard .img {
+    margin: 0 auto;
+  }
+
+  .follower-info {
+    width: 100%;
+  }
+
+  .followerCard button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* Yuklanish holati uchun animatsiya (Loading state) */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.follower-info h2:contains("Loading") {
+  animation: pulse 1.5s infinite;
+  color: var(--light-blue);
+}

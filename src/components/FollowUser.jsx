@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import "../styles/followPeople.css"
 
 function FollowPeople({ id }){
     const [followerData , setFollowerData] = useState(null);

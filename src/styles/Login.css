@@ -1,105 +1,151 @@
-@import "./theme.css";
+/* 1. O'zgaruvchilar */
+:root {
+  --primary-blue: #1E88E5;
+  --dark-blue: #1565C0;
+  --light-blue: #42A5F5;
+  --white: #FFFFFF;
+  --bg-soft: #F5F5F5;
+  --text-main: #0D47A1;
+  --error-red: #E53935;
+  --transition: all 0.3s ease;
+}
 
+/* 2. Markazlashtirish */
 .login-container {
-  max-width: 420px;
-  margin: clamp(3rem, 4vw, 5rem) auto;
-  padding: clamp(1.75rem, 3vw, 2.75rem);
-  border-radius: var(--tranquil-radius);
-  background: rgba(6, 6, 11, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--tranquil-shadow);
-  color: #fefcfb;
-}
-
-.login-header {
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 80px;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(13, 71, 161, 0.1);
+  border: 1px solid rgba(30, 136, 229, 0.1);
   text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: clamp(1.75rem, 3vw, 2.2rem);
-  color: #ffffff;
+  animation: fadeIn 0.5s ease-out;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. Sarlavha */
+.login-header {
+  font-size: 2rem;
+  color: var(--text-main);
+  margin-bottom: 30px;
+  font-weight: 800;
+}
+
+/* 4. Form Gruppalari */
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--tranquil-muted);
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #333 !important; /* JSX dagi inline style o'rniga */
 }
 
-.form-group input {
+input {
   width: 100%;
-  padding: 0.9rem 1rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.03);
-  color: #fdfcfb;
+  padding: 12px 15px;
+  border: 2px solid #eee;
+  border-radius: 10px;
   font-size: 1rem;
-  transition: border var(--tranquil-transition), box-shadow var(--tranquil-transition);
-}
-
-.form-group input:focus {
+  transition: var(--transition);
   outline: none;
-  border-color: var(--steel-red);
-  box-shadow: 0 0 0 3px rgba(194, 70, 61, 0.2);
+  background: var(--bg-soft);
 }
 
+input:focus {
+  border-color: var(--primary-blue);
+  background: var(--white);
+}
+
+/* 5. Password Wrapper & Toggle */
 .password-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .toggle-password {
   position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 15px;
   background: none;
   border: none;
-  color: var(--tranquil-muted);
+  color: #888;
   cursor: pointer;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: var(--transition);
 }
 
+.toggle-password:hover {
+  color: var(--primary-blue);
+}
+
+/* 6. Xatolik xabari */
+.error-message {
+  background: rgba(229, 57, 53, 0.1);
+  color: var(--error-red);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+  border-left: 4px solid var(--error-red);
+  font-weight: 600;
+}
+
+/* 7. Tugmalar */
 .submit-btn {
   width: 100%;
-  padding: 0.95rem;
-  border-radius: 999px;
+  padding: 14px;
+  background: var(--primary-blue);
+  color: var(--white);
   border: none;
-  font-weight: 600;
-  font-size: 1rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  background: linear-gradient(140deg, var(--steel-red) 0%, #d8685b 90%);
-  color: #05060a;
-  box-shadow: 0 15px 35px rgba(194, 70, 61, 0.4);
-  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
+  transition: var(--transition);
+  margin-top: 10px;
 }
 
 .submit-btn:hover {
-  transform: translateY(-1px);
+  background: var(--dark-blue);
+  box-shadow: 0 5px 15px rgba(30, 136, 229, 0.3);
+  transform: translateY(-2px);
 }
 
-.error-message {
-  background: rgba(194, 70, 61, 0.12);
-  color: #e07770;
-  padding: 0.85rem 1rem;
-  border-radius: 12px;
-  text-align: center;
-  border: 1px solid rgba(194, 70, 61, 0.4);
-}
-
+/* 8. Pastki linklar */
 .signup-link {
-  text-align: center;
-  margin-top: 1.25rem;
-  font-size: 0.95rem;
-  color: var(--tranquil-muted);
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #666;
 }
 
 .signup-link a {
-  color: var(--steel-red);
-  font-weight: 600;
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 700;
+  transition: var(--transition);
 }
 
+.signup-link a:hover {
+  text-decoration: underline;
+  color: var(--dark-blue);
+}
 
+/* 9. Responsivlik */
+@media (max-width: 480px) {
+  .login-container {
+    margin: 50px 20px;
+    padding: 30px 20px;
+  }
+}

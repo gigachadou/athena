@@ -1,186 +1,188 @@
-@import "./theme.css";
+/* 1. O'zgaruvchilar */
+:root {
+  --primary-blue: #1E88E5;
+  --dark-blue: #1565C0;
+  --light-blue: #42A5F5;
+  --primary-red: #E53935;
+  --dark-red: #C62828;
+  --white: #FFFFFF;
+  --bg-soft: #F5F5F5;
+  --text-main: #0D47A1;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+/* 2. Asosiy sahifa konteyneri */
 .profile-page {
-  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--white);
   min-height: 100vh;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  background: radial-gradient(circle at 25% 0%, rgba(194, 70, 61, 0.15), transparent 50%),
-    var(--tranquil-ink);
-  color: #fefcfb;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. Orqaga qaytish tugmasi */
 .back {
-  align-self: flex-start;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.6rem 1.75rem;
-  color: #fefefe;
-  cursor: pointer;
-  border-transition: var(--tranquil-transition);
-}
-
-.back:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.profile-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.profile-buttons button {
-  padding: 0.65rem 1.25rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.04);
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background var(--tranquil-transition);
-}
-
-.profile-buttons button svg {
-  font-size: 1rem;
-}
-
-.profile-buttons button:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.UserInfo {
-  width: 100%;
-  background: rgba(7, 8, 14, 0.9);
-  border-radius: var(--tranquil-radius);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: clamp(1.25rem, 2vw, 1.8rem);
-  display: grid;
-  grid-template-columns: minmax(140px, 180px) 1fr;
-  gap: 1.25rem;
-  box-shadow: var(--tranquil-shadow);
-}
-
-.UserInfo .avatar {
-  width: 140px;
-  height: 140px;
+  background: var(--bg-soft);
+  border: none;
+  color: var(--text-main);
+  padding: 12px;
   border-radius: 50%;
-  background: radial-gradient(circle, var(--steel-red), #8c2e2f);
+  cursor: pointer;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  overflow: hidden;
+  margin-bottom: 20px;
+  transition: var(--transition);
 }
 
+.back:hover {
+  background: var(--light-blue);
+  color: var(--white);
+  transform: translateX(-5px);
+}
+
+/* 4. Foydalanuvchi ma'lumotlari (Header) */
+.UserInfo {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 30px;
+  background: var(--bg-soft);
+  border-radius: 20px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(30, 136, 229, 0.1);
+}
+
+.UserInfo .avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 4px solid var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.UserInfo .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.UserInfo .avatar svg {
+  font-size: 50px;
+  color: var(--light-blue);
+}
+
+/* Bio va Ism qismi */
 .bio {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 0.4rem;
+  gap: 15px;
 }
 
 .name h2 {
   margin: 0;
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-size: 1.8rem;
+  color: var(--text-main);
+  font-weight: 800;
 }
 
 .name p {
-  margin: 0;
-  color: var(--tranquil-muted);
-  line-height: 1.5;
+  margin: 5px 0;
+  color: #555;
+  font-size: 0.95rem;
 }
 
-.name p:last-of-type {
-  margin-top: 0.6rem;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 0.65rem 1rem;
-  border-left: 4px solid var(--steel-red);
-  border-radius: 12px;
+.name p:last-child {
+  color: #333;
+  font-style: italic;
+  margin-top: 10px;
+  line-height: 1.4;
 }
 
-.follow-btn,
-.unfollow-btn {
-  padding: 0.7rem 1.6rem;
-  border-radius: 999px;
-  border: none;
-  font-weight: 600;
+/* 5. Follow / Unfollow Tugmalari */
+.following button {
+  padding: 10px 30px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
+  transition: var(--transition);
+  border: none;
 }
 
+/* Follow (Ko'k) */
 .follow-btn {
-  background: linear-gradient(130deg, var(--steel-red), #d8685b);
-  color: #05060a;
-  box-shadow: 0 12px 30px rgba(194, 70, 61, 0.35);
+  background-color: var(--primary-blue);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
 }
 
 .follow-btn:hover {
-  transform: translateY(-1px);
+  background-color: var(--dark-blue);
+  transform: scale(1.05);
 }
 
+/* Unfollow (Qizil - Outline uslubida) */
 .unfollow-btn {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--white);
+  color: var(--primary-red);
+  border: 2px solid var(--primary-red) !important;
 }
 
-.posts-h2 {
-  font-size: 0.9rem;
-  letter-spacing: 0.32rem;
-  text-transform: uppercase;
-  color: var(--tranquil-muted);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 0.85rem;
+.unfollow-btn:hover {
+  background-color: var(--primary-red);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(229, 57, 53, 0.2);
 }
 
-.posts-h2::before {
-  content: '';
-  width: 35px;
-  height: 2px;
-  background: var(--steel-red);
-  border-radius: 1px;
-}
-
+/* 6. Postlar bo'limi */
 .posts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 10px;
 }
 
-.posts > a {
-  padding: clamp(1.1rem, 2vw, 1.5rem);
-  border-radius: 18px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--steel-red);
-  text-decoration: none;
-  font-weight: 600;
-  text-align: center;
-  transition: background var(--tranquil-transition), border-color var(--tranquil-transition);
+.posts > div {
+  animation: slideUp 0.6s ease forwards;
 }
 
-.posts > a:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(194, 70, 61, 0.7);
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 768px) {
+/* 7. Responsivlik */
+@media (max-width: 600px) {
   .UserInfo {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     text-align: center;
+    padding: 20px;
+  }
+  
+  .UserInfo .avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .following button {
+    width: 100%;
   }
 
-  .profile-buttons {
-    justify-content: center;
+  .name h2 {
+    font-size: 1.5rem;
   }
 }
-
-

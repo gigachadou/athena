@@ -1,120 +1,150 @@
-@import "./theme.css";
-
+/* 1. Asosiy Konteyner */
 .signin-container {
-  max-width: 460px;
-  margin: clamp(3rem, 4vw, 4.5rem) auto;
-  padding: clamp(1.75rem, 3vw, 2.6rem);
-  border-radius: var(--tranquil-radius);
-  background: rgba(7, 8, 14, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--tranquil-shadow);
-  font-family: var(--tranquil-font);
-  color: #fefdfc;
+  max-width: 500px;
+  margin: 80px auto;
+  padding: 80px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(30, 136, 229, 0.1);
+  border: 1px solid rgba(30, 136, 229, 0.1);
+  animation: slideUp 0.6s ease-out;
 }
 
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 2. Sarlavha */
 .signin-header h2 {
+  font-size: 2.2rem;
+  color: #0d47a1;
   text-align: center;
-  margin-bottom: 1.75rem;
-  font-size: clamp(1.9rem, 3vw, 2.4rem);
+  margin-bottom: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
+/* 3. Form elementlari */
 .form-group {
-  margin-bottom: 1.2rem;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
   font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--tranquil-muted);
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 0.9rem;
 }
 
 .signin-form input {
   width: 100%;
-  padding: 0.95rem 1rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: #ffffff;
+  padding: 12px 15px;
+  border: 2px solid #f0f2f5;
+  border-radius: 12px;
   font-size: 1rem;
-  transition: border var(--tranquil-transition), box-shadow var(--tranquil-transition);
+  transition: all 0.3s ease;
+  outline: none;
+  background: #f8f9fa;
 }
 
 .signin-form input:focus {
-  outline: none;
-  border-color: var(--steel-red);
-  box-shadow: 0 0 0 3px rgba(194, 70, 61, 0.2);
+  border-color: #1e88e5;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(30, 136, 229, 0.1);
 }
 
 .signin-form input:disabled {
-  background: rgba(255, 255, 255, 0.05);
+  background: #e9ecef;
   cursor: not-allowed;
 }
 
+/* 4. Password Wrapper */
 .password-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .toggle-password {
   position: absolute;
-  right: 0.6rem;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
+  right: 15px;
   background: none;
-  color: var(--tranquil-muted);
-  font-size: 1.1rem;
+  border: none;
+  color: #adb5bd;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: color 0.3s;
 }
 
+.toggle-password:hover {
+  color: #1e88e5;
+}
+
+/* 5. Xatolik xabari */
+.error-message {
+  background: #fff5f5;
+  color: #e53935;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  border-left: 4px solid #e53935;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 6. Submit tugmasi */
 .submit-btn {
   width: 100%;
-  padding: 0.9rem;
-  border-radius: 999px;
+  padding: 14px;
+  background: #1e88e5;
+  color: white;
   border: none;
-  font-weight: 600;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  background: linear-gradient(140deg, var(--steel-red), #d8685b);
-  color: #05060a;
-  box-shadow: 0 14px 30px rgba(194, 70, 61, 0.3);
-  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
-  margin-top: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 10px;
 }
 
 .submit-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 18px 35px rgba(194, 70, 61, 0.4);
+  background: #1565c0;
+  box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
+  transform: translateY(-2px);
 }
 
 .submit-btn:disabled {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--tranquil-muted);
-  cursor: not-allowed;
-  box-shadow: none;
+  background: #a0c4ff;
+  cursor: wait;
 }
 
-.error-message {
-  background: rgba(255, 0, 0, 0.1);
-  color: #e07770;
-  padding: 0.9rem 1rem;
-  border-radius: 12px;
-  margin-bottom: 1.25rem;
-  border: 1px solid rgba(255, 0, 0, 0.25);
-  text-align: center;
-}
-
+/* 7. Pastki linklar */
 .signin-link {
+  margin-top: 25px;
   text-align: center;
-  margin-top: 1rem;
   font-size: 0.9rem;
-  color: var(--tranquil-muted);
+  color: #6c757d;
 }
 
 .signin-link a {
-  color: var(--steel-red);
-  font-weight: 600;
+  color: #1e88e5;
+  text-decoration: none;
+  font-weight: 700;
 }
 
+.signin-link a:hover {
+  text-decoration: underline;
+}
 
+/* 8. Responsivlik */
+@media (max-width: 500px) {
+  .signin-container {
+    margin: 40px 15px;
+    padding: 30px 20px;
+  }
+}

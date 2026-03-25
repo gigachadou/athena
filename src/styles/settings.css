@@ -1,49 +1,96 @@
-@import "./theme.css";
-
+/* 1. Asosiy Konteyner */
 .settings {
-  width: min(420px, 100%);
-  margin: 2.5rem auto;
-  padding: 1.5rem;
-  border-radius: var(--tranquil-radius);
-  background: rgba(10, 10, 18, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--tranquil-shadow);
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 15px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(30, 136, 229, 0.1);
 }
 
+/* 2. Umumiy Tugmalar Uslubi */
 .settings button {
   width: 100%;
-  padding: 0.9rem 1rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: #fefefe;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
   font-weight: 600;
-  text-align: left;
   cursor: pointer;
-  transition: background var(--tranquil-transition), transform var(--tranquil-transition);
+  text-align: left;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* O'ng tomonga kichik o'q belgisi qo'shish (ixtiyoriy, pseudo-element orqali) */
+.settings button::after {
+  content: '›';
+  font-size: 1.5rem;
+  color: #ccc;
 }
 
 .settings button:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
+  background-color: #e3f2fd;
+  color: #1e88e5;
+  transform: translateX(5px);
 }
 
-.settings button:nth-child(3) {
-  color: var(--steel-red-soft);
+/* 3. Maxsus Tugmalar: Log Out */
+.settings button:nth-last-of-type(2) {
+  background-color: rgba(229, 57, 53, 0.05);
+  color: #e53935;
+  border: 1px solid rgba(229, 57, 53, 0.1);
 }
 
+.settings button:nth-last-of-type(2):hover {
+  background-color: #e53935;
+  color: #fff;
+}
+
+.settings button:nth-last-of-type(2)::after {
+    color: inherit;
+}
+
+/* 4. Maxsus Tugmalar: Delete Account (Xavfli zona) */
 .settings button:nth-child(4) {
-  color: rgba(255, 255, 255, 0.85);
+    color: #888;
+    font-size: 0.9rem;
 }
 
-.settings button:last-child {
-  margin-top: 0.4rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  text-align: center;
+.settings button:nth-child(4):hover {
+    background-color: #333;
+    color: #fff;
 }
 
+/* 5. Back Tugmasi */
+.settings button:last-of-type {
+  background-color: #1e88e5;
+  color: white;
+  justify-content: center;
+  margin-top: 10px;
+}
 
+.settings button:last-of-type::after {
+  content: ''; /* Back tugmasida o'q kerak emas */
+}
+
+.settings button:last-of-type:hover {
+  background-color: #1565c0;
+  transform: scale(1.02);
+}
+
+/* 6. Responsivlik */
+@media (max-width: 600px) {
+  .settings {
+    margin: 20px;
+    padding: 15px;
+  }
+}

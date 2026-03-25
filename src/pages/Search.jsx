@@ -56,7 +56,7 @@ function Search() {
         navigate(`/searchresultusers/${id}`);
     };
     return (
-        <div>
+        <div className="container">
             <div className="search__header">
                 <input
                     type="search"

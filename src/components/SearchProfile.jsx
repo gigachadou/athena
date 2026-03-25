@@ -67,7 +67,7 @@ function SearchProfile() {
         <button onClick={() => navigate("/profile")} className="back"><FaArrowLeft /></button>
         <div className="UserInfo">
             <div className="avatar">
-                {!data?.avatar ? <FaUser /> : <img src={data.avatar} />}
+                {!data?.avatar ? <FaUser color="black" /> : <img src={data.avatar} />}
             </div>
             <div className="bio">
                 <div className="name">

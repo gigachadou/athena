@@ -39,10 +39,10 @@ function FollowerPage() {
         getUserFollowerID()
     }, [userID])
 
-    if(error) return <div>
+    if(error) return <div className="error-container">
         <h2>{error}</h2>
     </div>
-    if (!user) return <div>
+    if (!user) return <div className="error-container">
         <h2>Loading...</h2>
         <p>please wait</p>
     </div>

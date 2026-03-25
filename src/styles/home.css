@@ -1,210 +1,142 @@
-@import "./theme.css";
+/* 1. O'zgaruvchilar */
+:root {
+  --primary-blue: #1E88E5;
+  --dark-blue: #1565C0;
+  --light-blue: #42A5F5;
+  --white: #FFFFFF;
+  --bg-soft: #F5F5F5;
+  --text-main: #0D47A1;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+/* 2. Asosiy Konteyner */
 .home {
-  width: 100%;
-  min-height: 100vh;
-  padding: clamp(1.25rem, 3vw, 2.5rem);
-  border-radius: 48px;
-  background: radial-gradient(circle at top right, rgba(194, 70, 61, 0.2), transparent 45%),
-    radial-gradient(circle at 20% 10%, rgba(255, 154, 77, 0.25), transparent 40%),
-    var(--tranquil-ink);
-  box-shadow: var(--tranquil-shadow);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1.5rem, 2vw, 2rem);
-  position: relative;
-  overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 80px; /* Mobile Header (pastda) uchun joy */
 }
 
-.home::before,
-.home::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  z-index: 0;
-}
-
-.home::before {
-  width: 360px;
-  height: 360px;
-  top: -120px;
-  right: -80px;
-  background: radial-gradient(circle, rgba(194, 70, 61, 0.25), transparent 65%);
-}
-
-.home::after {
-  width: 240px;
-  height: 240px;
-  bottom: -90px;
-  left: -40px;
-  background: radial-gradient(circle, rgba(231, 65, 32, 0.25), transparent 70%);
-}
-
-.home > * {
-  position: relative;
-  z-index: 1;
-}
-
+/* 3. Home Header (User info & Search) */
 .home-header {
-  width: 100%;
-  background: rgba(10, 10, 17, 0.9);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: clamp(1.25rem, 2.2vw, 1.75rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1.5rem;
-  box-shadow: 0 18px 40px rgba(5, 6, 10, 0.4);
+  background: var(--white);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  border: 1px solid rgba(30, 136, 229, 0.1);
 }
 
 .home-about {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 15px;
 }
 
-.home-about svg,
-.home-about img {
-  width: clamp(55px, 4vw, 68px);
-  height: clamp(55px, 4vw, 68px);
+.home-about img, 
+.home-about svg {
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.4rem;
-  color: var(--steel-red);
   object-fit: cover;
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 2px;
 }
 
 .home-user h2 {
+  font-size: 1.2rem;
+  color: var(--text-main);
   margin: 0;
-  font-size: clamp(1.25rem, 1.9vw, 1.6rem);
-  color: #f8fafc;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .home-user p {
+  font-size: 0.85rem;
+  color: #666;
   margin: 0;
-  color: var(--tranquil-muted);
-  font-size: 0.95rem;
 }
 
+/* 4. Search Input (Zamonaviy effekt bilan) */
 .home-search {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
+  flex: 0 1 300px;
 }
 
 .form-control {
   position: relative;
   width: 100%;
-  max-width: 420px;
 }
 
 .input {
+  background-color: var(--bg-soft);
+  border: none;
+  padding: 12px 15px;
+  border-radius: 12px;
   width: 100%;
-  font-size: 1rem;
-  padding: 0.9rem 1.1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fdfcfb;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  transition: border var(--tranquil-transition), box-shadow var(--tranquil-transition);
+  font-size: 0.95rem;
+  transition: var(--transition);
+  border-bottom: 2px solid transparent;
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--steel-red);
-  box-shadow: 0 0 0 4px rgba(194, 70, 61, 0.2);
+  background-color: var(--white);
+  box-shadow: 0 5px 15px rgba(30, 136, 229, 0.1);
+  border-bottom-color: var(--primary-blue);
 }
 
+/* 5. Home Body (Posts Feed) */
 .home-body {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: clamp(0.5rem, 1.2vw, 1.5rem) 0;
-  gap: clamp(1rem, 1.6vw, 1.75rem);
 }
 
 .home-post {
-  width: min(960px, 100%);
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: clamp(1.2rem, 1.5vw, 1.75rem);
+  gap: 20px;
 }
 
-.home-post > * {
-  width: 100%;
-}
-
+/* Har bir post kartochkasi paydo bo'lish animatsiyasi */
 .post {
-  width: 100%;
+  animation: slideUpFade 0.5s ease forwards;
 }
 
-.input-border,
-.input-border-alt {
-  position: absolute;
-  left: 0;
-  bottom: 0.3rem;
-  height: 3px;
-  width: 0;
-  border-radius: 999px;
-  transition: width 0.4s ease;
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.input-border {
-  background: rgba(194, 70, 61, 0.7);
-}
-
-.input-border-alt {
-  background: linear-gradient(90deg, var(--steel-red), var(--steel-red-soft));
-}
-
-.input:focus + .input-border,
-.input:focus + .input-border-alt {
-  width: 100%;
-}
-
-@media (max-width: 1024px) {
+/* 6. Responsivlik */
+@media (max-width: 768px) {
   .home-header {
     flex-direction: column;
+    gap: 20px;
     align-items: flex-start;
   }
 
   .home-search {
     width: 100%;
-    justify-content: flex-start;
+    flex: none;
   }
 
-  .form-control {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .home {
-    padding: 1rem;
-    border-radius: 32px;
-  }
-
-  .home-header {
-    padding: 1.1rem;
-  }
-
-  .home-body {
-    gap: 1rem;
+  .home-about img, 
+  .home-about svg {
+    width: 45px;
+    height: 45px;
   }
 }
 
-@media (max-width: 480px) {
-  .home-header {
-    padding: 1rem;
-  }
-
-  .input {
-    padding: 0.7rem 1rem;
-  }
+/* Yuklanish (Loading) holati uchun stil */
+h2:contains("loading") {
+  color: #ccc;
+  font-style: italic;
 }
-
-

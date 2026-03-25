@@ -1,51 +1,130 @@
-@import "./theme.css";
+/* =========================
+   1. O'ZGARUVCHILAR
+========================= */
+:root {
+  --primary-blue: #1E88E5;
+  --dark-blue: #1565C0;
+  --light-blue: #42A5F5;
+  --white: #FFFFFF;
+  --bg-soft: #F5F5F5;
+  --text-main: #0D47A1;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+/* =========================
+   2. HEADER (DOIM PASTDA)
+========================= */
 .header {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(480px, 100%);
-  height: 60px;
-  border-radius: 30px;
-  background: rgba(5, 6, 10, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  bottom: 0; /* 🔥 DOIM PASTDA */
+  left: 0;
+  width: 100%;
+  height: 65px;
+
   display: flex;
   justify-content: space-around;
   align-items: center;
-  box-shadow: 0 20px 40px rgba(5, 6, 10, 0.7);
-  z-index: 10000;
+
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+
+  border-top: 1px solid rgba(30, 136, 229, 0.2);
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.05);
+
+  padding: 0 10px;
+  z-index: 9999;
+
+  animation: slideUp 0.4s ease-out;
 }
 
+/* =========================
+   3. LINKLAR
+========================= */
 .header a {
-  flex: 1;
-  text-align: center;
-  font-size: 1.15rem;
-  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
-  opacity: 0.8;
-  transition: color var(--tranquil-transition), transform var(--tranquil-transition);
+  color: var(--text-main);
+  font-size: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+
+  transition: var(--transition);
+  position: relative;
 }
 
-.header a.active {
-  color: #ffffff;
-  opacity: 1;
-  transform: translateY(-1px);
-}
-
+/* =========================
+   4. HOVER / ACTIVE
+========================= */
 .header a:hover {
-  color: var(--steel-red);
+  color: var(--primary-blue);
+  background-color: var(--bg-soft);
+  transform: translateY(-4px);
 }
 
-@media (max-width: 520px) {
-  .header {
-    bottom: 12px;
-    height: 55px;
-  }
+.header a:active {
+  transform: scale(0.9);
+  color: var(--dark-blue);
+}
 
+/* =========================
+   5. ADD POST (PLUS BUTTON)
+========================= */
+.header a[href="/addPost"] {
+  background-color: var(--primary-blue);
+  color: var(--white);
+
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+
+  margin-top: -25px; /* floating effect */
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+  border: 4px solid var(--white);
+}
+
+.header a[href="/addPost"]:hover {
+  background-color: var(--dark-blue);
+  transform: translateY(-6px) rotate(90deg);
+}
+
+/* =========================
+   6. ANIMATION
+========================= */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   7. CONTENT BOSILIB QOLMASIN
+========================= */
+body {
+  padding-bottom: 80px; /* header ustiga chiqib ketmasligi uchun */
+}
+
+/* =========================
+   8. RESPONSIVE (OPTIONAL)
+========================= */
+@media (max-width: 400px) {
   .header a {
-    font-size: 1rem;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  .header a[href="/addPost"] {
+    width: 50px;
+    height: 50px;
   }
 }
-
-

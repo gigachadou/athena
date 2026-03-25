@@ -98,24 +98,7 @@ const PostCard = ({ post }) => {
                     {post.media && <img src={post.media[0]} alt='Media' />}
                 </div> </>)}
 
-            {/* <div className="post-footer">
-                <div className="action-btns">
-                    <button className="action like">
-                        <span className="icon"><FaHeart /></span>
-                        <span>{post.likes.length}</span>
-                    </button>
-
-                    <button className="action comment">
-                        <span className="icon"><FaComment /></span>
-                        <span>{post.comments.length}</span>
-                    </button>
-
-                    <button className="action view">
-                        <span className="icon"><FaEye /></span>
-                        <span>{post.views.toLocaleString()}</span>
-                    </button>
-                </div>
-            </div> */}
+            
         </div>
     );
 };
