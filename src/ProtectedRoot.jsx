@@ -45,7 +45,6 @@ export default function ProtectedRoot() {
                 localStorage.removeItem("loginConf");
                 setUserData(null);
                 navigate("/login");
-                console.warn(err.message);
             };
         };
         getUserData();

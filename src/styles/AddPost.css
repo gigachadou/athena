@@ -189,6 +189,56 @@
   border-left: 4px solid var(--primary-red);
 }
 
+/* TOAST CONTAINER */
+.toast {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  width: 400px;
+  transform: translateX(-50%);
+  
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  color: white;
+  padding: 16px 25px;
+  border-radius: 12px;
+  
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 9999;
+
+  animation: slideDown 0.5s ease forwards, fadeOut 0.5s ease 4.5s forwards;
+}
+
+/* TITLE */
+.toast-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* TEXT */
+.toast-text {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* ANIMATION */
+@keyframes slideDown {
+  from {
+    top: -100px;
+    opacity: 0;
+  }
+  to {
+    top: 20px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    top: -100px;
+  }
+}
+
 /* 8. Responsivlik */
 @media (max-width: 600px) {
   .add-post-page {

@@ -7,6 +7,7 @@ import addNote from "../utils/addNotification";
 export default function AddPost() {
     const { postId: routePostId } = useParams();
     const [error, setError] = useState("");
+    const [notification, setNotification] = useState(null);
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [media, setMedia] = useState([]);
@@ -186,7 +187,15 @@ export default function AddPost() {
                 "Thank you again for staying with us.",
                 userData.id
             );
-            navigate("/profile");
+            setNotification({
+                title: isEditMode ? "Post updated successfully" : "Post added successfully",
+                text: "Thank you for staying with us"
+            });
+
+            // 5 sekunddan keyin yo‘qoladi
+            setTimeout(() => {
+                setNotification(null);
+            }, 5000);
         } catch (err) {
             setError(`General error: ${err.message}`);
         };
@@ -194,6 +203,12 @@ export default function AddPost() {
 
     return (
         <div className="add-post-page">
+            {notification && (
+                <div className="toast">
+                    <div className="toast-title">{notification.title}</div>
+                    <div className="toast-text">{notification.text}</div>
+                </div>
+            )}
             <div className="add-post-card">
                 <h2 className="add-post-title">Create a post</h2>
                 {error && <p>{error}</p>}

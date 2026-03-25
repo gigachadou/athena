@@ -11,7 +11,8 @@ import addNote from "../utils/addNotification";
 function SearchProfile() {
     const [data, setData] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
-    const [stateFollow, setStateFollow] = useState(false)
+    const [stateFollow, setStateFollow] = useState(false);
+    const [notification, setNotification] = useState(null);
     const [posts, setPosts] = useState([]);
     const { usersID } = useParams();
     let navigate = useNavigate();
@@ -51,19 +52,44 @@ function SearchProfile() {
     async function followHandler(currUserId, dataId, setStateFollow) {
         try {
             following(currUserId, dataId, setStateFollow);
-            addNote("Succes Follow" , "The follow operation was successful." , currUserId);
-            addNote("New Follower" , `You have new follower` , dataId)
+            addNote("Succes Follow", "The follow operation was successful.", currUserId);
+            addNote("New Follower", `You have new follower`, dataId)
+
+            setNotification({
+                title: "The follow operation was successful." ,
+                text: "Thank you for staying with us"
+            });
+
+            // 5 sekunddan keyin yo‘qoladi
+            setTimeout(() => {
+                setNotification(null);
+            }, 5000);
         } catch (error) { };
     };
 
     async function unfollowHandler(currUserId, dataId, setStateFollow) {
         try {
             unfollow(currUserId, dataId, setStateFollow);
-            addNote("Succes unfollow" , "The unfollow operation was successful." , currUserId)
+            addNote("Succes unfollow", "The unfollow operation was successful.", currUserId)
+            setNotification({
+                title: "The unfollow operation was successful." ,
+                text: "Thank you for staying with us"
+            });
+
+            // 5 sekunddan keyin yo‘qoladi
+            setTimeout(() => {
+                setNotification(null);
+            }, 5000);
         } catch (error) { };
     };
 
     return <div className="profile-page">
+        {notification && (
+            <div className="toast">
+                <div className="toast-title">{notification.title}</div>
+                <div className="toast-text">{notification.text}</div>
+            </div>
+        )}
         <button onClick={() => navigate("/profile")} className="back"><FaArrowLeft /></button>
         <div className="UserInfo">
             <div className="avatar">
@@ -76,7 +102,7 @@ function SearchProfile() {
                     <p>{data?.bio ? data.bio : "not bio yet"}</p>
                 </div>
                 <div className="following">
-                    {stateFollow ? <button onClick={() => unfollowHandler(currentUser.id, data.id , setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>}
+                    {stateFollow ? <button onClick={() => unfollowHandler(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>}
                 </div>
             </div>
         </div>
