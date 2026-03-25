@@ -12,38 +12,41 @@ export default function Home() {
     const { userData } = useOutletContext();
 
     useEffect(() => {
-        async function getData() {
-            try {
-                let data = userData;
+    async function getData() {
+        try {
+            let data = userData;
+            let ids = data.followers;
+            let filteredPosts = [];
+            let users = [];
 
-                let postRes = await fetch(`http://localhost:3000/posts?_limit=15`);
-                let userRes = await fetch(`http://localhost:3000/users`);
+            for (let i = 0; i < ids.length; i++) {
+                const followerPostsres = await fetch(`http://localhost:3000/posts?userId=${ids[i]}`);
+                const followerDatares = await fetch(`http://localhost:3000/users/${ids[i]}`);
 
-                if (!postRes.ok || !userRes.ok) {
-                    throw new Error("Data not loading please refresh page");
-                }
+                let followerPosts = await followerPostsres.json();
+                let followerData = await followerDatares.json();
 
-                let dataPosts = await postRes.json();
-                let users = await userRes.json();
-
-                let filteredPosts = dataPosts.filter(item => item.userId !== data.id);
-
-                setUser(data);
-                setPosts(
-                    filteredPosts.map(post => ({
-                        ...post,
-                        userData: users.find(user => user.id === post.userId)
-                    }))
-                );
-
-                setError("");
-            } catch (error) {
-                setError(error.message);
+                filteredPosts.push(...followerPosts);
+                users.push(followerData);
             }
-        }
 
-        if (userData) getData();
-    }, [userData]);
+            setUser(data);
+
+            setPosts(
+                filteredPosts.map(post => ({
+                    ...post,
+                    userData: users.find(user => user.id === post.userId)
+                }))
+            );
+
+            setError("");
+        } catch (error) {
+            setError(error.message);
+        }
+    }
+
+    if (userData) getData();
+}, [userData]);
 
     if (error) {
         return <h2>{error}</h2>

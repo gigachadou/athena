@@ -60,7 +60,6 @@ function SearchProfile() {
                 text: "Thank you for staying with us"
             });
 
-            // 5 sekunddan keyin yo‘qoladi
             setTimeout(() => {
                 setNotification(null);
             }, 5000);

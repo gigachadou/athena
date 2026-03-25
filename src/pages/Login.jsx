@@ -31,7 +31,7 @@ export default function Login() {
     }
 
     return (
-        <div className="container login-container">
+        <div className="login-container">
             <h3 className="login-header">Log In</h3>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">

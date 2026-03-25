@@ -89,8 +89,8 @@ function Notification() {
     return <div className="notification">
         <div className="State">
             <h2>Notifications:</h2>
-            <button onClick={handleMarkAllAsRead}>Mark as read</button>
-            <button onClick={handleDeleteAll}>Delete ALl</button>
+            <button onClick={handleMarkAllAsRead} disabled={notification.length === 0}>Mark as read</button>
+            <button onClick={handleDeleteAll} disabled={notification.length === 0}>Delete ALl</button>
         </div>
         {
             notification.length === 0 ? <h2>No notifications yet</h2> : notification.map(note => <NoteCard key={note.noteID} header={note.header} text={note.text} time={note.creadetAt} noteID={note.noteID} status={note.status} id={note.id} />)
