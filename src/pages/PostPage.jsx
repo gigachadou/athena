@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import "../styles/PostPage.css";
-import { FaComment, FaEye, FaHeart, FaPaperPlane, FaTrash, FaU } from "react-icons/fa6";
+import { FaComment, FaEye, FaHeart, FaPaperPlane, FaPen, FaTrash, FaU } from "react-icons/fa6";
 import { actionView } from "../utils/postActions/actionView";
 import actionDislike from "../utils/postActions/actionDislike";
 import actionLike from "../utils/postActions/actionLike";
@@ -17,7 +17,7 @@ export default function PostPage() {
     const { userData } = useOutletContext();
     const [isViewed, setIsViewed] = useState(false);
     const [trigger, setTrigger] = useState(0);
-    const [commentOwners, setCommentOwners] = useState([]);
+    const [commentOwners, setCommentOwners] = useState({});
     const inputRef = useRef(null);
     const navigate = useNavigate();
 
@@ -41,12 +41,16 @@ export default function PostPage() {
             }
         };
         getPost();
-        // Comment egalarini olish
+    }, [postId, userData.id, trigger, isViewed, isLiked]);
 
+    useEffect(() => {
+        async function fetchUsers() {
+            const uniqueUserIds = [...new Set((data?.post?.comments || []).map(c => c.user))];
+            if (!uniqueUserIds.length) {
+                setCommentOwners({});
+                return;
+            }
 
-        const fetchUsers = async () => {
-            const uniqueUserIds = [...new Set(data.post.comments.map(c => c.user))];
-            if (!uniqueUserIds.length) return;
             const promises = uniqueUserIds.map(id =>
                 fetch(`http://localhost:3000/users/${id}`)
                     .then(res => res.ok ? res.json() : Promise.reject())
@@ -60,12 +64,12 @@ export default function PostPage() {
             }, {});
 
             setCommentOwners(usersMap);
-        };
+        }
 
         if (data?.post) {
             fetchUsers();
         }
-    }, [postId, userData.id, trigger, isViewed, isLiked]);
+    }, [data]);
     useEffect(() => {
         if (!data) return;
 
@@ -101,12 +105,12 @@ export default function PostPage() {
         }
     };
 
-    async function handleCommentDelete(postId, userId, commentId) {
+    async function handleCommentDelete(postId, commentId) {
         try {
-            await actionDeleteComment(postId, userId, commentId);
+            await actionDeleteComment(postId, commentId);
             setTrigger(prev => prev + 1);
         } catch (error) {
-            alert("Couldn't delete the comment, please try again later.");
+            console.error(error.message);
         };
     };
 
@@ -173,9 +177,8 @@ export default function PostPage() {
                             <input ref={inputRef} type="text" placeholder="Share your thoughts" />
                             <button onClick={handleAddComment}><FaPaperPlane /></button>
                         </div>
-                        {data.post.comments.map((comment, index) => {
+                        {data.post.comments?.length ? [...data.post.comments].reverse().map((comment, index) => {
                             const owner = commentOwners[comment.user] || { name: "Loading...", id: null };
-                            console.log(comment);
                             return (
                                 <div key={comment.id || index} className="post-page-comment">
                                     <div
@@ -189,10 +192,14 @@ export default function PostPage() {
                                         <p>{owner.name}</p>
                                     </div>
                                     {comment.text}
-                                    {(owner.id === userData.id || data.post.userId === userData.id) && <FaTrash onClick={() => handleCommentDelete(data.post.id, userData.id, comment.id)} />}
+                                    {(owner.id === userData.id || data.post.userId === userData.id) &&
+                                        <div>
+                                            <FaPen />
+                                            <FaTrash onClick={() => handleCommentDelete(data.post.id, comment.id)} />
+                                        </div>}
                                 </div>
                             );
-                        })}
+                        }) : <div></div>}
                     </section>
                 </div>
             ) : null}

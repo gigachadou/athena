@@ -28,11 +28,11 @@ export default function Signin() {
             const res = await fetch("http://localhost:5000/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts: [], likes: [], comments: [], bio: "", followers: [], followings: [] }),
+                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts: [], bio: "", followers: [], followings: [] }),
             });
 
             const data = await res.json();
-
+            console.log(data);
             if (!res.ok) {
                 throw new Error(data.message || "Failed to sign in!");
             };

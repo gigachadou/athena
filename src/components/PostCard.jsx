@@ -13,15 +13,6 @@ const PostCard = ({ post, setTrigger }) => {
 
     const navigate = useNavigate();
 
-    function handleHeaderNavigation() {
-        if (!ownerInfo?.id) return;
-        if (post.userId === ownerInfo.id) {
-            navigate("/profile");
-            return;
-        }
-        navigate(`/searchresultusers/${ownerInfo.id}`);
-    }
-
     function handlePostNavigation() {
         if (!post?.id) return;
         navigate(`/posts/${post.id}`);
@@ -64,7 +55,7 @@ const PostCard = ({ post, setTrigger }) => {
 
     return (
         <div className="post-card">
-            {ownerInfo && (<><div className="post-header" onClick={handleHeaderNavigation}>
+            {ownerInfo && (<><div className="post-header" onClick={() => userData.id === ownerInfo.id ? navigate("/profile") : navigate(`/searchresultusers/${ownerInfo.id}`)}>
                 <div className="user-info">
                     <div className="avatar">
                         {!ownerInfo?.avatar ? <FaUser /> : <img src={ownerInfo.avatar} alt='user avatar' />}
