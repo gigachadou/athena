@@ -19,16 +19,4 @@ export default async function actionComment(postId, userId, text) {
 
     if (!res2.ok) throw new Error("Error at actionComment - PATCH1");
 
-    //userga commentni joylash ------------------------------------------>>>
-
-    const res3 = await fetch(`http://localhost:3000/users/${userId}`);
-    if (!res3.ok) throw new Error("Error at actionComment - GET2");
-    const user = await res3.json();
-
-    const res4 = await fetch(`http://localhost:3000/users/${userId}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ comments: [...user.comments, { id: commentId, post: postId, text: text }] })
-    });
-    if (!res4.ok) throw new Error("Error at actionComment - PATCH2");
 };

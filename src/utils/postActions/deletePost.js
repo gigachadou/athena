@@ -15,8 +15,6 @@ export async function deletePost(postId, userId) {
         },
         body: JSON.stringify({
             posts: data.posts.filter(e => e !== postId),
-            likes: data.likes.filter(e => e !== postId),
-            comments: data.comments.filter(e => e.post !== postId)
         })
     });
     if (!res2.ok) throw new Error("Server error: Couldn't delete the post, 2");

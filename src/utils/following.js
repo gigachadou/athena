@@ -1,7 +1,7 @@
 /**
  * Follow qiluvchi async funksiya, try...catchda ishlatilsin! 
- * @param {number} userID - user idsi
- * @param {number} followerID - follower idsi
+ * @param {*} userID - user idsi
+ * @param {*} followerID - follower idsi
  * @param {Function} changeFollowState - setter Function
  */
 async function following(userID, followerID, changeFollowState) {
@@ -35,7 +35,6 @@ async function following(userID, followerID, changeFollowState) {
     });
 
     changeFollowState(true);
-
-}
+};
 
 export default following;

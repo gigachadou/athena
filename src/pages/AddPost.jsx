@@ -217,7 +217,7 @@ export default function AddPost() {
                         <label className="add-post-add-media-label">
                             <input
                                 type="file"
-                                accept="image/*,video/*"
+                                accept="image/*"
                                 multiple
                                 onChange={handleAddMedia}
                                 className="add-post-add-media"

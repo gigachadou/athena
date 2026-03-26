@@ -18,16 +18,4 @@ export default async function actionDislike(postId, userId) {
 
     if (!res2.ok) throw new Error("Error at actionDislike - PATCH1");
 
-    //userdan like ni olib tashlash ------------------------------------------>>>
-
-    const res3 = await fetch(`http://localhost:3000/users/${userId}`);
-    if (!res3.ok) throw new Error("Error at actionDislike - GET2");
-    const user = await res3.json();
-
-    const res4 = await fetch(`http://localhost:3000/users/${userId}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ likes: user.likes.filter(e => e !== postId) })
-    });
-    if (!res4.ok) throw new Error("Error at actionDislike - PATCH2");
 };

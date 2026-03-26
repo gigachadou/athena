@@ -27,8 +27,10 @@ export default function Login() {
             
             localStorage.setItem("loginConf", JSON.stringify(data));
             navigate("/home");
-        } catch (error) { }
-    }
+        } catch (error) {
+            setError(error.message);
+        };
+    };
 
     return (
         <div className="login-container">
