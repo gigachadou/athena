@@ -8,6 +8,7 @@ import actionLike from "../utils/postActions/actionLike";
 import actionComment from "../utils/postActions/actionComment";
 import { FaUser } from "react-icons/fa";
 import actionDeleteComment from "../utils/postActions/actionDeleteComment";
+import CommentEditModal from "../components/CommentEditModal";
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -18,6 +19,7 @@ export default function PostPage() {
     const [isViewed, setIsViewed] = useState(false);
     const [trigger, setTrigger] = useState(0);
     const [commentOwners, setCommentOwners] = useState({});
+    const [editCommentModal, setEditCommentModal] = useState(null);
     const inputRef = useRef(null);
     const navigate = useNavigate();
 
@@ -114,6 +116,10 @@ export default function PostPage() {
         };
     };
 
+    function handleCommentEditSuccess() {
+        setTrigger(prev => prev + 1);
+    }
+
     return (
         <div>
             {serverError ? (
@@ -121,6 +127,7 @@ export default function PostPage() {
             ) : data ? (
                 <div className="post-page">
                     <article className="post">
+                        {editCommentModal && <CommentEditModal object={editCommentModal} modalData={setEditCommentModal} onSuccess={handleCommentEditSuccess} />}
                         <div className="post-page-header" onClick={() => data.post.userId === userData.id ? navigate("/profile") : navigate(`/searchresultusers/${data.owner.id}`)}>
                             <div className="post-page-user-info">
                                 <div className="post-page-avatar">
@@ -194,7 +201,7 @@ export default function PostPage() {
                                     {comment.text}
                                     {(owner.id === userData.id || data.post.userId === userData.id) &&
                                         <div>
-                                            <FaPen />
+                                            <FaPen onClick={() => setEditCommentModal({ postId : data.post.id, commentId: comment.id, previousText : comment.text })} /> 
                                             <FaTrash onClick={() => handleCommentDelete(data.post.id, comment.id)} />
                                         </div>}
                                 </div>
