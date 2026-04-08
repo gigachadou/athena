@@ -34,20 +34,20 @@
   z-index: 10;
 }
 
-.controller svg {
+/* .controller svg {
   font-size: 1.4rem;
   color: var(--text-main);
   cursor: pointer;
   transition: var(--transition);
   padding: 8px;
   border-radius: 50%;
-}
+} */
 
-.controller svg:hover {
+/* .controller svg:hover {
   background-color: var(--bg-soft);
   color: var(--primary-blue);
   transform: translateX(-5px);
-}
+} */
 
 .controller h2 {
   font-size: 1.25rem;
