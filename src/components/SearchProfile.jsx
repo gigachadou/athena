@@ -26,16 +26,19 @@ function SearchProfile() {
     useEffect(() => {
         async function getUsers(id) {
             let current = userData.id;
+
             const current_user = await fetch(`http://localhost:3000/users/${current}`);
+            const userDataFromDB = await current_user.json();
+
             const response = await fetch(`http://localhost:3000/users/${id}`);
             const data = await response.json();
-            const userDataFromDB = await current_user.json();
+
             setData(data);
             setCurrentUser(userDataFromDB)
         }
         getUsers(usersID)
     }, [usersID])
-
+    console.log(data);
     useEffect(() => {
         (async function () {
             if (data) {
@@ -43,7 +46,7 @@ function SearchProfile() {
                 setPosts(response);
             };
         })();
-    }, [data, posts]);
+    }, [data]);
 
     if (!data) {
         return <div>Loading...</div>

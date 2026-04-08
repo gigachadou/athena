@@ -16,32 +16,8 @@ The main goal of this project is:
 
 - ⚡ **Vite** – blazing fast dev environment & build tool
 - ⚛️ **React** – core UI library (with hooks & modern patterns)
-- 🧱 **HTML / CSS / JavaScript** + TypeScript
-
-
-## Current Project Structure
-
-athena/
-├─ node_modules/
-├─ public/
-├─ src/
-│ ├─ backend/
-│ │ ├─server.js
-│ │ ├─db.json
-│ ├─ assets/
-│ ├─ App.jsx
-│ ├─ main.jsx
-│ └─ index.css
-├─ .env.example
-├─ .gitignore
-├─ eslint.config.js
-├─ index.html
-├─ package-lock.json
-├─ package.json
-├─ vite.config.js
-└─ README.md
-⚠️ Note: This structure is temporary and will evolve as the project grows.
-Features (Planned)
+- 🧱 **HTML / CSS / JavaScript** - Frontend
+- **JSON-server** - Backend (temporarily);
 
 ## Installation
 
@@ -71,13 +47,15 @@ node src/backend/server.js
 ```json
 //server watches "users" endpoint only, so name it correctly or change it in server.js!
 {
-   "users": []
+   "users": [],
+   "posts": [],
+   "notifications": []
 }
 ```
 
 ## Gatito wishes you luck!
 
-   /\_/\
+   /\ /\
   ( -_- )
   /     \
  (  ___  )
