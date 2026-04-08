@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaUser } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import "../styles/searchresultuser.css"
 import PostCard from "./PostCard";
 import getPostsByIds from "../utils/getPostsByIds";
@@ -16,7 +16,7 @@ function SearchProfile() {
     const [posts, setPosts] = useState([]);
     const { usersID } = useParams();
     let navigate = useNavigate();
-
+    const { userData } = useOutletContext();
     useEffect(() => {
         if (currentUser && data) {
             setStateFollow(currentUser.followings.includes(data.id));
@@ -25,17 +25,20 @@ function SearchProfile() {
 
     useEffect(() => {
         async function getUsers(id) {
-            let current = JSON.parse(localStorage.getItem("loginConf")).user.id;
+            let current = userData.id;
+
             const current_user = await fetch(`http://localhost:3000/users/${current}`);
+            const userDataFromDB = await current_user.json();
+
             const response = await fetch(`http://localhost:3000/users/${id}`);
             const data = await response.json();
-            const userData = await current_user.json();
+
             setData(data);
-            setCurrentUser(userData)
+            setCurrentUser(userDataFromDB)
         }
         getUsers(usersID)
     }, [usersID])
-
+    console.log(data);
     useEffect(() => {
         (async function () {
             if (data) {
@@ -52,27 +55,30 @@ function SearchProfile() {
     async function followHandler(currUserId, dataId, setStateFollow) {
         try {
             following(currUserId, dataId, setStateFollow);
-            addNote("Succes Follow", "The follow operation was successful.", currUserId);
-            addNote("New Follower", `You have new follower`, dataId)
+            addNote("New Follower", `You have a new follower`, dataId)
 
             setNotification({
-                title: "The follow operation was successful." ,
-                text: "Thank you for staying with us"
+                title: "Now you follow this user.",
+                text: "Posts start to appear in your feed from now on."
             });
 
             setTimeout(() => {
                 setNotification(null);
             }, 5000);
-        } catch (error) { };
+        } catch (error) {
+            setNotification({
+                title: "Operation failed.",
+                text: "Please, try again later"
+            });
+        };
     };
 
     async function unfollowHandler(currUserId, dataId, setStateFollow) {
         try {
             unfollow(currUserId, dataId, setStateFollow);
-            addNote("Succes unfollow", "The unfollow operation was successful.", currUserId)
             setNotification({
-                title: "The unfollow operation was successful." ,
-                text: "Thank you for staying with us"
+                title: "You unfollowed this user.",
+                text: "Operation was succesful"
             });
 
             // 5 sekunddan keyin yo‘qoladi
@@ -89,7 +95,7 @@ function SearchProfile() {
                 <div className="toast-text">{notification.text}</div>
             </div>
         )}
-        <button onClick={() => navigate("/profile")} className="back"><FaArrowLeft /></button>
+        <button onClick={() => navigate(-1)} className="back"><FaArrowLeft /></button>
         <div className="UserInfo">
             <div className="avatar">
                 {!data?.avatar ? <FaUser color="black" /> : <img src={data.avatar} />}

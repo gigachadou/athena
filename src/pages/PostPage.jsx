@@ -6,7 +6,7 @@ import { actionView } from "../utils/postActions/actionView";
 import actionDislike from "../utils/postActions/actionDislike";
 import actionLike from "../utils/postActions/actionLike";
 import actionComment from "../utils/postActions/actionComment";
-import { FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaUser } from "react-icons/fa";
 import actionDeleteComment from "../utils/postActions/actionDeleteComment";
 import CommentEditModal from "../components/CommentEditModal";
 
@@ -126,6 +126,7 @@ export default function PostPage() {
                 <div className="post-serverError">{serverError}</div>
             ) : data ? (
                 <div className="post-page">
+                    <button onClick={() => navigate(-1)} className="back"><FaArrowLeft /></button>
                     <article className="post">
                         {editCommentModal && <CommentEditModal object={editCommentModal} modalData={setEditCommentModal} onSuccess={handleCommentEditSuccess} />}
                         <div className="post-page-header" onClick={() => data.post.userId === userData.id ? navigate("/profile") : navigate(`/searchresultusers/${data.owner.id}`)}>
@@ -201,7 +202,7 @@ export default function PostPage() {
                                     {comment.text}
                                     {(owner.id === userData.id || data.post.userId === userData.id) &&
                                         <div>
-                                            <FaPen onClick={() => setEditCommentModal({ postId : data.post.id, commentId: comment.id, previousText : comment.text })} /> 
+                                            <FaPen onClick={() => setEditCommentModal({ postId: data.post.id, commentId: comment.id, previousText: comment.text })} />
                                             <FaTrash onClick={() => handleCommentDelete(data.post.id, comment.id)} />
                                         </div>}
                                 </div>
