@@ -3,37 +3,44 @@ import "../styles/AddPost.css";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { convertToBase64 } from "../utils/convertToBase64";
 import addNote from "../utils/addNotification";
+import { supabase } from "../utils/supabaseClient";
 
 export default function AddPost() {
     const { postId: routePostId } = useParams();
     const [error, setError] = useState("");
-    const [notification, setNotification] = useState(null);
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [media, setMedia] = useState([]);
+    const [notification, setNotification] = useState(null);
     const { userData, setTriggerWindow } = useOutletContext();
     const navigate = useNavigate();
+
     useEffect(() => {
         async function loadPostForEdit() {
             try {
-                setError("");
-                const res = await fetch(`http://localhost:3000/posts/${routePostId}`);
-                if (!res.ok) {
-                    throw new Error("Couldn't load post");
+                const { data, error } = await supabase
+                    .from('posts')
+                    .select('*')
+                    .eq('id', routePostId)
+                    .single();
+
+                if (!error) {
+                    if (data.userid !== userData.id) {
+                        navigate("/");
+                    }
+                    setHeader(data.header || "");
+                    setText(data.text || "");
+                    
+                    let loaded = [];
+                    for (let m of (data.media || [])) {
+                        loaded.push({ base64: m, id: Math.random() });
+                    }
+                    setMedia(loaded);
                 }
-                const data = await res.json();
-                if (data.userId !== userData.id) navigate("/");
-                setHeader(data.header || "");
-                setText(data.text || "");
-                const loadedMedia = (data.media || []).map(base64 => ({
-                    base64,
-                    id: Date.now() + Math.random()
-                }));
-                setMedia(loadedMedia);
             } catch (err) {
-                setError(err.message);
-            };
-        };
+                console.log(err);
+            }
+        }
 
         if (routePostId) {
             loadPostForEdit();
@@ -58,16 +65,17 @@ export default function AddPost() {
         const selectedFiles = files.slice(0, availableSlots);
 
         try {
-            const converted = await Promise.all(
+            const newMedia = await Promise.all(
                 selectedFiles.map(async (file) => {
                     const base64 = await convertToBase64(file);
                     return {
                         base64,
+                        file,
                         id: Date.now() + Math.random()
                     };
                 })
             );
-            setMedia(prev => [...prev, ...converted]);
+            setMedia(prev => [...prev, ...newMedia]);
             setError("");
         } catch {
             setError("Could not convert image to a form needed, choose different image or try again");
@@ -81,74 +89,73 @@ export default function AddPost() {
             const isEditMode = Boolean(routePostId);
             const newPostId = `${userData.email}-${Date.now()}`;
 
-            const mediaSet = media.map(e => e.base64);
+            const mediaUrls = [];
+            for (const item of media) {
+                if (item.file) {
+                    const fileName = `${userData.id}-${Date.now()}-${item.file.name}`;
+                    const { error: uploadError } = await supabase.storage
+                        .from('media')
+                        .upload(`posts/${fileName}`, item.file);
 
-            let postResponse;
+                    if (uploadError) throw uploadError;
+
+                    const { data: { publicUrl } } = supabase.storage
+                        .from('media')
+                        .getPublicUrl(`posts/${fileName}`);
+                    mediaUrls.push(publicUrl);
+                } else {
+                    mediaUrls.push(item.base64);
+                }
+            }
+
             if (!isEditMode) {
-                postResponse = await fetch("http://localhost:3000/posts", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
+                const { error: postError } = await supabase
+                    .from('posts')
+                    .insert([{
+                        id: newPostId,
                         header: header.trim(),
                         text: text.trim(),
                         likes: [],
                         comments: [],
                         views: 0,
-                        id: newPostId,
-                        userId: userData.id,
-                        media: mediaSet?.length ? mediaSet : null,
-                        createdAt: new Date().toISOString(),
-                        lastEdited: new Date().toISOString()
-                    })
-                });
-            } else {
-                //EDITING ------------------------------------------------------------------------
-                postResponse = await fetch(`http://localhost:3000/posts/${routePostId}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        header: header.trim(),
-                        text: text.trim(),
-                        media: mediaSet?.length ? mediaSet : null,
-                        lastEdited: new Date().toISOString()
-                    })
-                });
-            }
+                        userid: userData.id,
+                        media: mediaUrls,
+                        createdat: new Date().toISOString(),
+                        lastedited: new Date().toISOString()
+                    }]);
 
-            if (!postResponse.ok) {
-                const errText = await postResponse.text();
-                throw new Error(`Error at loading your post to the server: ${postResponse.status} - ${errText}`);
-            };
+                if (postError) throw postError;
 
-            // adding postId to user/posts
+                const { data: user, error: userFetchError } = await supabase
+                    .from('users')
+                    .select('posts')
+                    .eq('id', userData.id)
+                    .single();
 
-            // 1. Get current user data
-            if (!isEditMode) {
-                const userRes = await fetch(`http://localhost:3000/users/${userData.id}`);
+                if (userFetchError) throw userFetchError;
 
-                if (!userRes.ok) throw new Error("Couldn't get user's data");
-
-                const user = await userRes.json();
-
-                // 2. Append the new post ID to the array
                 const updatedPosts = [...(user.posts || []), newPostId];
 
-                const patchRes = await fetch(`http://localhost:3000/users/${userData.id}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ posts: updatedPosts })
-                });
+                const { error: userUpdateError } = await supabase
+                    .from('users')
+                    .update({ posts: updatedPosts })
+                    .eq('id', userData.id);
 
-                if (!patchRes.ok) {
-                    throw new Error("Error at adding post's id to user");
-                };
-            };
+                if (userUpdateError) throw userUpdateError;
+
+            } else {
+                const { error: postUpdateError } = await supabase
+                    .from('posts')
+                    .update({
+                        header: header.trim(),
+                        text: text.trim(),
+                        media: mediaUrls,
+                        lastedited: new Date().toISOString()
+                    })
+                    .eq('id', routePostId);
+
+                if (postUpdateError) throw postUpdateError;
+            }
 
             setHeader("");
             setText("");
@@ -168,6 +175,8 @@ export default function AddPost() {
             setTimeout(() => {
                 setNotification(null);
             }, 5000);
+            
+            navigate("/profile");
         } catch (err) {
             setError(`General error: ${err.message}`);
         };
@@ -190,7 +199,7 @@ export default function AddPost() {
                         {error && <div className="add-post-error">{error}</div>}
                         <label className="add-post-label">Header</label>
                         <input
-                            className="add-post-input"
+                            className="input-alt add-post-input"
                             name="header"
                             value={header}
                             onChange={(e) => setHeader(e.target.value)}
@@ -254,8 +263,9 @@ export default function AddPost() {
                         ))}
                     </div>
                     <button type="submit" className="add-post-submit">Post</button>
+                    <button type="button" onClick={() => navigate(-1)} className="add-post-submit" style={{marginTop: "10px", backgroundColor: "#333"}}>Cancel</button>
                 </form>
             </div>
         </div>
     );
-};
+}

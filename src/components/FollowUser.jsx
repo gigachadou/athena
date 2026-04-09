@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../styles/followPeople.css"
+import { supabase } from "../utils/supabaseClient";
 
 function FollowPeople({ id }){
     const [followerData , setFollowerData] = useState(null);
@@ -9,13 +10,18 @@ function FollowPeople({ id }){
 
     useEffect(()=>{
         async function getFollowerData() {
-            const response = await fetch(`http://localhost:3000/users/${id}`);
-            let followerData = await response.json();
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', id)
+                .single();
 
-            setFollowerData(followerData)
+            if (!error) {
+                setFollowerData(data)
+            }
         }
         getFollowerData()
-    } , [])
+    } , [id])
     
     return (
         <div className="followerCard">

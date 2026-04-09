@@ -7,6 +7,7 @@ import getPostsByIds from "../utils/getPostsByIds";
 import following from "../utils/following";
 import unfollow from "../utils/unfollow";
 import addNote from "../utils/addNotification";
+import { supabase } from "../utils/supabaseClient";
 
 function SearchProfile() {
     const [data, setData] = useState(null);
@@ -25,19 +26,31 @@ function SearchProfile() {
 
     useEffect(() => {
         async function getUsers(id) {
-            let current = userData.id;
+            try {
+                let current = userData.id;
 
-            const current_user = await fetch(`http://localhost:3000/users/${current}`);
-            const userDataFromDB = await current_user.json();
+                const { data: current_user_db, error: currentError } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', current)
+                    .single();
 
-            const response = await fetch(`http://localhost:3000/users/${id}`);
-            const data = await response.json();
+                const { data: profile_user, error: profileError } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
 
-            setData(data);
-            setCurrentUser(userDataFromDB)
+                if (currentError || profileError) throw new Error("Couldn't get user data");
+
+                setData(profile_user);
+                setCurrentUser(current_user_db);
+            } catch (err) {
+                console.error(err);
+            }
         }
         getUsers(usersID)
-    }, [usersID])
+    }, [usersID, userData])
     console.log(data);
     useEffect(() => {
         (async function () {

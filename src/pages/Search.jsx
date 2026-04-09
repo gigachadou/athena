@@ -3,6 +3,7 @@ import "../styles/searchPage.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import Friends from "../components/Friends";
+import { supabase } from "../utils/supabaseClient";
 
 function Search() {
     const [friends, setFriends] = useState([]);
@@ -16,13 +17,17 @@ function Search() {
     useEffect(() => {
         async function getFriends() {
             try {
+                if (!userData) return;
                 let id = userData.id;
-                let friendRes = await fetch(`http://localhost:3000/users?_limit=10`);
-                if (!friendRes.ok) throw new Error("Friends not found");
-                let dataFriend = await friendRes.json();
-                let filteredFriends = dataFriend.filter(item => item.id !== id);
 
-                setFriends(filteredFriends);
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .neq('id', id)
+                    .limit(10);
+
+                if (error) throw error;
+                setFriends(data || []);
                 setError("")
             } catch (error) {
                 setError(error.message)
@@ -41,13 +46,13 @@ function Search() {
 
         let id = userData.id;
         try {
-            const res = await fetch(
-                `http://localhost:5000/users?search=${v}`
-            );
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .or(`name.ilike.%${v}%,email.ilike.%${v}%`)
+                .neq('id', id);
 
-            if (!res.ok) throw new Error("Server is not responding");
-            const info = await res.json();
-            const data = info.users.filter(item => item.id != id);
+            if (error) throw error;
             setElements(data || []);
         } catch (error) {
             setError(error.message);

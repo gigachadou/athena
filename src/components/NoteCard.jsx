@@ -1,23 +1,16 @@
 import "../styles/NoteCard.css"
+import { supabase } from "../utils/supabaseClient";
 
 function NoteCard({ header, text, time, noteID, status , id}) {
 
     async function handleChangeNoteStatus() {
         try {
-            const res = await fetch(`http://localhost:3000/notification?noteID=${noteID}`);
-            if (!res.ok) throw new Error("Server not found please try again");
+            const { error } = await supabase
+                .from('notification')
+                .update({ status: 'read' })
+                .eq('id', id);
 
-            const note = await res.json();
-
-            const updatedNote = { ...note[0], status: "read" };
-
-            const patch = await fetch(`http://localhost:3000/notification/${note[0].id}`, {
-                method: "PATCH",
-                headers: { "Content-type": "application/json" },
-                body: JSON.stringify(updatedNote)
-            });
-
-            if (!patch.ok) throw new Error("Failed to update note");
+            if (error) throw error;
 
         } catch (err) { }
     }
@@ -35,10 +28,11 @@ function NoteCard({ header, text, time, noteID, status , id}) {
 
     async function handleDeleteNote() {
         try {
-            const res = await fetch(`http://localhost:3000/notification/${id}` , {
-                method:"DELETE"
-            })
-            if(!res.ok) throw new Error("not found server please try again later")
+            const { error } = await supabase
+                .from('notification')
+                .delete()
+                .eq('id', id);
+            if(error) throw error;
         } catch (error) { }
     }
     return <div className="notification-card">

@@ -1,3 +1,5 @@
+import { supabase } from "../supabaseClient";
+
 /**
  * Dislike qilish uchun async funksiya, try...catchda ishlatilsin
  * @param {string} postId - post IDsi
@@ -6,16 +8,18 @@
 export default async function actionDislike(postId, userId) {
     //postdan like ni olib tashlash:
 
-    const res = await fetch(`http://localhost:3000/posts/${postId}`);
-    if (!res.ok) throw new Error("Error at actionDislike - GET1");
-    const post = await res.json();
+    const { data: post, error: getError } = await supabase
+        .from('posts')
+        .select('likes')
+        .eq('id', postId)
+        .single();
 
-    const res2 = await fetch(`http://localhost:3000/posts/${postId}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ likes: post.likes.filter(e => e !== userId) })
-    });
+    if (getError) throw getError;
 
-    if (!res2.ok) throw new Error("Error at actionDislike - PATCH1");
+    const { error: updateError } = await supabase
+        .from('posts')
+        .update({ likes: (post.likes || []).filter(e => e !== userId) })
+        .eq('id', postId);
 
+    if (updateError) throw updateError;
 };

@@ -1,9 +1,11 @@
+import { supabase } from "./supabaseClient";
+
 /**
- * Clears the local storage and reloads the page
+ * Clears the session and reloads the page
  * @param {Event} e - Event, important!
  */
-export default function logOutHandler(e) {
-    e.preventDefault();
-    localStorage.clear();
+export default async function logOutHandler(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    await supabase.auth.signOut();
     location.reload();
 };

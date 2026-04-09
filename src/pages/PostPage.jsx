@@ -9,6 +9,7 @@ import actionComment from "../utils/postActions/actionComment";
 import { FaArrowLeft, FaUser } from "react-icons/fa";
 import actionDeleteComment from "../utils/postActions/actionDeleteComment";
 import CommentEditModal from "../components/CommentEditModal";
+import { supabase } from "../utils/supabaseClient";
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -26,18 +27,24 @@ export default function PostPage() {
     useEffect(() => {
         async function getPost() {
             try {
-                const res = await fetch(`http://localhost:3000/posts/${postId}`);
-                if (!res.ok) throw new Error("Couldn't get the post needed");
-                const post = await res.json();
+                const { data: post, error: postError } = await supabase
+                    .from('posts')
+                    .select('*')
+                    .eq('id', postId)
+                    .single();
 
-                const res2 = await fetch(`http://localhost:3000/users/${post.userId}`);
-                if (!res2.ok) throw new Error("Couldn't get the information");
-                const owner = await res2.json();
+                if (postError) throw postError;
 
-                if (post.likes.includes(userData.id)) setIsLiked(true);
-                else setIsLiked(false);
+                const { data: owner, error: ownerError } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', post.userid)
+                    .single();
 
-                setData({ post: post, owner: owner });
+                if (ownerError) throw ownerError;
+
+                setIsLiked((post.likes || []).includes(userData.id));
+                setData({ post, owner });
             } catch (error) {
                 setServerError(error.message);
             }
@@ -53,14 +60,17 @@ export default function PostPage() {
                 return;
             }
 
-            const promises = uniqueUserIds.map(id =>
-                fetch(`http://localhost:3000/users/${id}`)
-                    .then(res => res.ok ? res.json() : Promise.reject())
-                    .catch(() => ({ id, name: "User not found", _error: true }))
-            );
+            const { data: users, error } = await supabase
+                .from('users')
+                .select('*')
+                .in('id', uniqueUserIds);
 
-            const results = await Promise.all(promises);
-            const usersMap = results.reduce((acc, user) => {
+            if (error) {
+                console.error("Error fetching comment owners:", error);
+                return;
+            }
+
+            const usersMap = (users || []).reduce((acc, user) => {
                 acc[user.id] = user;
                 return acc;
             }, {});
@@ -75,7 +85,7 @@ export default function PostPage() {
     useEffect(() => {
         if (!data) return;
 
-        if (!isViewed && data.post.userId !== userData.id) {
+        if (!isViewed && data.post.userid !== userData.id) {
             actionView(postId).then(() => setIsViewed(true)).catch(err => console.log("View action failed:", err.message));
         };
     }, [data, postId, userData.id]);
@@ -129,7 +139,7 @@ export default function PostPage() {
                     <button onClick={() => navigate(-1)} className="back"><FaArrowLeft /></button>
                     <article className="post">
                         {editCommentModal && <CommentEditModal object={editCommentModal} modalData={setEditCommentModal} onSuccess={handleCommentEditSuccess} />}
-                        <div className="post-page-header" onClick={() => data.post.userId === userData.id ? navigate("/profile") : navigate(`/searchresultusers/${data.owner.id}`)}>
+                        <div className="post-page-header" onClick={() => data.post.userid === userData.id ? navigate("/profile") : navigate(`/searchresultusers/${data.owner.id}`)}>
                             <div className="post-page-user-info">
                                 <div className="post-page-avatar">
                                     {!data.owner?.avatar ? <FaUser /> : <img src={data.owner.avatar} alt='user avatar' />}
@@ -143,7 +153,7 @@ export default function PostPage() {
                         <h1 className="post-page-title">{data.post.header}</h1>
 
                         <div className="post-meta">
-                            <span>{new Date(data.post.createdAt).toLocaleString()}</span>
+                            <span>{new Date(data.post.createdat).toLocaleString()}</span>
                         </div>
 
                         <p className="post-text">{data.post.text}</p>
@@ -200,7 +210,7 @@ export default function PostPage() {
                                         <p>{owner.name}</p>
                                     </div>
                                     {comment.text}
-                                    {(owner.id === userData.id || data.post.userId === userData.id) &&
+                                    {(owner.id === userData.id || data.post.userid === userData.id) &&
                                         <div>
                                             <FaPen onClick={() => setEditCommentModal({ postId: data.post.id, commentId: comment.id, previousText: comment.text })} />
                                             <FaTrash onClick={() => handleCommentDelete(data.post.id, comment.id)} />

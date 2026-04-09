@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { deletePost } from '../utils/postActions/deletePost';
 import addNote from '../utils/addNotification';
+import { supabase } from '../utils/supabaseClient';
 
 const PostCard = ({ post, setTrigger }) => {
     const [ownerInfo, setOwnerInfo] = useState(null);
@@ -20,19 +21,23 @@ const PostCard = ({ post, setTrigger }) => {
 
     useEffect(() => {
         async function getUserInfo() {
-            const res = await fetch(`http://localhost:3000/users/${post.userId}`);
-            if (!res.ok) {
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', post.userid)
+                .single();
+
+            if (error) {
                 setServerError("User not found");
                 return
             }
-            const data = await res.json();
             setOwnerInfo(data);
         };
         getUserInfo();
     }, [post]);
 
-    const timeAgo = post.createdAt
-        ? new Date(post.createdAt).toLocaleString('en-US', {
+    const timeAgo = post.createdat
+        ? new Date(post.createdat).toLocaleString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric',

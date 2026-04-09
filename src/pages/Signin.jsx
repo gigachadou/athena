@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Signin.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { ImGift } from "react-icons/im";
+import { supabase } from "../utils/supabaseClient";
 
 export default function Signin() {
     const [name, setName] = useState("");
@@ -53,19 +53,45 @@ export default function Signin() {
         // End of password validation
 
         try {
-            const res = await fetch("http://localhost:5000/users", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, email: email, password: password, status: "user", posts: [], bio: "", followers: [], followings: [] }),
+            const newUserId = Date.now();
+            const { data, error: signUpError } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        name: name,
+                        user_id: newUserId
+                    }
+                }
             });
 
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.message || "Failed to sign in!");
-            };
+            if (signUpError) throw signUpError;
 
-            localStorage.setItem("loginConf", JSON.stringify(data));
-            navigate("/home");
+            // Manual insert into public.users to ensure data is there
+            const { error: insertError } = await supabase
+                .from('users')
+                .insert([{
+                    id: newUserId,
+                    name: name,
+                    email: email,
+                    status: "user",
+                    bio: "",
+                    posts: [],
+                    followers: [],
+                    followings: [],
+                    avatar: ""
+                }]);
+
+            if (insertError) throw insertError;
+
+            if (data?.user && data?.session === null) {
+                setError("Please check your email for the confirmation link!");
+                return;
+            }
+
+            if (data?.session) {
+                navigate("/home");
+            }
         } catch (err) {
             setError(err.message || "Error by server");
         } finally {
