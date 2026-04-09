@@ -104,7 +104,7 @@ function SearchProfile() {
                 <div className="name">
                     <h2>{data?.name ? data.name : "UserName"}</h2>
                     <p>{data?.email ? data.email : "UserEmail"}</p>
-                    <p>{data?.bio ? data.bio : "not bio yet"}</p>
+                    <p>{data?.bio}</p>
                 </div>
                 <div className="following">
                     {stateFollow ? <button onClick={() => unfollowHandler(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>}

@@ -5,6 +5,7 @@ import EditModal from "../components/EditModal";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import getPostsByIds from "../utils/getPostsByIds";
 import PostCard from "../components/PostCard";
+import { BiPlus } from "react-icons/bi";
 
 function Profile() {
     const { userData, setUserData } = useOutletContext();
@@ -49,10 +50,13 @@ function Profile() {
                 </div>
             </div>
         </div>
-        <h2 className="posts-h2">Posts</h2>
+        <div>
+            <h2 className="posts-h2">Posts</h2>
+            <BiPlus size={36} onClick={() => navigate("/addPost")} />
+        </div>
         <div className="posts">
             {!userData.posts?.[0] ? <Link to={"/addPost"}>Create your first post</Link>
-                : posts.map(e => <PostCard post={e} key={e.id}  setTrigger={setTrigger}/>)}
+                : posts.map(e => <PostCard post={e} key={e.id} setTrigger={setTrigger} />)}
         </div>
     </div>
 };

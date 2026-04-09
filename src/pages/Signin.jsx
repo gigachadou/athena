@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Signin.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ImGift } from "react-icons/im";
 
 export default function Signin() {
-    const [name, setName] = useState(localStorage.getItem("name") || "");
-    const [email, setEmail] = useState(localStorage.getItem("email") || "");
-    const [password, setPassword] = useState(localStorage.getItem("password") || "");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [passRes, setPassRes] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -24,6 +26,32 @@ export default function Signin() {
             return;
         }
 
+        // Password validation
+        if (passRes !== password) {
+            setError("Confirmation password have to match the password!");
+            setLoading(false);
+            return;
+        };
+
+        if (!(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(password))) {
+            setError("Password must contain atleast one special character: (!@#$%^&* etc.)");
+            setLoading(false);
+            return;
+        } else if (!/[0-9]/.test(password)) {
+            setError("Password must contain atleast one number");
+            setLoading(false);
+            return;
+        } else if (!/[a-z]/.test(password)) {
+            setError("Password must contain atleast lowercase letter");
+            setLoading(false);
+            return;
+        } else if (!/[A-Z]/.test(password)) {
+            setError("Password must contain atleast uppercase letter");
+            setLoading(false);
+            return;
+        };
+        // End of password validation
+
         try {
             const res = await fetch("http://localhost:5000/users", {
                 method: "POST",
@@ -32,25 +60,23 @@ export default function Signin() {
             });
 
             const data = await res.json();
-            console.log(data);
             if (!res.ok) {
                 throw new Error(data.message || "Failed to sign in!");
             };
 
             localStorage.setItem("loginConf", JSON.stringify(data));
-
             navigate("/home");
         } catch (err) {
             setError(err.message || "Error by server");
         } finally {
             setLoading(false);
-        }
-    }
+        };
+    };
 
     return (
         <div className="signin-container">
             <div className="signin-header">
-                <h2>Sign In</h2>
+                <h2>Sign Up</h2>
             </div>
 
             <form onSubmit={handleSubmit} className="signin-form">
@@ -64,7 +90,7 @@ export default function Signin() {
                         onChange={(e) => setName(e.target.value)}
                         disabled={loading}
                         maxLength={40}
-                        minLength={4}
+                        minLength={2}
                         placeholder="name"
                     />
                 </div>
@@ -85,6 +111,27 @@ export default function Signin() {
                     <div className="password-wrapper">
                         <input
                             type={showPassword ? "text" : "password"}
+                            value={passRes}
+                            onChange={(e) => setPassRes(e.target.value)}
+                            disabled={loading}
+                            minLength={8}
+                            placeholder="*********"
+                        />
+                        <button
+                            type="button"
+                            className="toggle-password"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </button>
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label>Confirm your Password</label>
+                    <div className="password-wrapper">
+                        <input
+                            type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             disabled={loading}
@@ -102,7 +149,7 @@ export default function Signin() {
                 </div>
 
                 <button type="submit" disabled={loading} className="submit-btn">
-                    {loading ? "Creating..." : "Sign In"}
+                    {loading ? "Creating..." : "Sign Up"}
                 </button>
 
                 <div className="signin-link">

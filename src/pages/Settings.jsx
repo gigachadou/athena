@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import "../styles/settings.css"
 import EditModal from "../components/EditModal";
 import { useEffect, useState } from "react";
+import logOutHandler from "../utils/logOutHandler";
 
 function Settings() {
     const navigate = useNavigate();
@@ -23,13 +24,8 @@ function Settings() {
             }
         }
         getUser()
-    }, [])
+    }, []);
 
-    function logOutHandler(e) {
-        e.preventDefault();
-        localStorage.clear();
-        location.reload();
-    };
     async function cleanFollows(userId) {
         let users = await fetch(`http://localhost:3000/users`)
             .then(res => res.json());

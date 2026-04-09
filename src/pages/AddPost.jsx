@@ -11,7 +11,7 @@ export default function AddPost() {
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [media, setMedia] = useState([]);
-    const { userData } = useOutletContext();
+    const { userData, setTriggerWindow } = useOutletContext();
     const navigate = useNavigate();
     useEffect(() => {
         async function loadPostForEdit() {
@@ -162,6 +162,8 @@ export default function AddPost() {
                 title: isEditMode ? "Post updated successfully" : "Post added successfully",
                 text: "Thank you for staying with us"
             });
+
+            setTriggerWindow(prev => ++prev);
 
             setTimeout(() => {
                 setNotification(null);
