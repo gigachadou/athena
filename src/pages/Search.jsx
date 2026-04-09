@@ -47,9 +47,11 @@ function Search() {
 
             if (!res.ok) throw new Error("Server is not responding");
             const info = await res.json();
-            const data = info.users.filter(item => item.id != id)
+            const data = info.users.filter(item => item.id != id);
             setElements(data || []);
-        } catch (error) {};
+        } catch (error) {
+            setError(error.message);
+        };
     };
 
     function results(id) {
@@ -71,7 +73,7 @@ function Search() {
                     <FaSearch />
                 </label>
             </div>
-
+            <p>{error}</p> {/* test u-n */}
             <div className="search-friends">
                 {friends.map(friend => {
                     return (<Friends friendsData={friend} key={friend.id} />)

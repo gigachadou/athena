@@ -5,7 +5,11 @@ import checkUserExistance from "./utils/checkUserExistance";
 
 export default function ProtectedRoot() {
     const [userData, setUserData] = useState(null);
+    const [triggerWindow, setTriggerWindow] = useState(0);
     const navigate = useNavigate();
+
+    console.log(userData);
+
     useEffect(() => {
         async function getUserData() {
             try {
@@ -48,12 +52,12 @@ export default function ProtectedRoot() {
             };
         };
         getUserData();
-    }, []);
+    }, [triggerWindow]);
     return (
         <div>
             {userData && (<>
                 <Header />
-                <Outlet context={{ userData, setUserData }} />
+                <Outlet context={{ userData, setUserData, setTriggerWindow }} />
             </>)}
         </div>
     );

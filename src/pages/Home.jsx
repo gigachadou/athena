@@ -3,6 +3,8 @@ import "../styles/home.css"
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import logOutHandler from "../utils/logOutHandler";
+import { BiExit } from "react-icons/bi";
 
 export default function Home() {
     const [user, setUser] = useState(null);
@@ -12,41 +14,41 @@ export default function Home() {
     const { userData } = useOutletContext();
 
     useEffect(() => {
-    async function getData() {
-        try {
-            let data = userData;
-            let ids = data.followers;
-            let filteredPosts = [];
-            let users = [];
+        async function getData() {
+            try {
+                let data = userData;
+                let ids = data.followings;
+                let filteredPosts = [];
+                let users = [];
 
-            for (let i = 0; i < ids.length; i++) {
-                const followerPostsres = await fetch(`http://localhost:3000/posts?userId=${ids[i]}`);
-                const followerDatares = await fetch(`http://localhost:3000/users/${ids[i]}`);
+                for (let i = 0; i < ids.length; i++) {
+                    const followerPostsres = await fetch(`http://localhost:3000/posts?userId=${ids[i]}`);
+                    const followerDatares = await fetch(`http://localhost:3000/users/${ids[i]}`);
 
-                let followerPosts = await followerPostsres.json();
-                let followerData = await followerDatares.json();
+                    let followerPosts = await followerPostsres.json();
+                    let followerData = await followerDatares.json();
 
-                filteredPosts.push(...followerPosts);
-                users.push(followerData);
+                    filteredPosts.push(...followerPosts);
+                    users.push(followerData);
+                }
+
+                setUser(data);
+
+                setPosts(
+                    filteredPosts.map(post => ({
+                        ...post,
+                        userData: users.find(user => user.id === post.userId)
+                    }))
+                );
+
+                setError("");
+            } catch (error) {
+                setError(error.message);
             }
-
-            setUser(data);
-
-            setPosts(
-                filteredPosts.map(post => ({
-                    ...post,
-                    userData: users.find(user => user.id === post.userId)
-                }))
-            );
-
-            setError("");
-        } catch (error) {
-            setError(error.message);
         }
-    }
 
-    if (userData) getData();
-}, [userData]);
+        if (userData) getData();
+    }, [userData]);
 
     if (error) {
         return <h2>{error}</h2>
@@ -64,11 +66,12 @@ export default function Home() {
                 </div>
                 <div className="home-search">
                     <div className="form-control">
-                        <input className="input input-alt" placeholder="Search friends" required="" type="text" onChange={(e)=>{navigate(`/search/${e.target.value}`)}}/>
+                        <input className="input input-alt" placeholder="Search friends" required="" type="text" onChange={(e) => { navigate(`/search/${e.target.value}`) }} />
                         <span className="input-border input-border-alt"></span>
                     </div>
 
                 </div>
+                <button onClick={logOutHandler}><BiExit size={24}/></button>
             </div>
             <div className="home-body">
 
