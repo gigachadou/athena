@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../styles/editModal.css";
-import { convertToBase64 } from "../utils/convertToBase64";
+import { supabase } from "../utils/supabaseClient";
 
 function EditModal({ closeModal, UserId, data }) {
   const [name, setName] = useState("");
@@ -20,24 +20,30 @@ function EditModal({ closeModal, UserId, data }) {
       if (bio.trim()) updateData.bio = bio;
 
       if (avatar) {
-        const base64Avatar = await convertToBase64(avatar);
-        updateData.avatar = base64Avatar;
-      };
+        const fileName = `${UserId}-${Date.now()}`;
+        const { error: uploadError } = await supabase.storage
+          .from('media')
+          .upload(`avatars/${fileName}`, avatar);
 
-      const response = await fetch(`http://localhost:3000/users/${UserId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateData),
-      });
+        if (uploadError) throw uploadError;
 
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+        const { data: { publicUrl } } = supabase.storage
+          .from('media')
+          .getPublicUrl(`avatars/${fileName}`);
 
-      const result = await response.json();
+        updateData.avatar = publicUrl;
+      }
 
-      localStorage.setItem("loginConf", JSON.stringify({ user: result }));
-      data(result);
+      const { data: updatedUser, error: updateError } = await supabase
+        .from('users')
+        .update(updateData)
+        .eq('id', UserId)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      data(updatedUser);
       closeModal(false);
     } catch (err) {
       setError(`Error: ${err.message}`);

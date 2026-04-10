@@ -182,3 +182,55 @@
     font-size: 1.1rem;
   }
 }
+
+/* 7. Post Stats (Like, Comment, View) */
+.post-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: #fafafa;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.action:hover {
+  background: var(--bg-soft);
+  transform: translateY(-2px);
+}
+
+.action .icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action.like:hover {
+  color: #e53935;
+}
+
+.action.comment:hover {
+  color: var(--primary-blue);
+}
+
+.action.view:hover {
+  color: #777;
+}
+
+@media (max-width: 600px) {
+  .post-stats {
+    border-radius: 0;
+  }
+}

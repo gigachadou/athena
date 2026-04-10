@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import "../styles/settings.css"
 import EditModal from "../components/EditModal";
 import { useEffect, useState } from "react";
-import logOutHandler from "../utils/logOutHandler";
+import { supabase } from "../utils/supabaseClient";
 
 function Settings() {
     const navigate = useNavigate();
@@ -12,11 +12,16 @@ function Settings() {
     useEffect(() => {
         async function getUser() {
             try {
-                let id = JSON.parse(localStorage.getItem("loginConf")).user.id;
-                if (!id) throw new Error('User not logging yet')
-                let res = await fetch(`http://localhost:3000/users/${id}`);
-                if (!res.ok) throw new Error('Server error, please reload the page, or try again later');
-                let data = await res.json();
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) throw new Error('User not logging yet')
+                
+                let { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('email', session.user.email)
+                    .single();
+
+                if (error) throw error;
                 setUserData(data);
                 setError('');
             } catch (error) {
@@ -26,82 +31,44 @@ function Settings() {
         getUser()
     }, []);
 
-    async function cleanFollows(userId) {
-        let users = await fetch(`http://localhost:3000/users`)
-            .then(res => res.json());
-
-        for (let user of users) {
-            let updatedFollowers = user.followers.filter(f => f !== userId);
-            let updatedFollowings = user.followings.filter(f => f !== userId);
-
-            if (
-                updatedFollowers.length !== user.followers.length ||
-                updatedFollowings.length !== user.followings.length
-            ) {
-                await fetch(`http://localhost:3000/users/${user.id}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        followers: updatedFollowers,
-                        followings: updatedFollowings
-                    })
-                });
-            }
-        }
-    }
     async function handleDeleteProfile(e) {
         e.preventDefault();
-
-        let id = JSON.parse(localStorage.getItem("loginConf")).user.id;
-
         try {
-            let posts = await fetch(`http://localhost:3000/posts?userId=${id}`)
-                .then(res => res.json());
+            const userId = userData.id;
 
-            for (let post of posts) {
-                await fetch(`http://localhost:3000/posts/${post.id}`, {
-                    method: "DELETE"
-                });
-            }
-            let allPosts = await fetch(`http://localhost:3000/posts`)
-                .then(res => res.json());
+            // 1. Clean up comments and likes from all other posts (since they are in JSONB/ARRAY and can't be easily cascaded)
+            const { data: allPosts } = await supabase.from('posts').select('*');
+            
+            for (let post of allPosts || []) {
+                let updatedComments = (post.comments || []).filter(c => c.user !== userId);
+                let updatedLikes = (post.likes || []).filter(l => l !== userId);
 
-            for (let post of allPosts) {
-                let updatedComments = post.comments.filter(c => c.user !== id);
-                let updatedLikes = post.likes.filter(l => l !== id);
-
-                await fetch(`http://localhost:3000/posts/${post.id}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        comments: updatedComments,
-                        likes: updatedLikes
-                    })
-                });
-            }
-
-            await cleanFollows(id);
-
-            let notes = await fetch(`http://localhost:3000/notification`)
-                .then(res => res.json());
-
-            for (let note of notes) {
-                if (note.userID === id) {
-                    await fetch(`http://localhost:3000/notification/${note.id}`, {
-                        method: "DELETE"
-                    });
+                if (updatedComments.length !== (post.comments || []).length || updatedLikes.length !== (post.likes || []).length) {
+                    await supabase
+                        .from('posts')
+                        .update({ comments: updatedComments, likes: updatedLikes })
+                        .eq('id', post.id);
                 }
             }
 
-            await fetch(`http://localhost:3000/users/${id}`, {
-                method: "DELETE"
-            });
+            // 2. Clean up followers and followings from all other users
+            const { data: allUsers } = await supabase.from('users').select('*');
+            for (let user of allUsers || []) {
+                let updatedFollowers = (user.followers || []).filter(f => f !== userId);
+                let updatedFollowings = (user.followings || []).filter(f => f !== userId);
 
-            localStorage.clear();
+                if (updatedFollowers.length !== (user.followers || []).length || updatedFollowings.length !== (user.followings || []).length) {
+                    await supabase
+                        .from('users')
+                        .update({ followers: updatedFollowers, followings: updatedFollowings })
+                        .eq('id', user.id);
+                }
+            }
+
+            // 3. Delete the user
+            await supabase.from('users').delete().eq('id', userId);
+            
+            await supabase.auth.signOut();
             location.reload();
 
         } catch (err) {
@@ -109,14 +76,19 @@ function Settings() {
         }
     }
 
+    async function handleLogout() {
+        await supabase.auth.signOut();
+        navigate("/login");
+    }
+
     return <div className="settings">
         <button onClick={() => { setIsOpen(true) }}>Edit informations</button>
         {isOpen && <EditModal closeModal={setIsOpen} UserId={userData.id} data={setUserData} />}
         <button onClick={() => { navigate("/aboutapplicationinformation") }}>About the developers</button>
         <button onClick={handleDeleteProfile}>Delete the account</button>
-        <button onClick={logOutHandler}>Log out</button>
+        <button onClick={handleLogout}>Log out</button>
         <button onClick={() => navigate('/profile')}>Back</button>
     </div>
 };
 
-export default Settings;
+export default Settings;

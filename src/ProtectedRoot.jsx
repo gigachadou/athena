@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import { useEffect, useState } from "react";
-import checkUserExistance from "./utils/checkUserExistance";
+import { supabase } from "./utils/supabaseClient";
 
 export default function ProtectedRoot() {
     const [userData, setUserData] = useState(null);
@@ -13,27 +13,17 @@ export default function ProtectedRoot() {
     useEffect(() => {
         async function getUserData() {
             try {
-                const locale = localStorage.getItem("loginConf");
-                if (!locale) throw new Error("No data for auto-login");
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) throw new Error("No session found");
 
-                const { user, accessToken } = JSON.parse(locale);
-                console.log("Access Token: " + accessToken);
-                await checkUserExistance(accessToken);
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('email', session.user.email)
+                    .single();
 
-                if (!user?.id) throw new Error("Invalid data for auto-login")
+                if (error || !data) throw new Error("User not found in database");
 
-                const response = await fetch(`http://localhost:3000/users/${user.id}`);
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        throw new Error("Session expired");
-                    };
-
-                    const errorData = await response.json()
-                    throw new Error(errorData.message || `Server error: ${response.status}`);
-                }
-
-                const data = await response.json();
                 setUserData({
                     id: data.id,
                     email: data.email,
@@ -46,13 +36,12 @@ export default function ProtectedRoot() {
                     avatar: data.avatar
                 });
             } catch (err) {
-                localStorage.removeItem("loginConf");
                 setUserData(null);
                 navigate("/login");
             };
         };
         getUserData();
-    }, [triggerWindow]);
+    }, [triggerWindow, navigate]);
     return (
         <div>
             {userData && (<>

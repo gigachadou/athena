@@ -1,3 +1,5 @@
+import { supabase } from "../supabaseClient";
+
 /**
  * Komment edit qilish uchun async funksiya, try...catchda ishlatilsin
  * @param {string} postId - post IDsi
@@ -6,20 +8,23 @@
  */
 export default async function actionEditComment(postId, commentId, newComment) {
 
-    const res = await fetch(`http://localhost:3000/posts/${postId}`);
-    if (!res.ok) throw new Error("Error at actionEditComment - GET1");
-    const post = await res.json();
+    const { data: post, error: getError } = await supabase
+        .from('posts')
+        .select('comments')
+        .eq('id', postId)
+        .single();
 
-    const res2 = await fetch(`http://localhost:3000/posts/${postId}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({
-            comments: post.comments.map(c => {
+    if (getError) throw getError;
+
+    const { error: updateError } = await supabase
+        .from('posts')
+        .update({
+            comments: (post.comments || []).map(c => {
                 if (c.id === commentId) return { ...c, text: newComment };
                 return c;
             })
         })
-    });
+        .eq('id', postId);
 
-    if (!res2.ok) throw new Error("Error at actionEditComment - PATCH1");
+    if (updateError) throw updateError;
 };

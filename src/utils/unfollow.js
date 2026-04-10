@@ -1,3 +1,5 @@
+import { supabase } from "./supabaseClient";
+
 /**
  * Unfollow qilish uchun funksiya, try...catchda ishlatilsin
  * @param {number} userID 
@@ -5,34 +7,38 @@
  * @param {Function} changeFollowState 
  */
 async function unfollow(userID, followerID, changeFollowState) {
-    let response = await fetch(`http://localhost:3000/users/${userID}`);
-    let resFollower = await fetch(`http://localhost:3000/users/${followerID}`);
+    const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('followings')
+        .eq('id', userID)
+        .single();
+        
+    const { data: follower, error: followerError } = await supabase
+        .from('users')
+        .select('followers')
+        .eq('id', followerID)
+        .single();
 
-    let user = await response.json();
-    let follower = await resFollower.json();
+    if (userError || followerError) throw new Error("Error fetching user data");
 
-    if (!user.followings.includes(followerID)) {
+    if (!(user.followings || []).includes(followerID)) {
         return;
     }
 
-    const newFollowings = user.followings.filter(id => id !== followerID);
-    const newFollowers = follower.followers.filter(id => id !== userID);
+    const newFollowings = (user.followings || []).filter(id => id !== followerID);
+    const newFollowers = (follower.followers || []).filter(id => id !== userID);
 
-    await fetch(`http://localhost:3000/users/${userID}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            followings: newFollowings
-        })
-    });
+    const { error: patchUserError } = await supabase
+        .from('users')
+        .update({ followings: newFollowings })
+        .eq('id', userID);
 
-    await fetch(`http://localhost:3000/users/${followerID}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            followers: newFollowers
-        })
-    });
+    const { error: patchFollowerError } = await supabase
+        .from('users')
+        .update({ followers: newFollowers })
+        .eq('id', followerID);
+
+    if (patchUserError || patchFollowerError) throw new Error("Error updating follow data");
 
     changeFollowState(false);
 }

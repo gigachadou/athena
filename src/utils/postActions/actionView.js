@@ -1,3 +1,5 @@
+import { supabase } from "../supabaseClient";
+
 /**
  * Ko'rishlar sonini ko'paytiruvchi async funksiya, postni ustiga bosgan payti ishlatiladi. try...catchda ishlatilsin
  * @param {string} id 
@@ -5,14 +7,18 @@
 
 export async function actionView(id) {
     // qiymatlar olinishi
-    const res = await fetch(`http://localhost:3000/posts/${id}`);
-    if (!res.ok) throw new Error("Error at actionView - GET");
-    const post = await res.json();
+    const { data: post, error: getError } = await supabase
+        .from('posts')
+        .select('views')
+        .eq('id', id)
+        .single();
 
-    const res2 = await fetch(`http://localhost:3000/posts/${id}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ views: post.views + 1 })
-    });
-    if (!res2.ok) throw new Error("Error at actionView - PATCH");
+    if (getError) throw getError;
+
+    const { error: updateError } = await supabase
+        .from('posts')
+        .update({ views: (post.views || 0) + 1 })
+        .eq('id', id);
+
+    if (updateError) throw updateError;
 };

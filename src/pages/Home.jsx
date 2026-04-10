@@ -5,6 +5,7 @@ import PostCard from "../components/PostCard";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import logOutHandler from "../utils/logOutHandler";
 import { BiExit } from "react-icons/bi";
+import { supabase } from "../utils/supabaseClient";
 
 export default function Home() {
     const [user, setUser] = useState(null);
@@ -16,38 +17,31 @@ export default function Home() {
     useEffect(() => {
         async function getData() {
             try {
-                let data = userData;
-                let ids = data.followings;
-                let filteredPosts = [];
-                let users = [];
+                if (userData) {
+                    setUser(userData);
+                    let ids = userData.followings || [];
+                    
+                    if (ids.length === 0) {
+                        setPosts([]);
+                        return;
+                    }
 
-                for (let i = 0; i < ids.length; i++) {
-                    const followerPostsres = await fetch(`http://localhost:3000/posts?userId=${ids[i]}`);
-                    const followerDatares = await fetch(`http://localhost:3000/users/${ids[i]}`);
+                    const { data: followerPosts, error: postsError } = await supabase
+                        .from('posts')
+                        .select('*')
+                        .in('userid', ids);
 
-                    let followerPosts = await followerPostsres.json();
-                    let followerData = await followerDatares.json();
+                    if (postsError) throw postsError;
 
-                    filteredPosts.push(...followerPosts);
-                    users.push(followerData);
+                    setPosts(followerPosts || []);
+                    setError("");
                 }
-
-                setUser(data);
-
-                setPosts(
-                    filteredPosts.map(post => ({
-                        ...post,
-                        userData: users.find(user => user.id === post.userId)
-                    }))
-                );
-
-                setError("");
             } catch (error) {
                 setError(error.message);
             }
         }
 
-        if (userData) getData();
+        getData();
     }, [userData]);
 
     if (error) {
@@ -71,7 +65,7 @@ export default function Home() {
                     </div>
 
                 </div>
-                <button onClick={logOutHandler}><BiExit size={24}/></button>
+                <button onClick={logOutHandler}><BiExit /></button>
             </div>
             <div className="home-body">
 

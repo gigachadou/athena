@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { supabase } from "../utils/supabaseClient";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -14,18 +15,16 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const res = await fetch("http://localhost:5000/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
             });
-            if (!res.ok) {
+
+            if (error) {
                 setError("Incorrect email or password!");
-                throw new Error("server not responding!")
-            };
-            const data = await res.json();
-            
-            localStorage.setItem("loginConf", JSON.stringify(data));
+                throw error;
+            }
+
             navigate("/home");
         } catch (error) {
             setError(error.message);

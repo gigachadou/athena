@@ -3,6 +3,7 @@ import "../styles/followerpage.css"
 import FollowPeople from "../components/FollowUser"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import { useEffect, useState } from "react";
+import { supabase } from "../utils/supabaseClient";
 
 function FollowerPage() {
     const { order, userID } = useParams();
@@ -21,10 +22,13 @@ function FollowerPage() {
             }
             try {
                 if (order) {
-                    const response = await fetch(`http://localhost:3000/users/${userID}`);
+                    const { data: user, error: userError } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('id', userID)
+                        .single();
 
-                    if (!response.ok) throw new Error("Server not working , please wait or upload page")
-                    let user = await response.json();
+                    if (userError) throw userError;
 
                     let followersID = user[order] || [];
                     if (followersID.length === 0) throw new Error('Not follower')
@@ -38,7 +42,7 @@ function FollowerPage() {
             }
         }
         getUserFollowerID()
-    }, [userID])
+    }, [userID, userData])
 
     if (error) return <div className="error-container">
         <h2>{error}</h2>

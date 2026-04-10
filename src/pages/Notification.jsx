@@ -2,82 +2,67 @@ import { useEffect, useState } from "react";
 import NoteCard from "../components/NoteCard";
 import "../styles/Notification.css"
 import { FaXmark } from "react-icons/fa6";
+import { useOutletContext } from "react-router-dom";
+import { supabase } from "../utils/supabaseClient";
 
 function Notification() {
     const [notification, setNotification] = useState([]);
     const [error, setError] = useState("")
-
+    const { userData } = useOutletContext();
+ 
     useEffect(() => {
         async function getNotes() {
             try {
-                let id = JSON.parse(localStorage.getItem("loginConf")).user.id;
+                if (!userData?.id) return;
+                
+                const { data: notes, error: notesError } = await supabase
+                    .from('notification')
+                    .select('*')
+                    .eq('userid', userData.id)
+                    .order('creadetat', { ascending: false });
 
-                const res = await fetch(`http://localhost:3000/notification`);
-                if (!res.ok) throw new Error("Not loaded notes");
+                if (notesError) throw notesError;
 
-                let notes = await res.json();
-                let UserNotes = notes.filter(note => note.userID === id) || [];
                 setError('');
-                setNotification(UserNotes.reverse())
+                setNotification(notes || [])
             } catch (error) {
                 setError(error.message)
             }
         }
 
         getNotes()
-    }, [])
+    }, [userData]);
 
     async function handleMarkAllAsRead() {
         try {
-            const id = JSON.parse(localStorage.getItem("loginConf")).user.id;
+            const { error: patchError } = await supabase
+                .from('notification')
+                .update({ status: 'read' })
+                .eq('userid', userData.id)
+                .neq('status', 'read');
 
-            const res = await fetch(`http://localhost:3000/notification?userID=${id}`);
-            if (!res.ok) throw new Error("Failed to fetch notifications");
-
-            const notes = await res.json();
-
-            const unreadNotes = notes.filter(note => note.status !== "read");
-
-            await Promise.all(
-                unreadNotes.map(note =>
-                    fetch(`http://localhost:3000/notification/${note.id}`, {
-                        method: "PATCH",
-                        headers: { "Content-type": "application/json" },
-                        body: JSON.stringify({ status: "read" })
-                    })
-                )
-            );
+            if (patchError) throw patchError;
 
             setNotification(prev =>
                 prev.map(note => ({ ...note, status: "read" }))
             );
-
         } catch (err) { }
     }
 
     async function handleDeleteAll() {
-    try {
-        const id = JSON.parse(localStorage.getItem("loginConf")).user.id;
+        try {
+            const { error: deleteError } = await supabase
+                .from('notification')
+                .delete()
+                .eq('userid', userData.id);
 
-        const res = await fetch(`http://localhost:3000/notification?userID=${id}`);
-        if (!res.ok) throw new Error("Failed to fetch notifications");
-
-        const notes = await res.json();
-
-        await Promise.all(
-            notes.map(note =>
-                fetch(`http://localhost:3000/notification/${note.id}`, {
-                    method: "DELETE"
-                })
-            )
-        );
-        
-        setNotification([]);
-
-    } catch (err) {
-        console.log(err.message);
+            if (deleteError) throw deleteError;
+            
+            setNotification([]);
+        } catch (err) {
+            console.log(err.message);
+        }
     }
-}
 
     if (error) return (
         <div className="notification-error">
@@ -93,7 +78,7 @@ function Notification() {
             <button onClick={handleDeleteAll} disabled={notification.length === 0}>Delete all</button>
         </div>
         {
-            notification.length === 0 ? <h2>No notifications yet</h2> : notification.map(note => <NoteCard key={note.noteID} header={note.header} text={note.text} time={note.creadetAt} noteID={note.noteID} status={note.status} id={note.id} />)
+            notification.length === 0 ? <h2>No notifications yet</h2> : notification.map(note => <NoteCard key={note.noteid} header={note.header} text={note.text} time={note.creadetat} noteID={note.noteid} status={note.status} id={note.id} />)
         }
     </div>
 };
