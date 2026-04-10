@@ -65,6 +65,7 @@ export default function Home() {
                     </div>
 
                 </div>
+                <button onClick={logOutHandler}><BiExit /></button>
             </div>
             <div className="home-body">
 

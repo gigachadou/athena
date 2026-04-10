@@ -4,6 +4,7 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { convertToBase64 } from "../utils/convertToBase64";
 import addNote from "../utils/addNotification";
 import { supabase } from "../utils/supabaseClient";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function AddPost() {
     const { postId: routePostId } = useParams();
@@ -30,7 +31,7 @@ export default function AddPost() {
                     }
                     setHeader(data.header || "");
                     setText(data.text || "");
-                    
+
                     let loaded = [];
                     for (let m of (data.media || [])) {
                         loaded.push({ base64: m, id: Math.random() });
@@ -175,7 +176,7 @@ export default function AddPost() {
             setTimeout(() => {
                 setNotification(null);
             }, 5000);
-            
+
             navigate("/profile");
         } catch (err) {
             setError(`General error: ${err.message}`);
@@ -184,14 +185,18 @@ export default function AddPost() {
 
     return (
         <div className="add-post-page">
+
             {notification && (
                 <div className="toast">
                     <div className="toast-title">{notification.title}</div>
                     <div className="toast-text">{notification.text}</div>
                 </div>
             )}
+
             <div className="add-post-card">
+                <button onClick={() => navigate(-1)} className="back"><FaArrowLeft /></button>
                 <h2 className="add-post-title">Create a post</h2>
+
                 {error && <p>{error}</p>}
                 <h3 className="add-post-subtitle">Share an update with your community.</h3>
                 <form onSubmit={e => handleSubmit(e)} className="add-post-form">
@@ -263,7 +268,7 @@ export default function AddPost() {
                         ))}
                     </div>
                     <button type="submit" className="add-post-submit">Post</button>
-                    <button type="button" onClick={() => navigate(-1)} className="add-post-submit" style={{marginTop: "10px", backgroundColor: "#333"}}>Cancel</button>
+                    <button type="button" onClick={() => navigate(-1)} className="add-post-submit" style={{ marginTop: "10px", backgroundColor: "#333" }}>Cancel</button>
                 </form>
             </div>
         </div>
