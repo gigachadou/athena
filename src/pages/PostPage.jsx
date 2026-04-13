@@ -10,6 +10,7 @@ import { FaArrowLeft, FaUser } from "react-icons/fa";
 import actionDeleteComment from "../utils/postActions/actionDeleteComment";
 import CommentEditModal from "../components/CommentEditModal";
 import { supabase } from "../utils/supabaseClient";
+import { VscLoading } from "react-icons/vsc";
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -21,6 +22,7 @@ export default function PostPage() {
     const [trigger, setTrigger] = useState(0);
     const [commentOwners, setCommentOwners] = useState({});
     const [editCommentModal, setEditCommentModal] = useState(null);
+    const [commentLoading, setCommentLoading] = useState(false);
     const inputRef = useRef(null);
     const navigate = useNavigate();
 
@@ -106,6 +108,7 @@ export default function PostPage() {
     };
 
     async function handleAddComment() {
+        setCommentLoading(true);
         const text = inputRef.current.value;
         if (!text.trim()) return;
         try {
@@ -114,7 +117,9 @@ export default function PostPage() {
             setTrigger(prev => prev + 1);
         } catch (error) {
             setServerError(error.message);
-        }
+        } finally {
+            setCommentLoading(false);
+        };
     };
 
     async function handleCommentDelete(postId, commentId) {
@@ -191,9 +196,10 @@ export default function PostPage() {
 
                     <section className="comments">
                         <h2>Comments</h2>
+
                         <div className="post-page-add-comment-container">
                             <input ref={inputRef} type="text" placeholder="Share your thoughts" />
-                            <button onClick={handleAddComment}><FaPaperPlane /></button>
+                            <button onClick={handleAddComment} disabled={commentLoading}>{commentLoading ? <VscLoading /> : <FaPaperPlane />}</button>
                         </div>
                         {data.post.comments?.length ? [...data.post.comments].reverse().map((comment, index) => {
                             const owner = commentOwners[comment.user] || { name: "Loading...", id: null };
