@@ -9,11 +9,12 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
-
+        setLoading(true);
         try {
             const { data, error } = await supabase.auth.signInWithPassword({
                 email,
@@ -28,6 +29,8 @@ export default function Login() {
             navigate("/home");
         } catch (error) {
             setError(error.message);
+        } finally {
+            setLoading(false);
         };
     };
 
@@ -63,15 +66,15 @@ export default function Login() {
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? <FaEye/> : <FaEyeSlash/>}
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
                         </button>
                     </div>
                 </div>
-                <button type="submit" className="submit-btn">Log In</button>
+                <button type="submit" className="submit-btn" disabled={loading}>{loading ? "Wait..." : "Log In"}</button>
             </form>
             <div className="signup-link">
                 <span style={{ marginRight: "15px" }}>Or create one</span>
-                <Link to="/signin">Sign In</Link>
+                <Link to="/signin">Sign Up</Link>
             </div>
         </div>
     );

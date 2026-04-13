@@ -29,7 +29,6 @@ export default function Home() {
                     const { data: followerPosts, error: postsError } = await supabase
                         .from('posts')
                         .select('*')
-                        .in('userid', ids);
 
                     if (postsError) throw postsError;
 

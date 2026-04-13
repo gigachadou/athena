@@ -11,6 +11,7 @@ export default function Signin() {
     const [passRes, setPassRes] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [afterSign, setAfterSign] = useState(false);
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
@@ -85,7 +86,7 @@ export default function Signin() {
             if (insertError) throw insertError;
 
             if (data?.user && data?.session === null) {
-                setError("Please check your email for the confirmation link!");
+                setAfterSign(true);
                 return;
             }
 
@@ -101,88 +102,93 @@ export default function Signin() {
 
     return (
         <div className="signin-container">
-            <div className="signin-header">
-                <h2>Sign Up</h2>
-            </div>
-
-            <form onSubmit={handleSubmit} className="signin-form">
-                {error && <div className="error-message">{error}</div>}
-
-                <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        disabled={loading}
-                        maxLength={40}
-                        minLength={2}
-                        placeholder="name"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        disabled={loading}
-                        placeholder="email@gmail.com"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Password</label>
-                    <div className="password-wrapper">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            value={passRes}
-                            onChange={(e) => setPassRes(e.target.value)}
-                            disabled={loading}
-                            minLength={8}
-                            placeholder="*********"
-                        />
-                        <button
-                            type="button"
-                            className="toggle-password"
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <FaEye /> : <FaEyeSlash />}
-                        </button>
+            {afterSign ? <div>
+                <h2>Check your email for confirmation link!</h2>
+            </div> :
+                <div>
+                    <div className="signin-header">
+                        <h2>Sign Up</h2>
                     </div>
-                </div>
 
-                <div className="form-group">
-                    <label>Confirm your Password</label>
-                    <div className="password-wrapper">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            disabled={loading}
-                            minLength={8}
-                            placeholder="*********"
-                        />
-                        <button
-                            type="button"
-                            className="toggle-password"
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                    <form onSubmit={handleSubmit} className="signin-form">
+                        {error && <div className="error-message">{error}</div>}
+
+                        <div className="form-group">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                disabled={loading}
+                                maxLength={40}
+                                minLength={2}
+                                placeholder="name"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                disabled={loading}
+                                placeholder="email@gmail.com"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Password</label>
+                            <div className="password-wrapper">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={passRes}
+                                    onChange={(e) => setPassRes(e.target.value)}
+                                    disabled={loading}
+                                    minLength={8}
+                                    placeholder="*********"
+                                />
+                                <button
+                                    type="button"
+                                    className="toggle-password"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Confirm your Password</label>
+                            <div className="password-wrapper">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    disabled={loading}
+                                    minLength={8}
+                                    placeholder="*********"
+                                />
+                                <button
+                                    type="button"
+                                    className="toggle-password"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" disabled={loading} className="submit-btn">
+                            {loading ? "Creating..." : "Sign Up"}
                         </button>
-                    </div>
-                </div>
 
-                <button type="submit" disabled={loading} className="submit-btn">
-                    {loading ? "Creating..." : "Sign Up"}
-                </button>
-
-                <div className="signin-link">
-                    <span style={{ marginRight: "15px" }}>Have an account?</span>
-                    <Link to="/login">Log in</Link>
-                </div>
-            </form>
+                        <div className="signin-link">
+                            <span style={{ marginRight: "15px" }}>Have an account?</span>
+                            <Link to="/login">Log in</Link>
+                        </div>
+                    </form>
+                </div>}
         </div>
     );
 };
