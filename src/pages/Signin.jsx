@@ -59,13 +59,13 @@ export default function Signin() {
                 password,
                 options: {
                     data: {
-                        name: name,
-                        user_id: newUserId
+                        name: name
                     }
                 }
             });
 
             if (signUpError) throw signUpError;
+            if (!data.user) throw new Error("User creation failed");
 
             // Manual insert into public.users to ensure data is there
             const { error: insertError } = await supabase
