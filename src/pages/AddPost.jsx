@@ -14,6 +14,7 @@ export default function AddPost() {
     const [media, setMedia] = useState([]);
     const [notification, setNotification] = useState(null);
     const { userData, setTriggerWindow } = useOutletContext();
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,6 +55,7 @@ export default function AddPost() {
     }, [routePostId]);
 
     async function handleAddMedia(e) {
+
         const files = Array.from(e.target.files || []);
         if (!files.length) return;
 
@@ -84,6 +86,7 @@ export default function AddPost() {
     };
 
     async function handleSubmit(e) {
+        setLoading(true);
         e.preventDefault();
         try {
             setError("");
@@ -180,6 +183,8 @@ export default function AddPost() {
             navigate("/profile");
         } catch (err) {
             setError(`General error: ${err.message}`);
+        } finally {
+            setLoading(false);
         };
     };
 
@@ -267,7 +272,7 @@ export default function AddPost() {
                             </div>
                         ))}
                     </div>
-                    <button type="submit" className="add-post-submit">Post</button>
+                    <button type="submit" className="add-post-submit" disabled={loading}>{loading ? "Wait..." : "Post"}</button>
                     <button type="button" onClick={() => navigate(-1)} className="add-post-submit" style={{ marginTop: "10px", backgroundColor: "#333" }}>Cancel</button>
                 </form>
             </div>
