@@ -133,6 +133,11 @@
   transform: translateY(-1px);
 }
 
+.submit-btn:disabled {
+  background: #a0c4ff;
+  cursor: wait;
+}
+
 /* 9. Bottom Link */
 .signup-link {
   margin-top: 20px;
