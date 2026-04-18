@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { supabase } from "../utils/supabaseClient";
+import { loginUser } from "../utils/authService";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -15,17 +15,9 @@ export default function Login() {
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
+        setError("");
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
-
-            if (error) {
-                setError("Incorrect email or password!");
-                throw error;
-            }
-
+            await loginUser(email, password);
             navigate("/home");
         } catch (error) {
             setError(error.message);

@@ -46,12 +46,12 @@ function SearchProfile() {
                 setData(profile_user);
                 setCurrentUser(current_user_db);
             } catch (err) {
-                console.error(err);
+
             }
         }
         getUsers(usersID)
     }, [usersID, userData])
-    console.log(data);
+
     useEffect(() => {
         (async function () {
             if (data) {

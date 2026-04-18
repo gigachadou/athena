@@ -1,114 +1,162 @@
 @import "./theme.css";
 
+/* ============================================
+   Addbutton — Instagram Dark Create Form
+   ============================================ */
+
 .Inputdiv {
-  max-width: 420px;
-  margin: 2.5rem auto;
-  padding: 2.5rem clamp(1.25rem, 2vw, 1.75rem);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.6)),
-    var(--tranquil-ink);
-  border-radius: var(--tranquil-radius);
-  border: 1px solid var(--tranquil-border);
-  box-shadow: var(--tranquil-shadow);
+  max-width: var(--ig-max-width, 470px);
+  margin: 0 auto;
+  padding: 20px 16px;
+  background: var(--ig-surface);
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  gap: var(--tranquil-gap);
-  font-family: var(--tranquil-font);
-  color: #f8fafc;
+  gap: 16px;
+  font-family: var(--ig-font);
+  color: var(--ig-text-primary);
 }
 
 .selector__divs {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 6px;
 }
 
 .selector__divs label {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 6px;
   font-weight: 600;
-  color: var(--tranquil-muted);
-  font-size: 0.95rem;
+  color: var(--ig-text-primary);
+  font-size: 14px;
   cursor: pointer;
-  transition: color var(--tranquil-transition);
+  transition: var(--ig-transition);
 }
 
 .selector__divs:hover label {
-  color: #fef0e0;
+  color: var(--ig-text-secondary);
 }
 
 .selector__divs input[type="text"] {
   width: 100%;
-  padding: 0.9rem 1.2rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fefdfc;
-  font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  font-family: var(--tranquil-font);
+  padding: 10px 12px;
+  border-radius: var(--ig-radius-sm);
+  border: 1px solid var(--ig-border);
+  background: var(--ig-bg);
+  color: var(--ig-text-primary);
+  font-size: 14px;
+  transition: var(--ig-transition);
+  font-family: var(--ig-font);
 }
 
 .selector__divs input[type="text"]:focus {
   outline: none;
-  border-color: var(--steel-red);
-  box-shadow: 0 0 0 3px rgba(194, 70, 61, 0.25);
+  border-color: var(--ig-text-secondary);
+  background: var(--ig-surface);
 }
 
 .selector__divs input[type="file"] {
-  padding: 0.75rem 1rem;
-  border: 1px dashed rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--tranquil-muted);
-  font-size: 0.95rem;
+  padding: 10px 12px;
+  border: 1px dashed var(--ig-border);
+  border-radius: var(--ig-radius-sm);
+  background: var(--ig-bg);
+  color: var(--ig-text-secondary);
+  font-size: 14px;
   cursor: pointer;
-  transition: border-color 0.3s ease;
+  transition: var(--ig-transition);
 }
 
 .selector__divs input[type="file"]:hover,
 .selector__divs input[type="file"]:focus {
-  border-color: var(--steel-red);
+  border-color: var(--ig-blue);
 }
 
- .added-btn {
-  margin-top: 0.5rem;
-  padding: 0.9rem 1.4rem;
-  background: linear-gradient(140deg, var(--steel-red) 0%, #d8695f 70%);
-  color: #05060a;
+.added-btn {
+  margin-top: 4px;
+  padding: 10px 20px;
+  background: var(--ig-blue);
+  color: #fff;
   border: none;
-  border-radius: 999px;
-  font-size: 1rem;
+  border-radius: var(--ig-radius-sm);
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.5px;
   cursor: pointer;
-  box-shadow: 0 18px 35px rgba(194, 70, 61, 0.35);
-  transition: transform var(--tranquil-transition), box-shadow var(--tranquil-transition);
+  box-shadow: none;
+  transition: var(--ig-transition);
 }
 
- .added-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 22px 45px rgba(194, 70, 61, 0.45);
+.added-btn:hover {
+  background: var(--ig-blue-hover);
+  transform: none;
+  box-shadow: none;
 }
 
 .added-btn:active {
-  transform: translateY(1px);
+  transform: scale(0.97);
 }
 
 .selector__divs svg {
-  font-size: 1.1rem;
-  color: var(--steel-red);
+  font-size: 16px;
+  color: var(--ig-blue);
 }
 
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
   .Inputdiv {
-    padding: 1.75rem;
+    padding: 16px 12px;
+    gap: 14px;
+  }
+
+  .selector__divs input[type="text"],
+  .selector__divs input[type="file"] {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .selector__divs label {
+    font-size: 13px;
   }
 
   .added-btn {
-    width: 100%;
-    text-align: center;
+    padding: 10px 16px;
+    font-size: 13px;
   }
 }
 
+@media (max-width: 359px) {
+  .Inputdiv {
+    padding: 12px 8px;
+    gap: 12px;
+  }
 
+  .selector__divs input[type="text"],
+  .selector__divs input[type="file"] {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .selector__divs label {
+    font-size: 12px;
+  }
+
+  .added-btn {
+    padding: 9px 12px;
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 481px) {
+  .Inputdiv {
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius-sm);
+    margin-top: 16px;
+    padding: 24px 20px;
+  }
+}

@@ -21,7 +21,7 @@ export default async function getPostsByIds(postIds) {
         return postIds.map(id => postsById.get(id)).filter(Boolean);
         
     } catch (err) {
-        console.warn("Posts fetch error:", err);
+
         return [];
     }
 }

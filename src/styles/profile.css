@@ -1,148 +1,248 @@
-/* 1. Umumiy Konteyner */
+/* ============================================
+   Profile — Instagram-style Profile Page
+   ============================================ */
+
+/* Main Container */
 .profile-page {
-  max-width: 1200px;
+  max-width: var(--ig-max-width, 470px);
   margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
+  padding: 0 16px 16px;
+  background-color: var(--ig-surface);
+  min-height: 100vh;
 }
 
-/* 2. Tepada joylashgan boshqaruv tugmalari */
+/* Top Buttons (Settings, Edit) */
 .profile-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 12px;
+  padding: 10px 0;
 }
 
 .profile-buttons button {
-  background-color: #f0f2f5;
+  background-color: transparent;
   border: none;
-  padding: 10px;
-  border-radius: 50%;
+  padding: 8px;
+  border-radius: var(--ig-radius-full);
   cursor: pointer;
-  color: #1e88e5;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
+  color: var(--ig-text-primary);
+  font-size: 20px;
+  transition: var(--ig-transition);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .profile-buttons button:hover {
-  background-color: #1e88e5;
-  color: #fff;
-  transform: rotate(15deg);
+  background-color: var(--ig-bg);
+  color: var(--ig-text-primary);
+  transform: none;
 }
 
-/* 3. Foydalanuvchi ma'lumotlari (Header) */
+/* User Info Section — Instagram layout */
 .UserInfo {
   display: flex;
   align-items: center;
-  gap: 30px;
-  padding-bottom: 30px;
-  border-bottom: 2px solid #f0f2f5;
-  margin-bottom: 30px;
+  gap: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--ig-border-light);
+  margin-bottom: 16px;
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--ig-radius-full);
   overflow: hidden;
-  border: 4px solid #1e88e5;
-  background-color: #f8f9fa;
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--ig-surface), var(--ig-surface)),
+    var(--ig-gradient);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: var(--ig-radius-full);
 }
 
 .avatar svg {
-  font-size: 3rem;
-  color: #ccc;
+  font-size: 2rem;
+  color: var(--ig-text-secondary);
 }
 
 .bio .name h2 {
-  font-size: 1.8rem;
-  color: #0d47a1;
+  font-size: 20px;
+  color: var(--ig-text-primary);
   margin: 0;
+  font-weight: 700;
 }
 
 .bio .name p {
-  color: #666;
-  margin: 5px 0;
+  color: var(--ig-text-secondary);
+  margin: 2px 0;
+  font-size: 14px;
 }
 
-/* 4. Followers/Followings bo'limi */
+/* Followers/Following Stats */
 .following {
   display: flex;
   gap: 20px;
-  margin-top: 15px;
+  margin-top: 12px;
 }
 
 .follow-btns {
   background: none;
   border: none;
-  color: #333;
-  font-weight: 700;
+  color: var(--ig-text-primary);
+  font-weight: 600;
   cursor: pointer;
-  padding: 5px 0;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.3s;
+  padding: 0;
+  font-size: 14px;
+  transition: var(--ig-transition);
 }
 
 .follow-btns:hover {
-  color: #1e88e5;
-  border-bottom-color: #1e88e5;
+  color: var(--ig-text-secondary);
 }
 
-/* 5. Postlar bo'limi */
+.follow-btns span {
+  font-weight: 700;
+}
+
+/* Posts Section */
 .posts-h2 {
-  font-size: 1.5rem;
-  color: #0d47a1;
-  margin-bottom: 20px;
-  border-left: 5px solid #1e88e5;
-  padding-left: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ig-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--ig-border);
+  border-left: none;
+  padding-left: 0;
+  text-align: center;
 }
 
 .posts {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 0;
 }
 
-/* Birinchi postni yaratish linki */
+/* Empty state — create first post */
 .posts a {
   display: block;
   text-align: center;
-  padding: 40px;
-  border: 2px dashed #ccc;
-  border-radius: 15px;
+  padding: 32px;
+  border: 1px dashed var(--ig-border);
+  border-radius: var(--ig-radius-sm);
   text-decoration: none;
-  color: #888;
-  font-weight: 600;
-  transition: all 0.3s;
+  color: var(--ig-text-secondary);
+  font-weight: 500;
+  font-size: 14px;
+  transition: var(--ig-transition);
 }
 
 .posts a:hover {
-  background-color: #f0f8ff;
-  border-color: #1e88e5;
-  color: #1e88e5;
+  background-color: var(--ig-bg);
+  border-color: var(--ig-blue);
+  color: var(--ig-blue);
 }
 
-/* 6. Responsivlik */
-@media (max-width: 600px) {
-  .UserInfo {
-    flex-direction: column;
-    text-align: center;
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
+  .profile-page {
+    padding: 0 12px 12px;
   }
-  
+
+  .UserInfo {
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+
+  .avatar {
+    width: 68px;
+    height: 68px;
+  }
+
+  .bio .name h2 {
+    font-size: 18px;
+  }
+
+  .bio .name p {
+    font-size: 13px;
+  }
+
   .following {
-    justify-content: center;
+    gap: 16px;
+  }
+
+  .follow-btns {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 359px) {
+  .profile-page {
+    padding: 0 8px 8px;
+  }
+
+  .UserInfo {
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .bio .name h2 {
+    font-size: 16px;
+  }
+
+  .bio .name p {
+    font-size: 12px;
+  }
+
+  .following {
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .follow-btns {
+    font-size: 12px;
+  }
+
+  .profile-buttons button {
+    font-size: 18px;
+    padding: 6px;
+  }
+}
+
+@media (min-width: 768px) {
+  .profile-page {
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius-sm);
+    margin-top: 16px;
+    padding: 0 24px 24px;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .UserInfo {
+    gap: 32px;
   }
 }

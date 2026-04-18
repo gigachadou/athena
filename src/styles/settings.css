@@ -1,96 +1,128 @@
-/* 1. Asosiy Konteyner */
+/* ============================================
+   Settings — Instagram-style Settings Page
+   ============================================ */
+
+/* Main Container */
 .settings {
-  max-width: 1200px;
-  margin: 50px auto;
-  padding: 20px;
+  max-width: var(--ig-max-width, 470px);
+  margin: 0 auto;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(30, 136, 229, 0.1);
+  gap: 0;
+  background: var(--ig-surface);
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
 }
 
-/* 2. Umumiy Tugmalar Uslubi */
+/* Setting Buttons */
 .settings button {
   width: 100%;
-  padding: 15px 20px;
+  padding: 14px 16px;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   text-align: left;
-  transition: all 0.3s ease;
-  background-color: #f8f9fa;
-  color: #333;
+  transition: var(--ig-transition);
+  background-color: transparent;
+  color: var(--ig-text-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--ig-border-light);
 }
 
-/* O'ng tomonga kichik o'q belgisi qo'shish (ixtiyoriy, pseudo-element orqali) */
+/* Arrow indicator */
 .settings button::after {
   content: '›';
-  font-size: 1.5rem;
-  color: #ccc;
+  font-size: 18px;
+  color: var(--ig-text-secondary);
+  font-weight: 300;
 }
 
 .settings button:hover {
-  background-color: #e3f2fd;
-  color: #1e88e5;
-  transform: translateX(5px);
+  background-color: var(--ig-bg);
+  color: var(--ig-text-primary);
+  transform: none;
 }
 
-/* 3. Maxsus Tugmalar: Log Out */
+/* Log Out button */
 .settings button:nth-last-of-type(2) {
-  background-color: rgba(229, 57, 53, 0.05);
-  color: #e53935;
-  border: 1px solid rgba(229, 57, 53, 0.1);
+  background-color: transparent;
+  color: var(--ig-red);
+  border-bottom: 1px solid var(--ig-border-light);
 }
 
 .settings button:nth-last-of-type(2):hover {
-  background-color: #e53935;
-  color: #fff;
+  background-color: rgba(237, 73, 86, 0.05);
+  color: var(--ig-red);
 }
 
 .settings button:nth-last-of-type(2)::after {
-    color: inherit;
+  color: var(--ig-red);
 }
 
-/* 4. Maxsus Tugmalar: Delete Account (Xavfli zona) */
+/* Delete Account */
 .settings button:nth-child(4) {
-    color: #888;
-    font-size: 0.9rem;
+  color: var(--ig-text-secondary);
+  font-size: 14px;
 }
 
 .settings button:nth-child(4):hover {
-    background-color: #333;
-    color: #fff;
+  background-color: var(--ig-bg);
+  color: var(--ig-text-primary);
 }
 
-/* 5. Back Tugmasi */
+/* Back button */
 .settings button:last-of-type {
-  background-color: #1e88e5;
-  color: white;
+  background-color: var(--ig-blue);
+  color: #fff;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 12px;
+  border-radius: var(--ig-radius-sm);
+  border-bottom: none;
 }
 
 .settings button:last-of-type::after {
-  content: ''; /* Back tugmasida o'q kerak emas */
+  content: '';
 }
 
 .settings button:last-of-type:hover {
-  background-color: #1565c0;
-  transform: scale(1.02);
+  background-color: var(--ig-blue-hover);
+  transform: none;
 }
 
-/* 6. Responsivlik */
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
   .settings {
-    margin: 20px;
-    padding: 15px;
+    padding: 12px;
+  }
+
+  .settings button {
+    padding: 13px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 359px) {
+  .settings {
+    padding: 8px;
+  }
+
+  .settings button {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 481px) {
+  .settings {
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius-sm);
+    margin-top: 16px;
   }
 }

@@ -1,119 +1,151 @@
-/* 1. O'zgaruvchilar */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --error-red: #E53935;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================
+   Notification — Instagram-style Activity Page
+   ============================================ */
 
-/* 2. Asosiy Konteyner */
+/* Main Container */
 .notification {
-  max-width: 1200px;
+  max-width: var(--ig-max-width, 470px);
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 16px 16px;
   min-height: 100vh;
 }
 
-/* 3. Boshqaruv paneli (Header & Buttons) */
+/* Control Bar */
 .State {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 20px;
-  background: var(--white);
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  margin-bottom: 25px;
-  border: 1px solid rgba(30, 136, 229, 0.1);
+  padding: 14px 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+  border: none;
+  border-bottom: 1px solid var(--ig-border-light);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ig-surface);
 }
 
 .State h2 {
-  font-size: 1.3rem;
-  color: var(--text-main);
+  font-size: 16px;
+  color: var(--ig-text-primary);
   margin: 0;
-  font-weight: 800;
+  font-weight: 700;
 }
 
-/* Tugmalar uslubi */
+/* Buttons */
 .State button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--primary-blue);
+  padding: 6px 14px;
+  border-radius: var(--ig-radius-sm);
+  border: 1px solid var(--ig-border);
   background: transparent;
-  color: var(--primary-blue);
+  color: var(--ig-text-primary);
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
-  font-size: 0.85rem;
-  margin-left: 10px;
+  transition: var(--ig-transition);
+  font-size: 13px;
+  margin-left: 8px;
 }
 
 .State button:first-of-type:hover {
-  background: var(--primary-blue);
-  color: var(--white);
+  background: var(--ig-blue);
+  color: #fff;
+  border-color: var(--ig-blue);
 }
 
-/* Delete All tugmasi uchun alohida qizil uslub */
+/* Delete All button */
 .State button:last-of-type {
-  border-color: var(--error-red);
-  color: var(--error-red);
+  border-color: var(--ig-red);
+  color: var(--ig-red);
 }
 
 .State button:last-of-type:hover {
-  background: var(--error-red);
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);
+  background: var(--ig-red);
+  color: #fff;
 }
 
-/* 4. Xabarlar ro'yxati */
+/* Empty state */
 .notification > h2:last-child {
   text-align: center;
-  color: #888;
+  color: var(--ig-text-secondary);
   font-weight: 400;
-  margin-top: 50px;
-  font-size: 1.1rem;
+  margin-top: 40px;
+  font-size: 14px;
 }
 
-/* 5. Xatolik holati (Error State) */
+/* Error State */
 .notification-error {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 60vh;
-  color: var(--error-red);
+  color: var(--ig-red);
 }
 
 .notification-error svg {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  opacity: 0.8;
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  opacity: 0.7;
 }
 
-/* 6. Animatsiya */
-.notification .note-card-wrapper { /* NoteCard komponentingizni o'raydigan klass bo'lsa */
-  animation: slideIn 0.4s ease forwards;
+/* Item animation */
+.notification .note-card-wrapper {
+  animation: fadeIn 0.3s ease forwards;
 }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
+/* ========== RESPONSIVE ========== */
 
-/* 7. Responsivlik */
-@media (max-width: 600px) {
+@media (max-width: 480px) {
+  .notification {
+    padding: 0 12px 12px;
+  }
+
   .State {
-    flex-direction: column;
-    gap: 15px;
+    padding: 12px 0;
+    gap: 8px;
+  }
+
+  .State h2 {
+    font-size: 15px;
+  }
+
+  .State button {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: 6px;
+  }
+}
+
+@media (max-width: 359px) {
+  .notification {
+    padding: 0 8px 8px;
+  }
+
+  .State {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  .State h2 {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .State button {
+    flex: 1;
+    margin-left: 0;
+    padding: 6px 8px;
+    font-size: 11px;
     text-align: center;
   }
-  
-  .State button {
-    width: 100%;
-    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  .notification {
+    padding: 0 0 16px;
   }
 }

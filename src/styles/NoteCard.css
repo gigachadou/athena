@@ -1,137 +1,146 @@
-/* 1. O'zgaruvchilar */
-:root {
-  --primary-red: #E53935;
-  --dark-red: #C62828;
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --transition: all 0.3s ease-in-out;
-}
+/* ============================================
+   NoteCard — Instagram-style Notification Card
+   ============================================ */
 
-/* 2. Karta asosiy dizayni */
+/* Card Base */
 .notification-card {
-  background-color: var(--white);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-left: 5px solid var(--primary-blue); /* Standart holatda ko'k hoshiya */
-  transition: var(--transition);
+  background-color: var(--ig-surface);
+  border-radius: 0;
+  padding: 12px 0;
+  margin-bottom: 0;
+  box-shadow: none;
+  border-left: none;
+  border-bottom: 1px solid var(--ig-border-light);
+  transition: var(--ig-transition);
   position: relative;
   overflow: hidden;
+  animation: fadeIn 0.3s ease-out;
 }
 
-/* 3. O'qilmagan va O'qilgan holatlar uchun vizual farq */
+/* Read state */
 .notification-card:has(button[disabled]) {
-  border-left-color: #BDBDBD; /* O'qilgan bo'lsa kulrang */
-  opacity: 0.85;
+  opacity: 0.6;
 }
 
 .notification-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(13, 71, 161, 0.12);
+  background: var(--ig-bg);
+  transform: none;
+  box-shadow: none;
 }
 
-/* 4. Matnlar dizayni */
+/* Text */
 .notification-card h2 {
-  margin: 0 0 8px 0;
-  font-size: 1.15rem;
-  color: var(--text-main);
-  font-weight: 700;
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  color: var(--ig-text-primary);
+  font-weight: 600;
 }
 
 .notification-card p:first-of-type {
-  margin: 0 0 12px 0;
-  font-size: 1rem;
-  color: #444;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: var(--ig-text-primary);
   line-height: 1.4;
 }
 
-/* Vaqt ko'rsatkichi */
+/* Timestamp */
 .notification-card p:last-of-type {
   margin: 0;
-  font-size: 0.8rem;
-  color: #888;
-  font-style: italic;
+  font-size: 12px;
+  color: var(--ig-text-secondary);
+  font-style: normal;
 }
 
-/* 5. Tugmalar konteyneri */
+/* Buttons */
 .note-buttons {
   display: flex;
-  gap: 12px;
-  margin-top: 15px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .note-buttons button {
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  padding: 6px 16px;
+  border-radius: var(--ig-radius-sm);
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
-  text-transform: capitalize;
+  transition: var(--ig-transition);
   border: none;
 }
 
-/* "Read" / Status tugmasi */
+/* Read button */
 .note-buttons button:first-child {
-  background-color: var(--primary-blue);
-  color: var(--white);
+  background-color: var(--ig-blue);
+  color: #fff;
 }
 
 .note-buttons button:first-child:hover:not(:disabled) {
-  background-color: var(--dark-blue);
-  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
+  background-color: var(--ig-blue-hover);
 }
 
-/* "Delete" tugmasi */
+/* Delete button */
 .note-buttons button:last-child {
-  background-color: var(--white);
-  color: var(--primary-red);
-  border: 1.5px solid var(--primary-red);
+  background-color: transparent;
+  color: var(--ig-red);
+  border: 1px solid var(--ig-red);
 }
 
 .note-buttons button:last-child:hover:not(:disabled) {
-  background-color: var(--primary-red);
-  color: var(--white);
-  box-shadow: 0 4px 10px rgba(229, 57, 53, 0.2);
+  background-color: var(--ig-red);
+  color: #fff;
 }
 
-/* Disabled holati (tugma bosib bo'lmaydigan holat) */
+/* Disabled state */
 .note-buttons button:disabled {
-  background-color: #E0E0E0 !important;
-  color: #9E9E9E !important;
-  border-color: #E0E0E0 !important;
+  background-color: var(--ig-bg) !important;
+  color: var(--ig-text-secondary) !important;
+  border-color: var(--ig-border) !important;
   cursor: not-allowed;
   transform: none !important;
   box-shadow: none !important;
 }
 
-/* 6. Animatsiyalar */
-@keyframes fadeInCard {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
+/* ========== RESPONSIVE ========== */
 
-.notification-card {
-  animation: fadeInCard 0.4s ease-out;
-}
-
-/* 7. Responsivlik */
 @media (max-width: 480px) {
   .notification-card {
-    padding: 15px;
+    padding: 10px 0;
   }
-  
-  .note-buttons {
-    flex-direction: row;
-    justify-content: space-between;
+
+  .notification-card h2 {
+    font-size: 13px;
   }
-  
+
+  .notification-card p:first-of-type {
+    font-size: 13px;
+  }
+
   .note-buttons button {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 359px) {
+  .notification-card h2 {
+    font-size: 12px;
+  }
+
+  .notification-card p:first-of-type {
+    font-size: 12px;
+  }
+
+  .notification-card p:last-of-type {
+    font-size: 11px;
+  }
+
+  .note-buttons {
+    gap: 6px;
+  }
+
+  .note-buttons button {
+    padding: 5px 10px;
+    font-size: 11px;
     flex: 1;
-    padding: 10px;
   }
 }

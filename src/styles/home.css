@@ -1,68 +1,75 @@
-/* 1. O'zgaruvchilar */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================
+   Home — Instagram-style Feed Page
+   ============================================ */
 
-/* 2. Asosiy Konteyner */
+/* Main Container */
 .home {
-  max-width: 1200px;
+  max-width: var(--ig-max-width, 470px);
   margin: 0 auto;
-  padding: 20px;
-  padding-bottom: 80px; /* Mobile Header (pastda) uchun joy */
+  padding: 0;
 }
 
-/* 3. Home Header (User info & Search) */
+/* Home Header — User Info Bar */
 .home-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--white);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
-  border: 1px solid rgba(30, 136, 229, 0.1);
+  background: var(--ig-surface);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ig-border);
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .home-about {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
-.home-about img, 
+.home-about img,
 .home-about svg {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ig-radius-full);
   object-fit: cover;
-  border: 2px solid var(--primary-blue);
-  color: var(--primary-blue);
-  padding: 2px;
+  border: 1px solid transparent;
+  background: var(--ig-bg);
+  color: var(--ig-text-secondary);
+  padding: 0;
+  flex-shrink: 0;
+  background-image: linear-gradient(var(--ig-surface), var(--ig-surface)),
+    var(--ig-gradient);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
+.home-about svg {
+  padding: 6px;
 }
 
 .home-user h2 {
-  font-size: 1.2rem;
-  color: var(--text-main);
+  font-size: 14px;
+  color: var(--ig-text-primary);
   margin: 0;
-  font-weight: 800;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .home-user p {
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 12px;
+  color: var(--ig-text-secondary);
   margin: 0;
+  line-height: 1.2;
 }
 
-/* 4. Search Input (Zamonaviy effekt bilan) */
+/* Search Input */
 .home-search {
-  flex: 0 1 300px;
+  flex: 1;
+  min-width: 0;
 }
 
 .form-control {
@@ -71,24 +78,38 @@
 }
 
 .input {
-  background-color: var(--bg-soft);
+  background-color: var(--ig-bg);
   border: none;
-  padding: 12px 15px;
-  border-radius: 12px;
+  padding: 8px 12px;
+  border-radius: var(--ig-radius-sm);
   width: 100%;
-  font-size: 0.95rem;
-  transition: var(--transition);
-  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  transition: var(--ig-transition);
+  color: var(--ig-text-primary);
 }
 
 .input:focus {
   outline: none;
-  background-color: var(--white);
-  box-shadow: 0 5px 15px rgba(30, 136, 229, 0.1);
-  border-bottom-color: var(--primary-blue);
+  background-color: var(--ig-surface);
+  box-shadow: inset 0 0 0 1px var(--ig-border);
 }
 
-/* 5. Home Body (Posts Feed) */
+/* Logout button in header */
+.home-header > button {
+  background: transparent;
+  color: var(--ig-text-primary);
+  padding: 8px;
+  font-size: 20px;
+  border-radius: var(--ig-radius-full);
+  flex-shrink: 0;
+}
+
+.home-header > button:hover {
+  background: var(--ig-bg);
+  color: var(--ig-red);
+}
+
+/* Feed Container */
 .home-body {
   width: 100%;
 }
@@ -96,47 +117,96 @@
 .home-post {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0;
 }
 
-/* Har bir post kartochkasi paydo bo'lish animatsiyasi */
+/* Post entry animation */
 .post {
-  animation: slideUpFade 0.5s ease forwards;
+  animation: fadeIn 0.3s ease forwards;
 }
 
-@keyframes slideUpFade {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ========== RESPONSIVE ========== */
 
-/* 6. Responsivlik */
-@media (max-width: 768px) {
+/* Phones (up to 480px) */
+@media (max-width: 480px) {
+  .home {
+    max-width: 100%;
+  }
+
   .home-header {
-    flex-direction: column;
-    gap: 20px;
-    align-items: flex-start;
+    padding: 10px 12px;
+    gap: 8px;
   }
 
-  .home-search {
-    width: 100%;
-    flex: none;
-  }
-
-  .home-about img, 
+  .home-about img,
   .home-about svg {
-    width: 45px;
-    height: 45px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .home-user h2 {
+    font-size: 13px;
+  }
+
+  .home-user p {
+    font-size: 11px;
+  }
+
+  .input {
+    padding: 7px 10px;
+    font-size: 13px;
   }
 }
 
-/* Yuklanish (Loading) holati uchun stil */
-h2:contains("loading") {
-  color: #ccc;
-  font-style: italic;
+/* Small phones (320px-359px) */
+@media (max-width: 359px) {
+  .home-header {
+    padding: 8px 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .home-about img,
+  .home-about svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .home-user h2 {
+    font-size: 12px;
+  }
+
+  .home-user p {
+    display: none;
+  }
+
+  .input {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+}
+
+/* Tablets (768px+) */
+@media (min-width: 768px) {
+  .home-header {
+    border-bottom: none;
+    background: transparent;
+    padding: 16px 0;
+    position: relative;
+  }
+
+  .home-about img,
+  .home-about svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Loading state */
+h2:empty,
+h2:only-child {
+  color: var(--ig-text-secondary);
+  font-style: normal;
+  text-align: center;
+  padding: 40px 16px;
 }

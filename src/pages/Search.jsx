@@ -7,89 +7,95 @@ import { supabase } from "../utils/supabaseClient";
 
 function Search() {
     const [friends, setFriends] = useState([]);
-    let { name } = useParams();
+    const { name } = useParams();
     const [elements, setElements] = useState([]);
+    const [postResults, setPostResults] = useState([]);
     const [query, setQuery] = useState(name || "");
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const { userData } = useOutletContext();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        async function getFriends() {
-            try {
-                if (!userData) return;
-                let id = userData.id;
+        if (name) {
+            setQuery(name);
+            handleSearch(name);
+        }
+    }, [name]);
 
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .neq('id', id)
-                    .limit(10);
-
-                if (error) throw error;
-                setFriends(data || []);
-                setError("")
-            } catch (error) {
-                setError(error.message)
-            };
-        };
-        if (userData) getFriends();
-    }, [userData]);
+    useEffect(() => {
+        async function getRecommended() {
+            const { data } = await supabase.from('users').select('*').limit(5);
+            setFriends(data || []);
+        }
+        getRecommended();
+    }, []);
 
     async function handleSearch(v) {
-        if (v.length === 0) {
+        if (!v.trim()) {
             setElements([]);
+            setPostResults([]);
             return;
         }
 
-        if (!userData) return;
-
-        let id = userData.id;
+        setLoading(true);
+        const id = userData?.id;
         try {
-            const { data, error } = await supabase
+            // Search Users
+            const { data: usersData } = await supabase
                 .from('users')
                 .select('*')
                 .or(`name.ilike.%${v}%,email.ilike.%${v}%`)
-                .neq('id', id);
+                .neq('id', id || 0);
 
-            if (error) throw error;
-            setElements(data || []);
+            // Search Posts
+            const { data: postsData } = await supabase
+                .from('posts')
+                .select('*')
+                .or(`header.ilike.%${v}%,text.ilike.%${v}%`)
+                .limit(10);
+
+            setElements(usersData || []);
+            setPostResults(postsData || []);
         } catch (error) {
             setError(error.message);
-        };
+        } finally {
+            setLoading(false);
+        }
     };
 
-    function results(id) {
-        navigate(`/searchresultusers/${id}`);
-    };
     return (
         <div className="container">
             <div className="search__header">
                 <input
                     type="search"
                     value={query}
-                    placeholder="Search for your friends..."
+                    placeholder="Search people or posts..."
                     onChange={(e) => {
                         setQuery(e.target.value);
                         handleSearch(e.target.value);
                     }}
                 />
-                <label htmlFor="searchInput">
-                    <FaSearch />
-                </label>
-            </div>
-            <p>{error}</p> {/* test u-n */}
-            <div className="search-friends">
-                {friends.map(friend => {
-                    return (<Friends friendsData={friend} key={friend.id} />)
-                })}
+                <label><FaSearch /></label>
             </div>
 
+            {loading && <div style={{ textAlign: 'center', padding: '20px', color: 'var(--ig-text-secondary)' }}>Searching...</div>}
+
+            {!query && friends.length > 0 && (
+                <div className="recommendations">
+                    <h3 style={{ padding: '0 20px', fontSize: '14px', color: 'var(--ig-text-secondary)' }}>Suggested</h3>
+                    <div className="search-friends">
+                        {friends.map(friend => <Friends friendsData={friend} key={friend.id} />)}
+                    </div>
+                </div>
+            )}
+
             <div className="results">
+                {elements.length > 0 && <h3 className="section-title">Users</h3>}
                 {elements.map((item) => (
-                    <div key={item.id} onClick={() => results(item.id)}>
+                    <div key={item.id} className="search-result-item" onClick={() => navigate(`/searchresultusers/${item.id}`)}>
                         <div className="searchImg">
-                            {!item?.avatar ? <FaUser /> : <img src={item.avatar} alt="Users avatar" />}
+                            {!item?.avatar ? <FaUser /> : <img src={item.avatar} alt="Avatar" />}
                         </div>
                         <div className="searchInfo">
                             <h2>{item.name}</h2>
@@ -97,6 +103,25 @@ function Search() {
                         </div>
                     </div>
                 ))}
+
+                {postResults.length > 0 && <h3 className="section-title" style={{ marginTop: '20px' }}>Posts</h3>}
+                {postResults.map((post) => (
+                    <div key={post.id} className="search-result-item post-res" onClick={() => navigate(`/posts/${post.id}`)}>
+                        <div className="searchImg post-img">
+                             {post.media?.[0] ? (
+                                 post.media[0].match(/\.(mp4|webm|ogg|mov)$/i) ? <div className="video-thumb"><FaSearch /></div> : <img src={post.media[0]} alt="Post" />
+                             ) : <FaSearch />}
+                        </div>
+                        <div className="searchInfo">
+                            <h2>{post.header || "Post"}</h2>
+                            <p>{post.text?.substring(0, 50)}...</p>
+                        </div>
+                    </div>
+                ))}
+
+                {query && !loading && elements.length === 0 && postResults.length === 0 && (
+                    <div className="no-results">No results found for "{query}"</div>
+                )}
             </div>
         </div>
     );

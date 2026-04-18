@@ -1,133 +1,128 @@
-/* 1. O'zgaruvchilar */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --primary-red: #E53935;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================
+   AddPost — Instagram-style Create Post Page
+   ============================================ */
 
-/* 2. Asosiy Sahifa va Karta */
+/* Main Container */
 .add-post-page {
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
-  background-color: var(--bg-soft);
+  padding: 0;
+  background-color: var(--ig-surface);
   min-height: 100vh;
 }
 
+/* Post Card */
 .add-post-card {
-  background: var(--white);
+  background: var(--ig-surface);
   width: 100%;
-  max-width: 600px;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(13, 71, 161, 0.1);
-  border: 1px solid rgba(30, 136, 229, 0.1);
+  max-width: var(--ig-max-width, 470px);
+  padding: 16px;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
 }
 
 .add-post-title {
-  color: var(--text-main);
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: 5px;
+  color: var(--ig-text-primary);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .add-post-subtitle {
-  color: #666;
-  font-size: 1rem;
+  color: var(--ig-text-secondary);
+  font-size: 14px;
   font-weight: 400;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
-/* 3. Forma Elementlari */
+/* Form */
 .add-post-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .add-post-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .add-post-label {
-  font-weight: 700;
-  color: var(--text-main);
-  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ig-text-primary);
+  font-size: 14px;
 }
 
-.add-post-input, 
+.add-post-input,
 .add-post-textarea {
   width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #eee;
-  border-radius: 10px;
-  font-size: 1rem;
-  transition: var(--transition);
+  padding: 10px 12px;
+  border: 1px solid var(--ig-border);
+  border-radius: var(--ig-radius-sm);
+  font-size: 14px;
+  transition: var(--ig-transition);
   outline: none;
-  background: var(--bg-soft);
+  background: var(--ig-bg);
+  color: var(--ig-text-primary);
+  font-family: var(--ig-font);
 }
 
-.add-post-input:focus, 
+.add-post-input:focus,
 .add-post-textarea:focus {
-  border-color: var(--primary-blue);
-  background: var(--white);
-  box-shadow: 0 0 10px rgba(30, 136, 229, 0.1);
+  border-color: var(--ig-text-secondary);
+  background: var(--ig-surface);
 }
 
 .add-post-meta {
-  font-size: 0.75rem;
-  color: #888;
+  font-size: 12px;
+  color: var(--ig-text-secondary);
   text-align: right;
 }
 
-/* 4. Media Yuklash Qismi */
+/* Media Upload */
 .add-post-add-media-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 15px;
-  border: 2px dashed var(--light-blue);
-  border-radius: 12px;
+  gap: 8px;
+  padding: 20px;
+  border: 1px dashed var(--ig-border);
+  border-radius: var(--ig-radius-sm);
   cursor: pointer;
-  background: rgba(66, 165, 245, 0.05);
-  transition: var(--transition);
+  background: var(--ig-bg);
+  transition: var(--ig-transition);
 }
 
 .add-post-add-media-label:hover {
-  background: rgba(66, 165, 245, 0.1);
-  border-color: var(--primary-blue);
+  background: var(--ig-surface);
+  border-color: var(--ig-blue);
 }
 
 .add-post-add-media {
-  display: none; /* Inputni yashiramiz */
+  display: none;
 }
 
 .plus-icon {
-  font-size: 1.5rem;
-  color: var(--primary-blue);
-  font-weight: bold;
-}
-
-.upload-text {
-  color: var(--primary-blue);
+  font-size: 20px;
+  color: var(--ig-blue);
   font-weight: 600;
 }
 
-/* 5. Media Preview (Oldindan ko'rish) */
+.upload-text {
+  color: var(--ig-blue);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Media Preview */
 .add-post-media-preview {
   position: relative;
-  margin-top: 15px;
-  border-radius: 12px;
+  margin-top: 8px;
+  border-radius: var(--ig-radius-sm);
   overflow: hidden;
-  border: 1px solid var(--bg-soft);
+  border: 1px solid var(--ig-border);
 }
 
 .add-post-media-img {
@@ -139,113 +134,184 @@
 
 .remove-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(229, 57, 53, 0.9);
-  color: var(--white);
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
   border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ig-radius-full);
   cursor: pointer;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1;
-  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--ig-transition);
 }
 
 .remove-btn:hover {
-  background: var(--primary-red);
-  transform: scale(1.1);
+  background: rgba(237, 73, 86, 0.9);
+  transform: none;
 }
 
-/* 6. Submit Tugmasi */
+/* Submit Button */
 .add-post-submit {
-  background: var(--primary-blue);
-  color: var(--white);
+  background: var(--ig-blue);
+  color: #fff;
   border: none;
-  padding: 15px;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 700;
+  padding: 12px;
+  border-radius: var(--ig-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
-  margin-top: 10px;
+  transition: var(--ig-transition);
+  margin-top: 4px;
 }
 
 .add-post-submit:hover {
-  background: var(--dark-blue);
-  box-shadow: 0 5px 20px rgba(30, 136, 229, 0.4);
-  transform: translateY(-2px);
+  background: var(--ig-blue-hover);
+  box-shadow: none;
+  transform: none;
 }
 
-/* 7. Xatolik xabari */
+/* Error */
 .add-post-error {
-  background: rgba(229, 57, 53, 0.1);
-  color: var(--primary-red);
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-  border-left: 4px solid var(--primary-red);
+  background: rgba(237, 73, 86, 0.08);
+  color: var(--ig-red);
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  text-align: center;
 }
 
-/* TOAST CONTAINER */
+/* Toast Notification */
 .toast {
   position: fixed;
   top: -100px;
   left: 50%;
-  width: 400px;
+  width: auto;
+  max-width: 360px;
+  min-width: 200px;
   transform: translateX(-50%);
-  
-  background: linear-gradient(135deg, #1e88e5, #1565c0);
-  color: white;
-  padding: 16px 25px;
-  border-radius: 12px;
-  
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  z-index: 9999;
-
-  animation: slideDown 0.5s ease forwards, fadeOut 0.5s ease 4.5s forwards;
+  background: var(--ig-text-primary);
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: var(--ig-radius-sm);
+  box-shadow: var(--ig-shadow-lg);
+  z-index: 10000;
+  animation: toastSlideDown 0.3s ease forwards, toastFadeOut 0.3s ease 4.5s forwards;
 }
 
-/* TITLE */
 .toast-title {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 14px;
 }
 
-/* TEXT */
 .toast-text {
-  font-size: 0.85rem;
-  opacity: 0.9;
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 2px;
 }
 
-/* ANIMATION */
-@keyframes slideDown {
-  from {
-    top: -100px;
-    opacity: 0;
-  }
-  to {
-    top: 20px;
-    opacity: 1;
-  }
+@keyframes toastSlideDown {
+  from { top: -100px; opacity: 0; }
+  to   { top: 20px; opacity: 1; }
 }
 
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-    top: -100px;
-  }
+@keyframes toastFadeOut {
+  to { opacity: 0; top: -100px; }
 }
 
-/* 8. Responsivlik */
-@media (max-width: 600px) {
-  .add-post-page {
-    padding: 0;
-  }
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
   .add-post-card {
-    border-radius: 0;
-    padding: 20px;
+    padding: 12px;
+  }
+
+  .add-post-title {
+    font-size: 18px;
+  }
+
+  .add-post-subtitle {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .add-post-form {
+    gap: 12px;
+  }
+
+  .add-post-input,
+  .add-post-textarea {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .add-post-add-media-label {
+    padding: 16px;
+  }
+
+  .add-post-submit {
+    padding: 11px;
+  }
+
+  .toast {
+    max-width: calc(100vw - 32px);
+    min-width: 0;
+  }
+}
+
+@media (max-width: 359px) {
+  .add-post-card {
+    padding: 10px;
+  }
+
+  .add-post-title {
+    font-size: 16px;
+  }
+
+  .add-post-subtitle {
+    font-size: 12px;
+  }
+
+  .add-post-input,
+  .add-post-textarea {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .add-post-label {
+    font-size: 12px;
+  }
+
+  .add-post-submit {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .toast {
+    padding: 12px 16px;
+  }
+
+  .toast-title {
+    font-size: 13px;
+  }
+
+  .toast-text {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 481px) {
+  .add-post-card {
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius-sm);
+    margin-top: 16px;
+    padding: 24px;
   }
 }

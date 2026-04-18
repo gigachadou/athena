@@ -1,66 +1,72 @@
-/* 1. Asosiy Konteyner */
+/* ============================================
+   Signin (Register) — Instagram-style Sign Up
+   ============================================ */
+
+/* Main Container */
 .signin-container {
-  max-width: 450px;
-  margin: 80px auto;
-  padding: 80px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(30, 136, 229, 0.1);
-  border: 1px solid rgba(30, 136, 229, 0.1);
-  animation: slideUp 0.6s ease-out;
+  max-width: 350px;
+  margin: 60px auto;
+  padding: 40px;
+  background: var(--ig-surface);
+  border-radius: var(--ig-radius-sm);
+  border: 1px solid var(--ig-border);
+  animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 2. Sarlavha */
+/* Header */
 .signin-header h2 {
-  font-size: 2.2rem;
-  color: #0d47a1;
+  font-size: 28px;
+  color: var(--ig-text-primary);
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 8px;
   font-weight: 800;
-  letter-spacing: -1px;
 }
 
-/* 3. Form elementlari */
+/* Form Group */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .form-group label {
   display: block;
   font-weight: 600;
-  margin-bottom: 8px;
-  color: #333;
-  font-size: 0.9rem;
+  margin-bottom: 4px;
+  color: var(--ig-text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
+/* Inputs */
 .signin-form input {
   width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #f0f2f5;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  padding: 10px 12px;
+  border: 1px solid var(--ig-border);
+  border-radius: 4px;
+  font-size: 14px;
+  transition: var(--ig-transition);
   outline: none;
-  background: #f8f9fa;
+  background: var(--ig-bg);
+  color: var(--ig-text-primary);
 }
 
 .signin-form input:focus {
-  border-color: #1e88e5;
-  background: #ffffff;
-  box-shadow: 0 0 8px rgba(30, 136, 229, 0.1);
+  border-color: var(--ig-text-secondary);
+  background: var(--ig-surface);
 }
 
 .signin-form input:disabled {
-  background: #e9ecef;
+  background: var(--ig-bg);
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* 4. Password Wrapper */
+/* Password Toggle */
 .password-wrapper {
   position: relative;
   display: flex;
@@ -69,82 +75,116 @@
 
 .toggle-password {
   position: absolute;
-  right: 15px;
+  right: 10px;
   background: none;
   border: none;
-  color: #adb5bd;
+  color: var(--ig-text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-size: 1.1rem;
-  transition: color 0.3s;
+  font-size: 14px;
+  padding: 4px;
+  transition: var(--ig-transition);
 }
 
 .toggle-password:hover {
-  color: #1e88e5;
+  color: var(--ig-text-primary);
 }
 
-/* 5. Xatolik xabari */
+/* Error */
 .error-message {
-  background: #fff5f5;
-  color: #e53935;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  margin-bottom: 20px;
-  border-left: 4px solid #e53935;
-  font-weight: 600;
+  background: rgba(237, 73, 86, 0.08);
+  color: var(--ig-red);
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  font-weight: 500;
   text-align: center;
 }
 
-/* 6. Submit tugmasi */
+/* Submit Button */
 .submit-btn {
   width: 100%;
-  padding: 14px;
-  background: #1e88e5;
-  color: white;
+  padding: 10px;
+  background: var(--ig-blue);
+  color: #fff;
   border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 700;
+  border-radius: var(--ig-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: 10px;
+  transition: var(--ig-transition);
+  margin-top: 8px;
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #1565c0;
-  box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
-  transform: translateY(-2px);
+  background: var(--ig-blue-hover);
 }
 
 .submit-btn:disabled {
-  background: #a0c4ff;
+  opacity: 0.4;
   cursor: wait;
 }
 
-/* 7. Pastki linklar */
+/* Bottom link */
 .signin-link {
-  margin-top: 25px;
+  margin-top: 20px;
   text-align: center;
-  font-size: 0.9rem;
-  color: #6c757d;
+  font-size: 14px;
+  color: var(--ig-text-secondary);
 }
 
 .signin-link a {
-  color: #1e88e5;
+  color: var(--ig-blue);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .signin-link a:hover {
-  text-decoration: underline;
+  color: var(--ig-blue-hover);
 }
 
-/* 8. Responsivlik */
-@media (max-width: 500px) {
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
   .signin-container {
-    margin: 40px 15px;
-    padding: 30px 20px;
+    margin: 20px 16px;
+    padding: 30px 24px;
+  }
+
+  .signin-header h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 359px) {
+  .signin-container {
+    margin: 16px 12px;
+    padding: 24px 16px;
+  }
+
+  .signin-header h2 {
+    font-size: 22px;
+  }
+
+  .signin-form input {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .submit-btn {
+    padding: 9px;
+    font-size: 13px;
+  }
+
+  .signin-link {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 481px) {
+  .signin-container {
+    margin-top: 80px;
   }
 }

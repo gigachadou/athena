@@ -1,113 +1,105 @@
-/* =========================
-   1. GLOBAL CONTAINER
-========================= */
+/* ============================================
+   Search Page — Instagram-style Explore/Search
+   ============================================ */
+
+/* Global Container */
 .container {
-  max-width: 1200px;
+  max-width: var(--ig-max-width, 470px);
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0 16px;
 }
 
-/* =========================
-   2. SEARCH HEADER
-========================= */
+/* Search Header — Sticky search bar */
 .search__header {
   display: flex;
   align-items: center;
-  background: #fff;
-  padding: 10px 15px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  margin: 15px 0;
-  border: 1px solid #eee;
+  background: var(--ig-bg);
+  padding: 0 12px;
+  border-radius: var(--ig-radius-sm);
+  box-shadow: none;
+  margin: 12px 0;
+  border: 1px solid var(--ig-border);
 
   position: sticky;
-  top: 10px;
+  top: 8px;
   z-index: 100;
 }
 
-/* Focus effekti */
 .search__header:focus-within {
-  border-color: #1e88e5;
-  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.15);
+  border-color: var(--ig-text-secondary);
 }
 
 .search__header input {
   flex: 1;
   border: none;
-  padding: 10px;
-  font-size: 1rem;
+  padding: 10px 8px;
+  font-size: 14px;
   outline: none;
   background: transparent;
-  color: #666;
+  color: var(--ig-text-primary);
 }
 
-/* Icon */
+.search__header input::placeholder {
+  color: var(--ig-text-secondary);
+}
+
+/* Search icon */
 .search__header label {
-  color: #1e88e5;
-  font-size: 1.2rem;
+  color: var(--ig-text-secondary);
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-right: 8px;
+  margin-right: 4px;
 }
 
-/* =========================
-   3. FRIENDS GRID
-========================= */
+/* Friends Grid */
 .search-friends {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-/* =========================
-   4. SEARCH RESULTS
-========================= */
+/* Search Results */
 .results {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
 }
 
-/* Result item */
 .results > div {
   display: flex;
   align-items: center;
-  padding: 10px 15px;
-  background: #fff;
-  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--ig-surface);
+  border-radius: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
-
-  border: 1px solid #eee;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: var(--ig-transition);
+  border: none;
+  border-bottom: 1px solid var(--ig-border-light);
+  box-shadow: none;
 }
 
-/* Hover */
 .results > div:hover {
-  background: #f0f7ff;
-  border-color: #1e88e5;
-  transform: translateX(3px);
+  background: var(--ig-bg);
+  border-color: var(--ig-border-light);
+  transform: none;
 }
 
-/* =========================
-   5. AVATAR
-========================= */
+/* Avatar */
 .searchImg {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: var(--ig-radius-full);
   overflow: hidden;
-  background: #f0f2f5;
-
+  background: var(--ig-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-right: 12px;
-  border: 2px solid #1e88e5;
+  border: 1px solid var(--ig-border);
 }
 
 .searchImg img {
@@ -116,63 +108,116 @@
   object-fit: cover;
 }
 
-/* Agar rasm bo‘lmasa */
 .searchImg img:empty {
   display: none;
 }
 
 .searchImg svg {
-  font-size: 1.4rem;
-  color: #ccc;
+  font-size: 18px;
+  color: var(--ig-text-secondary);
 }
 
-/* =========================
-   6. TEXT INFO
-========================= */
+/* Text Info */
 .searchInfo h2 {
-  font-size: 1rem;
+  font-size: 14px;
   margin: 0;
-  color: #0d47a1;
+  color: var(--ig-text-primary);
   font-weight: 600;
 }
 
 .searchInfo p {
-  font-size: 0.9rem;
-  margin: 2px 0 0;
-  color: #666;
+  font-size: 14px;
+  margin: 1px 0 0;
+  color: var(--ig-text-secondary);
 }
 
-/* =========================
-   7. ERROR / EMPTY
-========================= */
+/* Error / Empty */
 .search-error {
   text-align: center;
-  color: #e53935;
+  color: var(--ig-red);
   margin-top: 20px;
-  font-size: 0.95rem;
+  font-size: 14px;
 }
 
-/* =========================
-   8. RESPONSIVE
-========================= */
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+
   .search__header {
-    padding: 8px 10px;
+    padding: 0 10px;
+    margin: 8px 0;
+  }
+
+  .search__header input {
+    padding: 9px 6px;
+    font-size: 13px;
+  }
+
+  .search-friends {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
   }
 
   .results > div {
     padding: 8px 10px;
   }
 
-  .search-friends {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  .searchImg {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    margin-right: 10px;
   }
 
   .searchInfo h2 {
-    font-size: 0.95rem;
+    font-size: 13px;
   }
 
   .searchInfo p {
-    font-size: 0.85rem;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 359px) {
+  .container {
+    padding: 0 8px;
+  }
+
+  .search__header {
+    padding: 0 8px;
+    margin: 6px 0;
+  }
+
+  .search__header input {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+
+  .search-friends {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .searchImg {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    margin-right: 8px;
+  }
+
+  .searchInfo h2 {
+    font-size: 12px;
+  }
+
+  .searchInfo p {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .search__header {
+    border-radius: var(--ig-radius-md);
   }
 }

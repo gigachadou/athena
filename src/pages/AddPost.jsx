@@ -39,7 +39,7 @@ export default function AddPost() {
                     setMedia(loaded);
                 }
             } catch (err) {
-                console.log(err);
+
             }
         }
 
@@ -65,21 +65,59 @@ export default function AddPost() {
         const availableSlots = 10 - media.length;
         const selectedFiles = files.slice(0, availableSlots);
 
+        const hasVideo = media.some(m => m.file?.type.startsWith('video/'));
+
         try {
-            const newMedia = await Promise.all(
-                selectedFiles.map(async (file) => {
-                    const base64 = await convertToBase64(file);
-                    return {
-                        base64,
-                        file,
-                        id: Date.now() + Math.random()
-                    };
-                })
-            );
-            setMedia(prev => [...prev, ...newMedia]);
-            setError("");
+            const processedMedia = [];
+            for (const file of selectedFiles) {
+                const isVideo = file.type.startsWith('video/');
+
+                if (isVideo && (hasVideo || processedMedia.some(m => m.file?.type.startsWith('video/')))) {
+                    setError("Faqat bitta video yuklash mumkin");
+                    continue;
+                }
+
+                if (isVideo && (media.length > 0 || processedMedia.length > 0)) {
+                    setError("Video va rasmni birga yuklab bo'lmaydi");
+                    continue;
+                }
+
+                if (!isVideo && hasVideo) {
+                    setError("Video bor joyga rasm qo'shib bo'lmaydi");
+                    continue;
+                }
+
+                let duration = null;
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    duration = await new Promise((resolve) => {
+                        video.onloadedmetadata = () => {
+                            window.URL.revokeObjectURL(video.src);
+                            resolve(video.duration);
+                        };
+                        video.src = URL.createObjectURL(file);
+                    });
+
+                    if (duration > 90) {
+                        setError(`Video juda uzun (${Math.floor(duration)}s). Maksimal 1:30 daqiqa.`);
+                        continue;
+                    }
+                }
+
+                const base64 = await convertToBase64(file);
+                processedMedia.push({
+                    base64,
+                    file,
+                    duration,
+                    id: Date.now() + Math.random()
+                });
+            }
+
+            setMedia(prev => [...prev, ...processedMedia]);
+            if (processedMedia.length > 0) setError("");
         } catch {
-            setError("Could not convert image to a form needed, choose different image or try again");
+            setError("Error processing files.");
         }
     };
 
@@ -93,7 +131,10 @@ export default function AddPost() {
             const mediaUrls = [];
             for (const item of media) {
                 if (item.file) {
-                    const fileName = `${userData.id}-${Date.now()}-${item.file.name}`;
+                    // Sanitize file name: remove non-alphanumeric characters (except dots)
+                    const sanitizedName = item.file.name.replace(/[^a-zA-Z0-9.]/g, '-').replace(/-+/g, '-');
+                    const fileName = `${userData.id}-${Date.now()}-${sanitizedName}`;
+                    
                     const { error: uploadError } = await supabase.storage
                         .from('media')
                         .upload(`posts/${fileName}`, item.file);
@@ -233,7 +274,7 @@ export default function AddPost() {
                         <label className="add-post-add-media-label">
                             <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/*,video/*"
                                 multiple
                                 onChange={handleAddMedia}
                                 className="add-post-add-media"
@@ -243,12 +284,15 @@ export default function AddPost() {
                         </label>
                         {media.map((obj) => (
                             <div className="add-post-media-preview" key={obj.id}>
-                                {obj.base64.startsWith("data:video/") ? (
-                                    <video
-                                        src={obj.base64}
-                                        controls
-                                        className="add-post-media-img"
-                                    />
+                                {obj.base64.startsWith("data:video/") || obj.file?.type.startsWith("video/") ? (
+                                    <div style={{ position: "relative" }}>
+                                        <video
+                                            src={obj.base64}
+                                            className="add-post-media-img"
+                                        />
+                                        <div className="video-badge" style={{ position: "absolute", top: "5px", left: "5px", background: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px", fontWeight: "bold" }}>VIDEO</div>
+                                        {obj.duration && <div className="video-duration" style={{ position: "absolute", bottom: "5px", right: "5px", background: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>{Math.floor(obj.duration)}s</div>}
+                                    </div>
                                 ) : (
                                     <img
                                         src={obj.base64}

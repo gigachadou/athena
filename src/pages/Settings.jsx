@@ -3,6 +3,7 @@ import "../styles/settings.css"
 import EditModal from "../components/EditModal";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
+import { getCurrentUser, clearSession } from "../utils/authService";
 
 function Settings() {
     const navigate = useNavigate();
@@ -12,17 +13,9 @@ function Settings() {
     useEffect(() => {
         async function getUser() {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (!session) throw new Error('User not logging yet')
-                
-                let { data, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('email', session.user.email)
-                    .single();
-
-                if (error) throw error;
-                setUserData(data);
+                const user = await getCurrentUser();
+                if (!user) throw new Error('User not logging yet');
+                setUserData(user);
                 setError('');
             } catch (error) {
                 setError(error.message);
@@ -68,16 +61,17 @@ function Settings() {
             // 3. Delete the user
             await supabase.from('users').delete().eq('id', userId);
             
-            await supabase.auth.signOut();
+            // 4. Clear local session and reload
+            clearSession();
             location.reload();
 
         } catch (err) {
-            console.log(err);
+
         }
     }
 
-    async function handleLogout() {
-        await supabase.auth.signOut();
+    function handleLogout() {
+        clearSession();
         navigate("/login");
     }
 
@@ -91,4 +85,4 @@ function Settings() {
     </div>
 };
 
-export default Settings;
+export default Settings;

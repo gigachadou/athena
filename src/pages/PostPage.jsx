@@ -68,7 +68,7 @@ export default function PostPage() {
                 .in('id', uniqueUserIds);
 
             if (error) {
-                console.error("Error fetching comment owners:", error);
+
                 return;
             }
 
@@ -88,7 +88,7 @@ export default function PostPage() {
         if (!data) return;
 
         if (!isViewed && data.post.userid !== userData.id) {
-            actionView(postId).then(() => setIsViewed(true)).catch(err => console.log("View action failed:", err.message));
+            actionView(postId).then(() => setIsViewed(true)).catch(err => {});
         };
     }, [data, postId, userData.id]);
 
@@ -127,7 +127,7 @@ export default function PostPage() {
             await actionDeleteComment(postId, commentId);
             setTrigger(prev => prev + 1);
         } catch (error) {
-            console.error(error.message);
+
         };
     };
 

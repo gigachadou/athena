@@ -1,82 +1,70 @@
-/* 1. Root Variables */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --white: #FFFFFF;
-  --bg-soft: #F5F7FA;
-  --text-main: #0D47A1;
-  --error-red: #E53935;
-  --transition: all 0.25s ease;
-}
+/* ============================================
+   Login — Instagram-style Login Page
+   ============================================ */
 
-/* 2. Page Centering */
+/* Page Container */
 .login-container {
-  max-width: 360px;
+  max-width: 350px;
   width: 100%;
-  margin: 80px auto;
-  padding: 40px 30px;
-  background: var(--white);
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(13, 71, 161, 0.08);
-  border: 1px solid rgba(30, 136, 229, 0.08);
+  margin: 0 auto;
+  padding: 40px;
+  background: var(--ig-surface);
+  border-radius: var(--ig-radius-sm);
+  border: 1px solid var(--ig-border);
   text-align: center;
-  animation: fadeIn 0.4s ease;
+  animation: fadeIn 0.3s ease;
+  margin-top: 60px;
 }
 
-/* Animation */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 3. Header */
+/* Header / Logo area */
 .login-header {
-  font-size: 1.8rem;
-  color: var(--text-main);
-  margin-bottom: 25px;
-  font-weight: 700;
+  font-size: 28px;
+  color: var(--ig-text-primary);
+  margin-bottom: 20px;
+  font-weight: 800;
+  font-family: var(--ig-font);
 }
 
-/* 4. Form Group */
+/* Form Group */
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   text-align: left;
 }
 
 .form-group label {
   display: block;
   font-weight: 600;
-  margin-bottom: 6px;
-  font-size: 0.85rem;
-  color: #333;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--ig-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* 5. Inputs (scoped) */
+/* Inputs */
 .form-group input {
   width: 100%;
-  padding: 11px 14px;
-  border: 1.8px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: var(--transition);
+  padding: 10px 12px;
+  border: 1px solid var(--ig-border);
+  border-radius: 4px;
+  font-size: 14px;
+  transition: var(--ig-transition);
   outline: none;
-  background: var(--bg-soft);
+  background: var(--ig-bg);
+  color: var(--ig-text-primary);
 }
 
 .form-group input:focus {
-  border-color: var(--primary-blue);
-  background: var(--white);
-  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.1);
+  border-color: var(--ig-text-secondary);
+  background: var(--ig-surface);
 }
 
-/* 6. Password Wrapper */
+/* Password toggle */
 .password-wrapper {
   position: relative;
   display: flex;
@@ -85,86 +73,118 @@
 
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 10px;
   background: none;
   border: none;
-  color: #888;
+  color: var(--ig-text-secondary);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 14px;
   display: flex;
   align-items: center;
-  transition: var(--transition);
+  transition: var(--ig-transition);
+  padding: 4px;
 }
 
 .toggle-password:hover {
-  color: var(--primary-blue);
+  color: var(--ig-text-primary);
 }
 
-/* 7. Error Message */
+/* Error */
 .error-message {
-  background: rgba(229, 57, 53, 0.08);
-  color: var(--error-red);
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 0.8rem;
+  background: rgba(237, 73, 86, 0.08);
+  color: var(--ig-red);
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 13px;
   margin-bottom: 12px;
-  border-left: 3px solid var(--error-red);
   font-weight: 500;
+  text-align: center;
 }
 
-/* 8. Button */
+/* Submit Button */
 .submit-btn {
   width: 100%;
-  padding: 12px;
-  background: var(--primary-blue);
-  color: var(--white);
+  padding: 10px;
+  background: var(--ig-blue);
+  color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: var(--ig-radius-sm);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--ig-transition);
   margin-top: 8px;
 }
 
 .submit-btn:hover {
-  background: var(--dark-blue);
-  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.25);
-  transform: translateY(-1px);
+  background: var(--ig-blue-hover);
 }
 
 .submit-btn:disabled {
-  background: #a0c4ff;
+  opacity: 0.4;
   cursor: wait;
 }
 
-/* 9. Bottom Link */
+/* Bottom link */
 .signup-link {
   margin-top: 20px;
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 14px;
+  color: var(--ig-text-secondary);
 }
 
 .signup-link a {
-  color: var(--primary-blue);
+  color: var(--ig-blue);
   text-decoration: none;
   font-weight: 600;
-  transition: var(--transition);
 }
 
 .signup-link a:hover {
-  color: var(--dark-blue);
-  text-decoration: underline;
+  color: var(--ig-blue-hover);
 }
 
-/* 10. Responsive */
+/* ========== RESPONSIVE ========== */
+
 @media (max-width: 480px) {
   .login-container {
-    margin: 40px 15px;
-    padding: 25px 20px;
+    margin: 20px 16px;
+    padding: 30px 24px;
+    border-radius: var(--ig-radius-sm);
   }
 
   .login-header {
-    font-size: 1.5rem;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 359px) {
+  .login-container {
+    margin: 16px 12px;
+    padding: 24px 16px;
+  }
+
+  .login-header {
+    font-size: 22px;
+  }
+
+  .form-group input {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .submit-btn {
+    padding: 9px;
+    font-size: 13px;
+  }
+
+  .signup-link {
+    font-size: 13px;
+  }
+}
+
+/* Desktop — separate card below */
+@media (min-width: 481px) {
+  .login-container {
+    margin-top: 80px;
   }
 }

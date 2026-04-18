@@ -10,12 +10,21 @@ import Settings from './pages/Settings';
 import Search from './pages/Search';
 import Notification from './pages/Notification';
 import AddPost from './pages/AddPost';
+import Shorts from './pages/Shorts';
 import SearchProfile from './components/SearchProfile';
 import PostPage from './pages/PostPage';
 import FollowerPage from './pages/FollowerPage';
 import AboutUs from './pages/AboutUs';
+import SplashScreen from './components/SplashScreen';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  if (showSplash) {
+    return <SplashScreen onFinished={() => setShowSplash(false)} />;
+  }
+
   const router = createBrowserRouter([
     {
       element: <PublicRoot />,
@@ -34,6 +43,7 @@ function App() {
         { path: "/search", element: <Search /> },
         { path: "/notification", element: <Notification /> },
         { path: "/addPost", element: <AddPost /> },
+        { path: "/shorts", element: <Shorts /> },
         { path: "/editPost/:postId", element: <AddPost /> },
         { path: "/searchresultusers/:usersID", element: <SearchProfile /> },
         { path: "/posts/:postId", element: <PostPage /> },

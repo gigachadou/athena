@@ -1,45 +1,40 @@
-/* 1. O'zgaruvchilarni qayta ishlatamiz (Root allaqachon mavjud deb hisoblaymiz) */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --text-main: #0D47A1;
-  --bg-soft: #F5F5F5;
-  --white: #FFFFFF;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================
+   FollowPeople — Instagram-style Follower Card
+   ============================================ */
 
-/* 2. Asosiy karta konteyneri */
+/* Card */
 .followerCard {
   display: flex;
   align-items: center;
-  background-color: var(--white);
-  padding: 16px 20px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  gap: 20px;
-  transition: var(--transition);
-  border: 1px solid transparent;
+  background-color: var(--ig-surface);
+  padding: 10px 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  box-shadow: none;
+  gap: 12px;
+  transition: var(--ig-transition);
+  border: none;
+  border-bottom: 1px solid var(--ig-border-light);
 }
 
 .followerCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(13, 71, 161, 0.12);
-  border-color: var(--light-blue);
+  background: var(--ig-bg);
+  transform: none;
+  box-shadow: none;
+  border-color: var(--ig-border-light);
 }
 
-/* 3. Avatar va Rasm qismi */
+/* Avatar */
 .followerCard .img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--ig-radius-full);
   overflow: hidden;
-  background-color: var(--bg-soft);
+  background-color: var(--ig-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--light-blue);
+  border: 1px solid var(--ig-border);
   flex-shrink: 0;
 }
 
@@ -47,93 +42,124 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: var(--transition);
+  transition: none;
 }
 
 .followerCard:hover .img img {
-  transform: scale(1.1);
+  transform: none;
 }
 
 .followerCard .img svg {
-  font-size: 24px;
-  color: var(--dark-blue);
+  font-size: 18px;
+  color: var(--ig-text-secondary);
 }
 
-/* 4. Ma'lumotlar qismi */
+/* Info */
 .follower-info {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  min-width: 0;
 }
 
 .follower-info h2 {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ig-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .follower-info p {
   margin: 0;
-  font-size: 0.9rem;
-  color: #666; /* Yumshoqroq matn uchun */
+  font-size: 14px;
+  color: var(--ig-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 5. View Follower tugmasi */
+/* View Button */
 .followerCard button {
-  padding: 8px 18px;
-  background-color: var(--primary-blue);
-  color: var(--white);
+  padding: 6px 16px;
+  background-color: var(--ig-blue);
+  color: #fff;
   border: none;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  border-radius: var(--ig-radius-sm);
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: var(--transition);
+  transition: var(--ig-transition);
+  flex-shrink: 0;
 }
 
 .followerCard button:hover {
-  background-color: var(--dark-blue);
-  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.4);
+  background-color: var(--ig-blue-hover);
+  box-shadow: none;
 }
 
 .followerCard button:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
 }
 
-/* 6. Responsiv dizayn */
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
   .followerCard {
-    flex-wrap: wrap; /* Elementlar sig'masa pastga tushadi */
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
+    padding: 8px 0;
+    gap: 10px;
   }
 
   .followerCard .img {
-    margin: 0 auto;
+    width: 40px;
+    height: 40px;
   }
 
-  .follower-info {
-    width: 100%;
+  .follower-info h2 {
+    font-size: 13px;
+  }
+
+  .follower-info p {
+    font-size: 13px;
   }
 
   .followerCard button {
-    width: 100%;
-    margin-top: 10px;
+    padding: 5px 12px;
+    font-size: 12px;
   }
 }
 
-/* Yuklanish holati uchun animatsiya (Loading state) */
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
+@media (max-width: 359px) {
+  .followerCard {
+    gap: 8px;
+  }
+
+  .followerCard .img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .follower-info h2 {
+    font-size: 12px;
+  }
+
+  .follower-info p {
+    font-size: 12px;
+  }
+
+  .followerCard button {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
 }
 
-.follower-info h2:contains("Loading") {
-  animation: pulse 1.5s infinite;
-  color: var(--light-blue);
+/* Loading animation */
+@keyframes pulse {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.5; }
+  100% { opacity: 1; }
 }

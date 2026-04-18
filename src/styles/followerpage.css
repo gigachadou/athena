@@ -1,119 +1,118 @@
-/* 1. O'zgaruvchilar */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --primary-red: #E53935;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================
+   Follower Page — Instagram-style Followers/Following List
+   ============================================ */
 
-/* 2. Asosiy Sahifa Konteyneri */
+/* Main Container */
 .followers-page {
-  max-width: 1200px;
+  max-width: var(--ig-max-width, 470px);
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 16px;
   min-height: 100vh;
-  background-color: var(--white);
+  background-color: var(--ig-surface);
 }
 
-/* 3. Yuqori boshqaruv qismi (Controller) */
+/* Controller (Sticky Header) */
 .controller {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 15px 0;
-  border-bottom: 1px solid var(--bg-soft);
-  margin-bottom: 20px;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--ig-border-light);
+  margin-bottom: 0;
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(5px);
+  background: var(--ig-surface);
   z-index: 10;
 }
 
-/* .controller svg {
-  font-size: 1.4rem;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: var(--transition);
-  padding: 8px;
-  border-radius: 50%;
-} */
-
-/* .controller svg:hover {
-  background-color: var(--bg-soft);
-  color: var(--primary-blue);
-  transform: translateX(-5px);
-} */
-
 .controller h2 {
-  font-size: 1.25rem;
-  color: var(--text-main);
+  font-size: 16px;
+  color: var(--ig-text-primary);
   font-weight: 700;
-  text-transform: capitalize; /* followers/followings so'zini chiroyli qiladi */
+  text-transform: capitalize;
 }
 
-/* 4. Xatolik va Yuklanish holatlari */
-.error-container, 
+/* Error & Loading states */
+.error-container,
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 60vh;
+  height: 50vh;
   text-align: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 h2 {
-  color: var(--text-main);
+  color: var(--ig-text-primary);
 }
 
-/* Maxsus: Ruxsatsiz kirish xatosi (Unauthorized) */
+/* Unauthorized error */
 div:has(h2:contains("unauthorized")) {
-  color: var(--primary-red);
-  background: rgba(229, 57, 53, 0.05);
-  border-radius: 15px;
-  border: 1px dashed var(--primary-red);
-  margin: 40px auto;
-  max-width: 500px;
+  color: var(--ig-red);
+  background: rgba(237, 73, 86, 0.05);
+  border-radius: var(--ig-radius-sm);
+  border: 1px dashed var(--ig-red);
+  margin: 32px auto;
+  max-width: 400px;
+  padding: 20px;
 }
 
-/* 5. Ro'yxat elementlari uchun animatsiya */
+/* List animation */
 .followers-page > *:not(.controller) {
-  animation: slideInUp 0.4s ease forwards;
+  animation: fadeIn 0.3s ease forwards;
 }
 
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 6. "Not follower yet" xabari */
+/* Empty state */
 .followers-page h2:only-of-type {
-    text-align: center;
-    color: #888;
-    font-weight: 400;
-    margin-top: 50px;
-    font-size: 1.1rem;
+  text-align: center;
+  color: var(--ig-text-secondary);
+  font-weight: 400;
+  margin-top: 40px;
+  font-size: 14px;
 }
 
-/* 7. Responsivlik */
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
   .followers-page {
-    padding: 15px;
+    padding: 0 12px;
   }
-  
+
+  .controller {
+    padding: 12px 0;
+    gap: 12px;
+  }
+
   .controller h2 {
-    font-size: 1.1rem;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 359px) {
+  .followers-page {
+    padding: 0 8px;
+  }
+
+  .controller {
+    padding: 10px 0;
+    gap: 10px;
+  }
+
+  .controller h2 {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .followers-page {
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius-sm);
+    margin-top: 16px;
+  }
+
+  .controller {
+    padding: 14px 16px;
   }
 }

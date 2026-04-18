@@ -1,185 +1,205 @@
-/* 1. Ranglar palitrasini o'rnatamiz */
-:root {
-  --primary-red: #E53935;
-  --dark-red: #C62828;
-  --light-red: #FF5252;
-  
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  
-  --transition: all 0.3s ease-in-out;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
+/* ============================================
+   EditModal — Instagram-style Edit Dialog
+   ============================================ */
 
-/* 2. Dialog (Modal) asosiy dizayni */
+/* Modal */
 .dialog {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 450px;
+  width: calc(100% - 32px);
+  max-width: 400px;
   border: none;
-  border-radius: 16px;
-  padding: 30px;
-  background-color: var(--white);
-  box-shadow: var(--shadow);
+  border-radius: var(--ig-radius-md);
+  padding: 24px;
+  background-color: var(--ig-surface);
+  box-shadow: var(--ig-shadow-lg);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  z-index: 1000;
-  
-  /* Animatsiya kirish paytida */
-  animation: modalIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  gap: 16px;
+  z-index: 10000;
+  animation: modalIn 0.25s ease;
 }
 
 @keyframes modalIn {
-  from { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  from { opacity: 0; transform: translate(-50%, -52%) scale(0.95); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
-/* Modal orqa foni (Backdrop) uchun */
+/* Backdrop */
 .dialog::backdrop {
-  background: rgba(13, 71, 161, 0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 }
 
-/* 3. Matn va Sarlavhalar */
+/* Title */
 .dialog h2 {
-  color: var(--text-main);
+  color: var(--ig-text-primary);
   margin: 0;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 10px;
 }
 
-/* 4. Inputlar dizayni */
+/* Inputs */
 .dialog input[type="text"] {
   width: 100%;
-  padding: 12px 16px;
-  border: 2px solid var(--bg-soft);
-  border-radius: 8px;
-  font-size: 16px;
-  color: var(--text-main);
-  background-color: var(--bg-soft);
-  transition: var(--transition);
+  padding: 10px 12px;
+  border: 1px solid var(--ig-border);
+  border-radius: var(--ig-radius-sm);
+  font-size: 14px;
+  color: var(--ig-text-primary);
+  background-color: var(--ig-bg);
+  transition: var(--ig-transition);
   outline: none;
 }
 
 .dialog input[type="text"]:focus {
-  border-color: var(--primary-blue);
-  background-color: var(--white);
-  box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
+  border-color: var(--ig-text-secondary);
+  background-color: var(--ig-surface);
 }
 
-/* File input dizayni */
+/* File input */
 .dialog input[type="file"] {
-  font-size: 14px;
-  color: var(--text-main);
+  font-size: 13px;
+  color: var(--ig-text-secondary);
   cursor: pointer;
 }
 
 .dialog input[type="file"]::-webkit-file-upload-button {
-  background: var(--bg-soft);
-  border: 1px solid var(--light-blue);
-  padding: 8px 12px;
-  border-radius: 6px;
-  color: var(--dark-blue);
+  background: var(--ig-bg);
+  border: 1px solid var(--ig-border);
+  padding: 6px 12px;
+  border-radius: var(--ig-radius-sm);
+  color: var(--ig-text-primary);
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
-  margin-right: 10px;
+  transition: var(--ig-transition);
+  margin-right: 8px;
+  font-size: 13px;
 }
 
 .dialog input[type="file"]::-webkit-file-upload-button:hover {
-  background: var(--light-blue);
-  color: var(--white);
+  background: var(--ig-blue);
+  color: #fff;
+  border-color: var(--ig-blue);
 }
 
-/* 5. Tugmalar (Buttons) */
+/* Buttons Row */
 .modal__btns {
   display: flex;
   justify-content: space-between;
-  gap: 15px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 4px;
 }
 
 .modal__btns button {
   flex: 1;
-  padding: 12px;
+  padding: 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: var(--ig-radius-sm);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--ig-transition);
 }
 
-/* O'zgartirish tugmasi (Blue) */
+/* Save button */
 .modal__btns button:first-child {
-  background-color: var(--primary-blue);
-  color: var(--white);
+  background-color: var(--ig-blue);
+  color: #fff;
 }
 
 .modal__btns button:first-child:hover {
-  background-color: var(--dark-blue);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(30, 136, 229, 0.3);
+  background-color: var(--ig-blue-hover);
+  transform: none;
+  box-shadow: none;
 }
 
-/* Bekor qilish tugmasi (Red) */
+/* Cancel button */
 .modal__btns button:last-child {
-  background-color: var(--white);
-  color: var(--primary-red);
-  border: 2px solid var(--primary-red);
+  background-color: transparent;
+  color: var(--ig-red);
+  border: 1px solid var(--ig-border);
 }
 
 .modal__btns button:last-child:hover {
-  background-color: var(--primary-red);
-  color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(229, 57, 53, 0.2);
+  background-color: var(--ig-bg);
+  border-color: var(--ig-red);
+  transform: none;
+  box-shadow: none;
 }
 
 .modal__btns button:active {
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 
-/* 6. Xatolik xabari (Error message) */
+/* Error message */
 .dialog p[style*="color: red"] {
-  background: rgba(229, 57, 53, 0.1);
+  background: rgba(237, 73, 86, 0.08);
   padding: 10px;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 4px;
+  font-size: 13px;
   text-align: center;
   margin: 0;
-  animation: shake 0.5s ease-in-out;
+  animation: shake 0.4s ease-in-out;
 }
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
 }
 
-/* 7. Responsivlik (Mobile First) */
+/* ========== RESPONSIVE ========== */
+
 @media (max-width: 480px) {
   .dialog {
-    width: 95%;
+    width: calc(100% - 24px);
     padding: 20px;
+    gap: 14px;
   }
-  
+
+  .dialog h2 {
+    font-size: 16px;
+  }
+
+  .dialog input[type="text"] {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .modal__btns button {
+    padding: 9px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 359px) {
+  .dialog {
+    width: calc(100% - 16px);
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .dialog h2 {
+    font-size: 15px;
+  }
+
+  .dialog input[type="text"] {
+    padding: 8px;
+    font-size: 12px;
+  }
+
   .modal__btns {
     flex-direction: column;
+    gap: 8px;
   }
-  
+
   .modal__btns button {
     width: 100%;
+    padding: 10px;
+    font-size: 13px;
   }
 }

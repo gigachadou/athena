@@ -19,7 +19,9 @@ function Profile() {
         (async function () {
             if (userData) {
                 const response = await getPostsByIds(userData.posts);
-                setPosts(response);
+                // Sort by time: newest first
+                const sorted = (response || []).sort((a, b) => new Date(b.createdat) - new Date(a.createdat));
+                setPosts(sorted);
             };
         })();
     }, [userData, trigger]);

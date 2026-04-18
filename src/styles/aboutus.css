@@ -1,119 +1,143 @@
-/* 1. O'zgaruvchilar */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --transition: all 0.3s ease-in-out;
-}
+/* ============================================
+   About Us — Instagram-style About Page
+   ============================================ */
 
-/* 2. Asosiy Konteyner */
+/* Main Container */
 .about-container {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 40px;
-  background: var(--white);
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(13, 71, 161, 0.08);
+  max-width: var(--ig-max-width, 470px);
+  margin: 0 auto;
+  padding: 24px 16px;
+  background: var(--ig-surface);
+  border-radius: 0;
+  box-shadow: none;
   position: relative;
-  border: 1px solid rgba(30, 136, 229, 0.1);
-  animation: fadeInDown 0.6s ease-out;
+  border: none;
+  animation: fadeIn 0.3s ease-out;
 }
 
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 3. Orqaga qaytish tugmasi (Back Button) */
+/* Back Button */
 .about-back-btn {
   position: absolute;
-  top: 25px;
-  left: 25px;
-  font-size: 1.8rem;
-  color: var(--primary-blue);
+  top: 24px;
+  left: 16px;
+  font-size: 22px;
+  color: var(--ig-text-primary);
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--ig-transition);
+  background: transparent;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
 }
 
 .about-back-btn:hover {
-  color: var(--dark-blue);
-  transform: scale(1.1) rotate(-10deg);
+  opacity: 0.6;
+  color: var(--ig-text-primary);
+  transform: none;
 }
 
-/* 4. Sarlavha (Header) */
+/* Header */
 .about__header {
   text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid var(--bg-soft);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ig-border-light);
 }
 
 .about__header h2 {
-  font-size: 2.2rem;
-  color: var(--text-main);
-  font-weight: 800;
-  letter-spacing: -0.5px;
+  font-size: 20px;
+  color: var(--ig-text-primary);
+  font-weight: 700;
+  letter-spacing: -0.3px;
 }
 
-/* 5. Matn qismi (Body) */
+/* Body Text */
 .about__body p {
-  font-size: 1.15rem;
-  line-height: 1.8;
-  color: #444;
-  text-align: justify;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ig-text-primary);
+  text-align: left;
   position: relative;
-  padding: 10px;
+  padding: 0;
 }
 
-/* Matn boshidagi urg'u (Drop cap effekti yoki shunchaki bezak) */
 .about__body p::first-letter {
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: var(--primary-blue);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--ig-blue);
   float: left;
-  margin-right: 8px;
+  margin-right: 6px;
   line-height: 1;
 }
 
-/* 6. Pastki bezak (Athena brand touch) */
+/* Brand footer */
 .about-container::after {
-  content: "Athena Project";
+  content: "Athena";
   position: absolute;
-  bottom: 20px;
-  right: 40px;
-  font-size: 0.8rem;
+  bottom: 16px;
+  right: 16px;
+  font-size: 11px;
   font-weight: 700;
-  color: var(--light-blue);
+  color: var(--ig-text-secondary);
   text-transform: uppercase;
   letter-spacing: 2px;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-/* 7. Responsivlik (Mobile First) */
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
   .about-container {
-    margin: 20px;
-    padding: 30px 20px;
-    border-radius: 16px;
+    padding: 20px 12px;
   }
 
   .about__header h2 {
-    font-size: 1.7rem;
-    margin-top: 20px;
+    font-size: 18px;
+    margin-top: 24px;
   }
 
   .about__body p {
-    font-size: 1rem;
-    line-height: 1.6;
-    text-align: left;
+    font-size: 13px;
+    line-height: 1.5;
   }
-  
+
   .about-back-btn {
-    top: 15px;
-    left: 15px;
-    font-size: 1.5rem;
+    top: 20px;
+    left: 12px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 359px) {
+  .about-container {
+    padding: 16px 8px;
+  }
+
+  .about__header h2 {
+    font-size: 16px;
+  }
+
+  .about__body p {
+    font-size: 12px;
+  }
+
+  .about-back-btn {
+    top: 16px;
+    left: 8px;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 481px) {
+  .about-container {
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius-sm);
+    margin-top: 16px;
   }
 }

@@ -1,113 +1,81 @@
-/* =========================
-   1. GLOBAL VARIABLES
-========================= */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --primary-red: #E53935;
+/* ============================================
+   Friends — Instagram-style Friend Card (Compact)
+   ============================================ */
 
-  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --card-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  --hover-shadow: 0 8px 20px rgba(13, 71, 161, 0.12);
-}
-
-/* =========================
-   2. FRIEND CARD
-========================= */
+/* Friend Card */
 .friends {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 
-  padding: 12px 16px;
-  margin-bottom: 10px;
+  padding: 10px 12px;
+  margin-bottom: 0;
 
-  background: var(--white);
-  border-radius: 14px;
-  border: 1px solid var(--bg-soft);
+  background: var(--ig-surface);
+  border-radius: var(--ig-radius-sm);
+  border: 1px solid var(--ig-border);
 
   cursor: pointer;
   position: relative;
   overflow: hidden;
 
-  transition: var(--transition-smooth);
-  box-shadow: var(--card-shadow);
-
-  animation: slideIn 0.35s ease forwards;
+  transition: var(--ig-transition);
+  box-shadow: none;
 }
 
-/* subtle left highlight */
-.friends::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 0;
-  background: linear-gradient(180deg, var(--light-blue), var(--primary-blue));
-  transition: var(--transition-smooth);
+/* Remove decorative pseudo-elements */
+.friends::before,
+.friends::after {
+  display: none;
 }
 
-/* hover */
+/* Hover */
 .friends:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: var(--hover-shadow);
-  border-color: var(--light-blue);
-  background: #fafcff;
+  background: var(--ig-bg);
+  transform: none;
+  box-shadow: none;
+  border-color: var(--ig-border);
 }
 
-.friends:hover::before {
-  width: 4px;
-}
-
-/* click */
+/* Active */
 .friends:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
+  opacity: 0.8;
 }
 
-/* =========================
-   3. AVATAR (IMG + ICON)
-========================= */
+/* Avatar */
 .friends img,
 .friends svg {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
 
-  border-radius: 50%;
+  border-radius: var(--ig-radius-full);
   object-fit: cover;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: var(--bg-soft);
-  border: 2px solid var(--light-blue);
+  background: var(--ig-bg);
+  border: 1px solid var(--ig-border);
 
-  transition: var(--transition-smooth);
+  transition: none;
 }
 
-/* icon (FaUser) */
 .friends svg {
-  font-size: 20px;
-  color: var(--dark-blue);
-  padding: 10px;
+  font-size: 16px;
+  color: var(--ig-text-secondary);
+  padding: 8px;
 }
 
-/* hover avatar effect */
 .friends:hover img,
 .friends:hover svg {
-  border-color: var(--primary-blue);
-  transform: scale(1.05);
+  border-color: var(--ig-border);
+  transform: none;
 }
 
-/* =========================
-   4. USER INFO
-========================= */
+/* User Info */
 .friends-about {
   display: flex;
   flex-direction: column;
@@ -118,95 +86,81 @@
 
 .friends-about h2 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
-  color: var(--text-main);
-
+  color: var(--ig-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* =========================
-   5. BUTTON
-========================= */
+/* Button */
 .friends-about button {
-  margin-top: 3px;
-  padding: 2px 0;
-
+  margin-top: 2px;
+  padding: 0;
   background: transparent;
   border: none;
-
-  color: var(--primary-blue);
-  font-size: 0.75rem;
-  font-weight: 700;
-
+  color: var(--ig-blue);
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-
-  transition: var(--transition-smooth);
+  text-transform: none;
+  letter-spacing: 0;
+  transition: var(--ig-transition);
+  text-align: left;
 }
 
-/* button hover */
 .friends:hover .friends-about button {
-  color: var(--dark-blue);
-  text-decoration: underline;
+  color: var(--ig-blue-hover);
+  text-decoration: none;
 }
 
-/* =========================
-   6. RIPPLE EFFECT (optional feel)
-========================= */
-.friends::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(30,136,229,0.08) 10%, transparent 10%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+/* ========== RESPONSIVE ========== */
 
-.friends:active::after {
-  opacity: 1;
-  transition: 0s;
-}
-
-/* =========================
-   7. ANIMATION
-========================= */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =========================
-   8. RESPONSIVE
-========================= */
 @media (max-width: 480px) {
   .friends {
-    padding: 10px 12px;
-    gap: 10px;
+    padding: 8px 10px;
+    gap: 8px;
   }
 
   .friends img,
   .friends svg {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
   }
 
   .friends svg {
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .friends-about h2 {
-    font-size: 0.95rem;
+    font-size: 13px;
+  }
+
+  .friends-about button {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 359px) {
+  .friends {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .friends img,
+  .friends svg {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  .friends-about h2 {
+    font-size: 12px;
+  }
+
+  .friends-about button {
+    font-size: 10px;
   }
 }

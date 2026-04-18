@@ -1,31 +1,27 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+/* ============================================
+   theme.css — Athena Instagram Dark Theme Base
+   ============================================ */
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+/* Theme variables — used for special dark cards (Addbutton) */
 :root {
-  --tranquil-black: #04050c;
-  --tranquil-ink: #101325;
-  --steel-red: #c2463d;
-  --steel-red-soft: #e07467;
-  --tranquil-muted: rgba(255, 255, 255, 0.78);
-  --tranquil-border: rgba(255, 255, 255, 0.08);
-  --tranquil-shadow: 0 25px 60px rgba(3, 3, 7, 0.8);
-  --tranquil-radius: 26px;
-  --tranquil-gap: clamp(1rem, 1.4vw, 1.6rem);
-  --tranquil-padding: clamp(1rem, 2vw, 1.8rem);
-  --tranquil-transition: 0.35s ease;
-  --tranquil-font: "Inter", "Segoe UI", system-ui, sans-serif;
-}
-
-body {
-  font-family: var(--tranquil-font);
-  background: radial-gradient(circle at 20% 0%, rgba(194, 70, 61, 0.25), transparent 45%),
-    radial-gradient(circle at 80% 100%, rgba(4, 5, 12, 1), transparent 65%),
-    var(--tranquil-black);
-  color: #f9fafb;
-  min-height: 100vh;
+  --tranquil-black: #000000;
+  --tranquil-ink: #121212;
+  --steel-red: #ed4956;
+  --steel-red-soft: #ff6b7a;
+  --tranquil-muted: rgba(255, 255, 255, 0.7);
+  --tranquil-border: rgba(255, 255, 255, 0.1);
+  --tranquil-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --tranquil-radius: 16px;
+  --tranquil-gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  --tranquil-padding: clamp(1rem, 2vw, 1.5rem);
+  --tranquil-transition: 0.25s ease;
+  --tranquil-font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .tranquil-card {
-  background: rgba(9, 10, 20, 0.95);
+  background: rgba(18, 18, 18, 0.95);
   border-radius: var(--tranquil-radius);
   border: 1px solid var(--tranquil-border);
   box-shadow: var(--tranquil-shadow);
@@ -37,7 +33,6 @@ body {
 }
 
 .tranquil-shadow-hover:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 30px 70px rgba(3, 3, 7, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
-

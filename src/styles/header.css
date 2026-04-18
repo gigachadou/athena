@@ -1,130 +1,133 @@
-/* =========================
-   1. O'ZGARUVCHILAR
-========================= */
-:root {
-  --primary-blue: #1E88E5;
-  --dark-blue: #1565C0;
-  --light-blue: #42A5F5;
-  --white: #FFFFFF;
-  --bg-soft: #F5F5F5;
-  --text-main: #0D47A1;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================
+   Header — Instagram Bottom Navigation Bar
+   ============================================ */
 
-/* =========================
-   2. HEADER (DOIM PASTDA)
-========================= */
+/* Bottom Tab Bar */
 .header {
   position: fixed;
-  bottom: 0; /* 🔥 DOIM PASTDA */
+  bottom: 0;
   left: 0;
+  right: 0;
   width: 100%;
-  height: 65px;
+  height: var(--ig-bottom-nav, 50px);
 
   display: flex;
   justify-content: space-around;
   align-items: center;
 
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background: var(--ig-surface);
+  border-top: 1px solid var(--ig-border);
 
-  border-top: 1px solid rgba(30, 136, 229, 0.2);
-  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.05);
-
-  padding: 0 10px;
+  padding: 0;
   z-index: 9999;
 
-  animation: slideUp 0.4s ease-out;
+  /* No animation on header — instant feel */
 }
 
-/* =========================
-   3. LINKLAR
-========================= */
+/* Navigation Links */
 .header a {
   text-decoration: none;
-  color: var(--text-main);
+  color: var(--ig-text-primary);
   font-size: 22px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--ig-radius-full);
 
-  transition: var(--transition);
+  transition: var(--ig-transition);
   position: relative;
 }
 
-/* =========================
-   4. HOVER / ACTIVE
-========================= */
+/* Hover state */
 .header a:hover {
-  color: var(--primary-blue);
-  background-color: var(--bg-soft);
-  transform: translateY(-4px);
+  color: var(--ig-text-secondary);
+  background: transparent;
+  transform: none;
 }
 
+/* Active press */
 .header a:active {
   transform: scale(0.9);
-  color: var(--dark-blue);
+  opacity: 0.6;
 }
 
-/* =========================
-   5. ADD POST (PLUS BUTTON)
-========================= */
+/* Center Add Post button — Instagram "+" style */
 .header a[href="/addPost"] {
-  background-color: var(--primary-blue);
-  color: var(--white);
-
-  border-radius: 50%;
-  width: 55px;
-  height: 55px;
-
-  margin-top: -25px; /* floating effect */
-  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
-  border: 4px solid var(--white);
+  background: transparent;
+  color: var(--ig-text-primary);
+  border-radius: var(--ig-radius-sm);
+  width: 28px;
+  height: 28px;
+  margin-top: 0;
+  box-shadow: none;
+  border: 2px solid var(--ig-text-primary);
+  font-size: 18px;
 }
 
 .header a[href="/addPost"]:hover {
-  background-color: var(--dark-blue);
-  transform: translateY(-6px) rotate(90deg);
+  opacity: 0.7;
+  transform: none;
 }
 
-/* =========================
-   6. ANIMATION
-========================= */
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* =========================
-   7. CONTENT BOSILIB QOLMASIN
-========================= */
+/* Body padding for bottom nav */
 body {
-  padding-bottom: 80px; /* header ustiga chiqib ketmasligi uchun */
+  padding-bottom: calc(var(--ig-bottom-nav, 50px) + env(safe-area-inset-bottom, 0px) + 10px);
 }
 
-/* =========================
-   8. RESPONSIVE (OPTIONAL)
-========================= */
-@media (max-width: 400px) {
+/* ========== RESPONSIVE ========== */
+
+/* Large phones */
+@media (max-width: 480px) {
+  .header {
+    height: 48px;
+    padding: 0 4px;
+  }
+
   .header a {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     font-size: 20px;
   }
 
   .header a[href="/addPost"] {
-    width: 50px;
-    height: 50px;
+    width: 26px;
+    height: 26px;
+    font-size: 16px;
+  }
+}
+
+/* Small phones (iPhone SE, Galaxy S5) */
+@media (max-width: 359px) {
+  .header {
+    height: 44px;
+  }
+
+  .header a {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .header a[href="/addPost"] {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+}
+
+/* Tablet and desktop — slightly larger tap targets */
+@media (min-width: 768px) {
+  .header {
+    height: 52px;
+  }
+
+  .header a {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
   }
 }
