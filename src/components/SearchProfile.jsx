@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaArrowLeft, FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaUser, FaCommentDots } from "react-icons/fa";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import "../styles/searchresultuser.css"
 import PostCard from "./PostCard";
@@ -101,6 +101,37 @@ function SearchProfile() {
         } catch (error) { };
     };
 
+    async function handleMessage() {
+        if (!userData || !data) return;
+        try {
+            // Check for existing chat
+            const { data: existingChats } = await supabase
+                .from('chats')
+                .select('*')
+                .contains('participants', [userData.id, data.id]);
+            
+            const chat = existingChats?.find(c => c.participants.length === 2);
+
+            if (chat) {
+                navigate(`/chat/${chat.id}`);
+            } else {
+                // Create new chat
+                const { data: newChat, error } = await supabase
+                    .from('chats')
+                    .insert([{
+                        participants: [userData.id, data.id],
+                        created_at: new Date()
+                    }])
+                    .select()
+                    .single();
+                
+                if (!error) navigate(`/chat/${newChat.id}`);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     return <div className="profile-page">
         {notification && (
             <div className="toast">
@@ -119,8 +150,14 @@ function SearchProfile() {
                     <p>{data?.email ? data.email : "UserEmail"}</p>
                     <p>{data?.bio}</p>
                 </div>
-                <div className="following">
-                    {stateFollow ? <button onClick={() => unfollowHandler(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>}
+                <div className="following" style={{ display: 'flex', gap: '8px' }}>
+                    {stateFollow ? 
+                        <button onClick={() => unfollowHandler(currentUser.id, data.id, setStateFollow)} className="unfollow-btn">Unfollow</button> : 
+                        <button onClick={() => followHandler(currentUser.id, data.id, setStateFollow)} className="follow-btn">Follow</button>
+                    }
+                    <button onClick={handleMessage} className="message-btn">
+                        <FaCommentDots /> Message
+                    </button>
                 </div>
             </div>
         </div>

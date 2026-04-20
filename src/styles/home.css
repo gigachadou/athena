@@ -14,48 +14,42 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--ig-surface);
-  padding: 12px 16px;
+  background: var(--ig-glass);
+  backdrop-filter: var(--ig-blur);
+  -webkit-backdrop-filter: var(--ig-blur);
+  padding: 14px 16px;
   border-bottom: 1px solid var(--ig-border);
   gap: 12px;
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
 .home-about {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .home-about img,
 .home-about svg {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--ig-radius-full);
   object-fit: cover;
-  border: 1px solid transparent;
-  background: var(--ig-bg);
-  color: var(--ig-text-secondary);
-  padding: 0;
-  flex-shrink: 0;
-  background-image: linear-gradient(var(--ig-surface), var(--ig-surface)),
-    var(--ig-gradient);
-  background-origin: border-box;
-  background-clip: content-box, border-box;
-}
-
-.home-about svg {
-  padding: 6px;
+  padding: 2px;
+  background: var(--ig-gradient);
+  filter: drop-shadow(0 0 5px rgba(0, 149, 246, 0.3));
 }
 
 .home-user h2 {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--ig-text-primary);
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -63,7 +57,7 @@
   font-size: 12px;
   color: var(--ig-text-secondary);
   margin: 0;
-  line-height: 1.2;
+  opacity: 0.8;
 }
 
 /* Search Input */
@@ -72,16 +66,11 @@
   min-width: 0;
 }
 
-.form-control {
-  position: relative;
-  width: 100%;
-}
-
 .input {
-  background-color: var(--ig-bg);
-  border: none;
-  padding: 8px 12px;
-  border-radius: var(--ig-radius-sm);
+  background-color: var(--ig-surface-soft);
+  border: 1px solid var(--ig-border);
+  padding: 10px 16px;
+  border-radius: var(--ig-radius-md);
   width: 100%;
   font-size: 14px;
   transition: var(--ig-transition);
@@ -90,34 +79,21 @@
 
 .input:focus {
   outline: none;
+  border-color: var(--ig-blue);
   background-color: var(--ig-surface);
-  box-shadow: inset 0 0 0 1px var(--ig-border);
-}
-
-/* Logout button in header */
-.home-header > button {
-  background: transparent;
-  color: var(--ig-text-primary);
-  padding: 8px;
-  font-size: 20px;
-  border-radius: var(--ig-radius-full);
-  flex-shrink: 0;
-}
-
-.home-header > button:hover {
-  background: var(--ig-bg);
-  color: var(--ig-red);
+  box-shadow: 0 0 0 4px rgba(0, 149, 246, 0.1);
 }
 
 /* Feed Container */
 .home-body {
   width: 100%;
+  padding: 16px;
 }
 
 .home-post {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 16px;
 }
 
 /* Post entry animation */

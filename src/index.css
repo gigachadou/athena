@@ -6,39 +6,43 @@
 
 /* ===== 1. CSS Custom Properties ===== */
 :root {
-  /* Primary palette — Instagram-inspired */
-  --ig-bg: #fafafa;
-  --ig-surface: #ffffff;
-  --ig-border: #dbdbdb;
-  --ig-border-light: #efefef;
-  --ig-text-primary: #262626;
-  --ig-text-secondary: #8e8e8e;
-  --ig-text-link: #0095f6;
-  --ig-blue: #0095f6;
-  --ig-blue-hover: #1877f2;
-  --ig-red: #ed4956;
-  --ig-red-hover: #d32f3a;
-  --ig-green: #58c322;
-  --ig-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  /* Primary palette — Bold Startup Athena */
+  --ig-bg: #0f172a;
+  --ig-surface: #1e293b;
+  --ig-surface-soft: #334155;
+  --ig-border: #334155;
+  --ig-border-light: #475569;
+  --ig-text-primary: #f8fafc;
+  --ig-text-secondary: #94a3b8;
+  --ig-text-link: #f43f5e;
+  --ig-blue: #f43f5e;
+  --ig-blue-hover: #e11d48;
+  --ig-red: #ef4444;
+  --ig-green: #22c55e;
+  --ig-gold: linear-gradient(45deg, #fbbf24, #f59e0b, #d97706);
+  --ig-gold-static: #f59e0b;
+  --ig-gradient: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 100%);
+  --ig-glass: rgba(15, 23, 42, 0.85);
+  --ig-blur: blur(12px);
 
   /* Typography */
-  --ig-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --ig-font: 'Inter', -apple-system, sans-serif;
 
   /* Sizing & spacing */
-  --ig-radius-sm: 8px;
-  --ig-radius-md: 12px;
-  --ig-radius-lg: 16px;
-  --ig-radius-xl: 24px;
+  --ig-radius-sm: 12px;
+  --ig-radius-md: 16px;
+  --ig-radius-lg: 24px;
+  --ig-radius-xl: 32px;
   --ig-radius-full: 9999px;
-  --ig-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --ig-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --ig-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
-  --ig-transition: all 0.2s ease;
+  --ig-shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --ig-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --ig-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  --ig-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Layout */
-  --ig-header-height: 60px;
-  --ig-bottom-nav: 50px;
-  --ig-max-width: 470px;
+  --ig-header-height: 70px;
+  --ig-bottom-nav: 64px;
+  --ig-max-width: 500px;
 }
 
 /* ===== 2. Reset ===== */
@@ -180,6 +184,25 @@ input::placeholder, textarea::placeholder {
   background: var(--ig-surface);
   border: 1px solid var(--ig-border);
   border-radius: var(--ig-radius-md);
+  box-shadow: var(--ig-shadow-md);
+}
+
+.glass-card {
+  background: var(--ig-glass);
+  backdrop-filter: var(--ig-blur);
+  -webkit-backdrop-filter: var(--ig-blur);
+  border: 1px solid var(--ig-border);
+  border-radius: var(--ig-radius-lg);
+  box-shadow: var(--ig-shadow-lg);
+}
+
+.gold-glow {
+  animation: goldGlow 3s infinite alternate;
+}
+
+@keyframes goldGlow {
+  from { filter: drop-shadow(0 0 2px rgba(212, 175, 55, 0.4)); }
+  to { filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.8)); }
 }
 
 /* ===== 7. Scrollbar (Instagram-minimal) ===== */

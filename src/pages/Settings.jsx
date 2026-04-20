@@ -1,88 +1,132 @@
-import { useNavigate } from "react-router-dom"
-import "../styles/settings.css"
-import EditModal from "../components/EditModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../utils/supabaseClient";
-import { getCurrentUser, clearSession } from "../utils/authService";
+import { useOutletContext, useNavigate } from "react-router-dom";
+import { FaArrowLeft, FaSignOutAlt, FaUserShield, FaBell, FaCoins, FaWallet, FaArrowUp } from "react-icons/fa";
+import { logoutUser } from "../utils/authService";
+import addNote from "../utils/addNotification";
+import "../styles/settings.css";
 
-function Settings() {
+export default function Settings() {
+    const { userData, setUserData } = useOutletContext();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(false)
-    const [userData, setUserData] = useState(null);
-    const [error, setError] = useState('');
-    useEffect(() => {
-        async function getUser() {
-            try {
-                const user = await getCurrentUser();
-                if (!user) throw new Error('User not logging yet');
-                setUserData(user);
-                setError('');
-            } catch (error) {
-                setError(error.message);
-            }
-        }
-        getUser()
-    }, []);
 
-    async function handleDeleteProfile(e) {
-        e.preventDefault();
+    const buyPackages = [
+        { id: 1, amount: 100, price: 0.99 },
+        { id: 2, amount: 500, price: 3.99 },
+        { id: 3, amount: 1200, price: 9.99 },
+        { id: 4, amount: 3000, price: 19.99 },
+    ];
+
+    const handleBuyCoins = async (pkg) => {
+        setLoading(true);
         try {
-            const userId = userData.id;
+            const newBalance = (userData.coins || 0) + pkg.amount;
+            const { error: updateError } = await supabase.from('users').update({ coins: newBalance }).eq('id', userData.id);
+            if (updateError) throw updateError;
 
-            // 1. Clean up comments and likes from all other posts (since they are in JSONB/ARRAY and can't be easily cascaded)
-            const { data: allPosts } = await supabase.from('posts').select('*');
-            
-            for (let post of allPosts || []) {
-                let updatedComments = (post.comments || []).filter(c => c.user !== userId);
-                let updatedLikes = (post.likes || []).filter(l => l !== userId);
+            await supabase.from('transactions').insert([{
+                user_id: userData.id,
+                type: 'buy',
+                amount: pkg.amount,
+                status: 'completed'
+            }]);
 
-                if (updatedComments.length !== (post.comments || []).length || updatedLikes.length !== (post.likes || []).length) {
-                    await supabase
-                        .from('posts')
-                        .update({ comments: updatedComments, likes: updatedLikes })
-                        .eq('id', post.id);
-                }
-            }
-
-            // 2. Clean up followers and followings from all other users
-            const { data: allUsers } = await supabase.from('users').select('*');
-            for (let user of allUsers || []) {
-                let updatedFollowers = (user.followers || []).filter(f => f !== userId);
-                let updatedFollowings = (user.followings || []).filter(f => f !== userId);
-
-                if (updatedFollowers.length !== (user.followers || []).length || updatedFollowings.length !== (user.followings || []).length) {
-                    await supabase
-                        .from('users')
-                        .update({ followers: updatedFollowers, followings: updatedFollowings })
-                        .eq('id', user.id);
-                }
-            }
-
-            // 3. Delete the user
-            await supabase.from('users').delete().eq('id', userId);
-            
-            // 4. Clear local session and reload
-            clearSession();
-            location.reload();
-
+            setUserData(prev => ({ ...prev, coins: newBalance }));
+            addNote("Purchase Successful!", `You received ${pkg.amount} A-Coins! 🪙`, userData.id);
         } catch (err) {
-
+            setError(err.message);
         }
-    }
+        setLoading(false);
+    };
 
-    function handleLogout() {
-        clearSession();
-        navigate("/login");
-    }
+    const handleWithdraw = async () => {
+        if (!userData.coins || userData.coins < 1000) {
+            setError("Minimum withdrawal amount is 1000 A-Coins ($1).");
+            setTimeout(() => setError(""), 5000);
+            return;
+        }
+        setLoading(true);
+        try {
+            const amount = 1000;
+            const newBalance = userData.coins - amount;
+            const { error: updateError } = await supabase.from('users').update({ coins: newBalance }).eq('id', userData.id);
+            if (updateError) throw updateError;
 
-    return <div className="settings">
-        <button onClick={() => { setIsOpen(true) }}>Edit informations</button>
-        {isOpen && <EditModal closeModal={setIsOpen} UserId={userData.id} data={setUserData} />}
-        <button onClick={() => { navigate("/aboutapplicationinformation") }}>About the developers</button>
-        <button onClick={handleDeleteProfile}>Delete the account</button>
-        <button onClick={handleLogout}>Log out</button>
-        <button onClick={() => navigate('/profile')}>Back</button>
-    </div>
-};
+            await supabase.from('transactions').insert([{
+                user_id: userData.id,
+                type: 'withdraw',
+                amount: amount,
+                status: 'pending'
+            }]);
 
-export default Settings;
+            setUserData(prev => ({ ...prev, coins: newBalance }));
+            addNote("Withdrawal Requested", "Your request is being processed. 💸", userData.id);
+        } catch (err) {
+            setError(err.message);
+        }
+        setLoading(false);
+    };
+
+    return (
+        <div className="settings-page">
+            <div className="settings-header">
+                <button onClick={() => navigate(-1)} className="back-btn"><FaArrowLeft /></button>
+                <h2>Settings</h2>
+            </div>
+
+            <div className="settings-section wallet-section">
+                <div className="section-title">
+                    <FaWallet /> <h3>Athena Coin Wallet</h3>
+                </div>
+                <div className="wallet-card">
+                    <div className="balance-info">
+                        <span className="label">Available Balance</span>
+                        <div className="amount">
+                            <FaCoins /> <span>{userData?.coins || 0} A-Coins</span>
+                        </div>
+                    </div>
+                    <button className="withdraw-btn" onClick={handleWithdraw} disabled={loading}>
+                        <FaArrowUp /> Withdraw
+                    </button>
+                </div>
+
+                <h4 className="sub-title">Buy A-Coins</h4>
+                <div className="packages-grid">
+                    {buyPackages.map(pkg => (
+                        <div key={pkg.id} className="package-card" onClick={() => handleBuyCoins(pkg)}>
+                            <div className="pkg-amount">{pkg.amount}</div>
+                            <div className="pkg-coin">A-Coins</div>
+                            <div className="pkg-price">${pkg.price}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="settings-section">
+                <div className="section-title">
+                    <FaUserShield /> <h3>Account Security</h3>
+                </div>
+                <button className="settings-item">Change Password</button>
+                <button className="settings-item">Two-Factor Authentication</button>
+            </div>
+
+            <div className="settings-section">
+                <div className="section-title">
+                    <FaBell /> <h3>Notifications</h3>
+                </div>
+                <div className="settings-toggle">
+                    <span>Push Notifications</span>
+                    <input type="checkbox" defaultChecked />
+                </div>
+            </div>
+
+            <button className="logout-btn" onClick={logoutUser}>
+                <FaSignOutAlt /> Logout
+            </button>
+            
+            {error && <div className="settings-error">{error}</div>}
+        </div>
+    );
+}

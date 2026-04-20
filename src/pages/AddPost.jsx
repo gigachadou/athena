@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { convertToBase64 } from "../utils/convertToBase64";
 import addNote from "../utils/addNotification";
 import { supabase } from "../utils/supabaseClient";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaVideo, FaImage, FaTags, FaInfoCircle } from "react-icons/fa";
 
 export default function AddPost() {
     const { postId: routePostId } = useParams();
@@ -12,6 +12,10 @@ export default function AddPost() {
     const [header, setHeader] = useState("");
     const [text, setText] = useState("");
     const [media, setMedia] = useState([]);
+    const [postType, setPostType] = useState("image"); // 'image' or 'video'
+    const [tags, setTags] = useState("");
+    const [forWho, setForWho] = useState("everyone");
+    const [coverImage, setCoverImage] = useState(null);
     const [notification, setNotification] = useState(null);
     const { userData, setTriggerWindow } = useOutletContext();
     const navigate = useNavigate();
@@ -31,6 +35,10 @@ export default function AddPost() {
                     }
                     setHeader(data.header || "");
                     setText(data.text || "");
+                    setPostType(data.type || "image");
+                    setTags(data.tags?.join(", ") || "");
+                    setForWho(data.for_who || "everyone");
+                    setCoverImage(data.cover_image ? { base64: data.cover_image, id: 'cover' } : null);
 
                     let loaded = [];
                     for (let m of (data.media || [])) {
@@ -39,7 +47,7 @@ export default function AddPost() {
                     setMedia(loaded);
                 }
             } catch (err) {
-
+                console.error(err);
             }
         }
 
@@ -49,9 +57,13 @@ export default function AddPost() {
             setHeader("");
             setText("");
             setMedia([]);
+            setPostType("image");
+            setTags("");
+            setForWho("everyone");
+            setCoverImage(null);
             setError("");
         }
-    }, [routePostId]);
+    }, [routePostId, userData.id, navigate]);
 
     async function handleAddMedia(e) {
         const files = Array.from(e.target.files || []);
@@ -65,25 +77,22 @@ export default function AddPost() {
         const availableSlots = 10 - media.length;
         const selectedFiles = files.slice(0, availableSlots);
 
-        const hasVideo = media.some(m => m.file?.type.startsWith('video/'));
-
         try {
             const processedMedia = [];
             for (const file of selectedFiles) {
                 const isVideo = file.type.startsWith('video/');
 
-                if (isVideo && (hasVideo || processedMedia.some(m => m.file?.type.startsWith('video/')))) {
-                    setError("Faqat bitta video yuklash mumkin");
+                if (postType === 'video' && !isVideo) {
+                    setError("Video postda faqat video yuklash mumkin");
+                    continue;
+                }
+                if (postType === 'image' && isVideo) {
+                    setError("Rasm postda video yuklab bo'lmaydi");
                     continue;
                 }
 
                 if (isVideo && (media.length > 0 || processedMedia.length > 0)) {
-                    setError("Video va rasmni birga yuklab bo'lmaydi");
-                    continue;
-                }
-
-                if (!isVideo && hasVideo) {
-                    setError("Video bor joyga rasm qo'shib bo'lmaydi");
+                    setError("Faqat bitta video yuklash mumkin");
                     continue;
                 }
 
@@ -99,8 +108,8 @@ export default function AddPost() {
                         video.src = URL.createObjectURL(file);
                     });
 
-                    if (duration > 90) {
-                        setError(`Video juda uzun (${Math.floor(duration)}s). Maksimal 1:30 daqiqa.`);
+                    if (duration > 180) { // Increased to 3 mins for "advanced"
+                        setError(`Video juda uzun (${Math.floor(duration)}s). Maksimal 3 daqiqa.`);
                         continue;
                     }
                 }
@@ -121,17 +130,28 @@ export default function AddPost() {
         }
     };
 
+    async function handleCoverUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const base64 = await convertToBase64(file);
+        setCoverImage({ base64, file, id: 'cover' });
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
         try {
             setError("");
+            if (media.length === 0) {
+                setError("Iltimos, rasm yoki video yuklang");
+                return;
+            }
+
             const isEditMode = Boolean(routePostId);
-            const newPostId = `${userData.email}-${Date.now()}`;
+            const newPostId = isEditMode ? routePostId : `${userData.email}-${Date.now()}`;
 
             const mediaUrls = [];
             for (const item of media) {
                 if (item.file) {
-                    // Sanitize file name: remove non-alphanumeric characters (except dots)
                     const sanitizedName = item.file.name.replace(/[^a-zA-Z0-9.]/g, '-').replace(/-+/g, '-');
                     const fileName = `${userData.id}-${Date.now()}-${sanitizedName}`;
                     
@@ -150,20 +170,43 @@ export default function AddPost() {
                 }
             }
 
+            let coverUrl = null;
+            if (coverImage) {
+                if (coverImage.file) {
+                    const fileName = `${userData.id}-${Date.now()}-cover-${coverImage.file.name}`;
+                    const { error: coverError } = await supabase.storage
+                        .from('media')
+                        .upload(`covers/${fileName}`, coverImage.file);
+                    if (coverError) throw coverError;
+                    const { data: { publicUrl } } = supabase.storage.from('media').getPublicUrl(`covers/${fileName}`);
+                    coverUrl = publicUrl;
+                } else {
+                    coverUrl = coverImage.base64;
+                }
+            }
+
+            const postData = {
+                id: newPostId,
+                header: header.trim(),
+                text: text.trim(),
+                type: postType,
+                tags: tags.split(",").map(t => t.trim()).filter(t => t),
+                for_who: forWho,
+                cover_image: coverUrl,
+                userid: userData.id,
+                media: mediaUrls,
+                lastedited: new Date().toISOString()
+            };
+
             if (!isEditMode) {
                 const { error: postError } = await supabase
                     .from('posts')
                     .insert([{
-                        id: newPostId,
-                        header: header.trim(),
-                        text: text.trim(),
+                        ...postData,
                         likes: [],
                         comments: [],
                         views: 0,
-                        userid: userData.id,
-                        media: mediaUrls,
-                        createdat: new Date().toISOString(),
-                        lastedited: new Date().toISOString()
+                        createdat: new Date().toISOString()
                     }]);
 
                 if (postError) throw postError;
@@ -188,12 +231,7 @@ export default function AddPost() {
             } else {
                 const { error: postUpdateError } = await supabase
                     .from('posts')
-                    .update({
-                        header: header.trim(),
-                        text: text.trim(),
-                        media: mediaUrls,
-                        lastedited: new Date().toISOString()
-                    })
+                    .update(postData)
                     .eq('id', routePostId);
 
                 if (postUpdateError) throw postUpdateError;
@@ -202,6 +240,9 @@ export default function AddPost() {
             setHeader("");
             setText("");
             setMedia([]);
+            setTags("");
+            setCoverImage(null);
+            
             addNote(
                 isEditMode ? "Post updated successfully." : "Post added successfully.",
                 "Thank you again for staying with us.",
@@ -226,7 +267,6 @@ export default function AddPost() {
 
     return (
         <div className="add-post-page">
-
             {notification && (
                 <div className="toast">
                     <div className="toast-title">{notification.title}</div>
@@ -236,10 +276,23 @@ export default function AddPost() {
 
             <div className="add-post-card">
                 <button onClick={() => navigate(-1)} className="back"><FaArrowLeft /></button>
-                <h2 className="add-post-title">Create a post</h2>
+                <h2 className="add-post-title">{routePostId ? "Edit Post" : "Create a post"}</h2>
 
-                {error && <p>{error}</p>}
-                <h3 className="add-post-subtitle">Share an update with your community.</h3>
+                <div className="post-type-selector">
+                    <button 
+                        className={`type-btn ${postType === 'image' ? 'active' : ''}`}
+                        onClick={() => { setPostType('image'); setMedia([]); }}
+                    >
+                        <FaImage /> Image
+                    </button>
+                    <button 
+                        className={`type-btn ${postType === 'video' ? 'active' : ''}`}
+                        onClick={() => { setPostType('video'); setMedia([]); }}
+                    >
+                        <FaVideo /> Video
+                    </button>
+                </div>
+
                 <form onSubmit={e => handleSubmit(e)} className="add-post-form">
                     <div className="add-post-field">
                         {error && <div className="add-post-error">{error}</div>}
@@ -256,6 +309,7 @@ export default function AddPost() {
                         />
                         <div className="add-post-meta">{header.length}/50</div>
                     </div>
+
                     <div className="add-post-field">
                         <label className="add-post-label">Text</label>
                         <textarea
@@ -264,57 +318,104 @@ export default function AddPost() {
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             placeholder="Tell people what is happening..."
-                            rows={6}
+                            rows={4}
                             maxLength={300}
                         />
                         <div className="add-post-meta">{text.length}/300</div>
                     </div>
-                    <div>
-                        <label className="add-post-label">Media: (limit 10 images)</label>
+
+                    <div className="add-post-field">
+                        <label className="add-post-label"><FaTags /> Tags (comma separated)</label>
+                        <input
+                            className="add-post-input"
+                            value={tags}
+                            onChange={(e) => setTags(e.target.value)}
+                            placeholder="e.g. nature, tech, fun"
+                            type="text"
+                        />
+                    </div>
+
+                    <div className="add-post-field">
+                        <label className="add-post-label"><FaInfoCircle /> For who?</label>
+                        <select 
+                            className="add-post-input" 
+                            value={forWho} 
+                            onChange={(e) => setForWho(e.target.value)}
+                        >
+                            <option value="everyone">Everyone</option>
+                            <option value="followers">Followers Only</option>
+                            <option value="close-friends">Close Friends</option>
+                        </select>
+                    </div>
+
+                    <div className="media-upload-section">
+                        <label className="add-post-label">
+                            {postType === 'video' ? "Video (Max 3 mins)" : "Images (Max 10 images)"}
+                        </label>
                         <label className="add-post-add-media-label">
                             <input
                                 type="file"
-                                accept="image/*,video/*"
-                                multiple
+                                accept={postType === 'video' ? "video/*" : "image/*"}
+                                multiple={postType === 'image'}
                                 onChange={handleAddMedia}
                                 className="add-post-add-media"
                             />
                             <span className="plus-icon">+</span>
-                            <span className="upload-text">Add media (images/videos)</span>
+                            <span className="upload-text">Upload {postType}</span>
                         </label>
-                        {media.map((obj) => (
-                            <div className="add-post-media-preview" key={obj.id}>
-                                {obj.base64.startsWith("data:video/") || obj.file?.type.startsWith("video/") ? (
-                                    <div style={{ position: "relative" }}>
-                                        <video
-                                            src={obj.base64}
-                                            className="add-post-media-img"
-                                        />
-                                        <div className="video-badge" style={{ position: "absolute", top: "5px", left: "5px", background: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px", fontWeight: "bold" }}>VIDEO</div>
-                                        {obj.duration && <div className="video-duration" style={{ position: "absolute", bottom: "5px", right: "5px", background: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>{Math.floor(obj.duration)}s</div>}
-                                    </div>
-                                ) : (
-                                    <img
-                                        src={obj.base64}
-                                        alt="Uploaded preview"
-                                        className="add-post-media-img"
-                                    />
-                                )}
-                                <button
-                                    type="button"
-                                    className="remove-btn"
-                                    onClick={() => setMedia(prev => prev.filter((e) => e.id !== obj.id))}
-                                    aria-label="Remove media"
-                                >
-                                    ×
-                                </button>
-                            </div>
-                        ))}
+
+                        <div className="media-previews">
+                            {media.map((obj) => (
+                                <div className="add-post-media-preview" key={obj.id}>
+                                    {obj.base64.startsWith("data:video/") || obj.file?.type.startsWith("video/") || (typeof obj.base64 === 'string' && obj.base64.includes('.mp4')) ? (
+                                        <div style={{ position: "relative" }}>
+                                            <video src={obj.base64} className="add-post-media-img" />
+                                            <div className="video-badge">VIDEO</div>
+                                            {obj.duration && <div className="video-duration">{Math.floor(obj.duration)}s</div>}
+                                        </div>
+                                    ) : (
+                                        <img src={obj.base64} alt="Preview" className="add-post-media-img" />
+                                    )}
+                                    <button
+                                        type="button"
+                                        className="remove-btn"
+                                        onClick={() => setMedia(prev => prev.filter((e) => e.id !== obj.id))}
+                                    >×</button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <button type="submit" className="add-post-submit">Post</button>
-                    <button type="button" onClick={() => navigate(-1)} className="add-post-submit" style={{ marginTop: "10px", backgroundColor: "#333" }}>Cancel</button>
+
+                    <div className="add-post-field">
+                        <label className="add-post-label">Cover Image (Thumbnail)</label>
+                        <label className="add-post-add-media-label cover-upload">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleCoverUpload}
+                                className="add-post-add-media"
+                            />
+                            {coverImage ? (
+                                <img src={coverImage.base64} alt="Cover" className="cover-preview-img" />
+                            ) : (
+                                <span className="upload-text">Select Thumbnail</span>
+                            )}
+                        </label>
+                        {coverImage && (
+                            <button 
+                                type="button" 
+                                className="remove-cover" 
+                                onClick={() => setCoverImage(null)}
+                            >Remove Cover</button>
+                        )}
+                    </div>
+
+                    <button type="submit" className="add-post-submit">
+                        {routePostId ? "Save Changes" : "Post"}
+                    </button>
                 </form>
             </div>
         </div>
     );
 }
+

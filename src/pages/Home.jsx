@@ -2,6 +2,7 @@ import { FaUser, FaBell } from "react-icons/fa";
 import "../styles/home.css"
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
+import CreatePostInline from "../components/CreatePostInline";
 import { useNavigate, useOutletContext, Link } from "react-router-dom";
 import logOutHandler from "../utils/logOutHandler";
 import { BiExit } from "react-icons/bi";
@@ -13,6 +14,7 @@ export default function Home() {
     const [posts, setPosts] = useState([]);
     const [error, setError] = useState("");
     const [hasUnread, setHasUnread] = useState(false);
+    const [trigger, setTrigger] = useState(0);
     const { userData } = useOutletContext();
 
     useEffect(() => {
@@ -91,7 +93,7 @@ export default function Home() {
         }
 
         getData();
-    }, [userData]);
+    }, [userData, trigger]);
 
     if (error) {
         return <h2>{error}</h2>
@@ -122,7 +124,7 @@ export default function Home() {
                 </div>
             </div>
             <div className="home-body">
-
+                <CreatePostInline userData={userData} onPostCreated={() => setTrigger(prev => prev + 1)} />
                 <div className="home-post">
                     {
                         posts.map(post => (

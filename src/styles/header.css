@@ -9,125 +9,81 @@
   left: 0;
   right: 0;
   width: 100%;
-  height: var(--ig-bottom-nav, 50px);
+  height: var(--ig-bottom-nav, 60px);
 
   display: flex;
   justify-content: space-around;
   align-items: center;
 
-  background: var(--ig-surface);
+  background: var(--ig-glass);
+  backdrop-filter: var(--ig-blur);
+  -webkit-backdrop-filter: var(--ig-blur);
   border-top: 1px solid var(--ig-border);
 
-  padding: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 9999;
-
-  /* No animation on header — instant feel */
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* Navigation Links */
 .header a {
   text-decoration: none;
   color: var(--ig-text-primary);
-  font-size: 22px;
-
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--ig-radius-full);
-
   transition: var(--ig-transition);
   position: relative;
-}
-
-/* Hover state */
-.header a:hover {
-  color: var(--ig-text-secondary);
-  background: transparent;
-  transform: none;
-}
-
-/* Active press */
-.header a:active {
-  transform: scale(0.9);
   opacity: 0.6;
 }
 
-/* Center Add Post button — Instagram "+" style */
-.header a[href="/addPost"] {
-  background: transparent;
-  color: var(--ig-text-primary);
-  border-radius: var(--ig-radius-sm);
-  width: 28px;
-  height: 28px;
-  margin-top: 0;
-  box-shadow: none;
-  border: 2px solid var(--ig-text-primary);
-  font-size: 18px;
+/* Active link indicator (simulated via scale and opacity) */
+.header a:hover {
+  opacity: 1;
+  color: #fff;
+  transform: translateY(-2px);
 }
 
-.header a[href="/addPost"]:hover {
-  opacity: 0.7;
-  transform: none;
+.header a:active {
+  transform: scale(0.9);
 }
 
-/* Body padding for bottom nav */
-body {
-  padding-bottom: calc(var(--ig-bottom-nav, 50px) + env(safe-area-inset-bottom, 0px) + 10px);
+/* Highlights for specific icons */
+.header a svg {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+}
+
+/* Special styling for Trophy (Challenges) */
+.header a[href="/challenges"] {
+  color: #ffd700;
+  opacity: 0.8;
+}
+
+.header a[href="/challenges"]:hover {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
+}
+
+/* Profile Icon Glow */
+.header a[href="/profile"] {
+  background: var(--ig-surface-soft);
+  border: 1.5px solid var(--ig-border);
 }
 
 /* ========== RESPONSIVE ========== */
 
-/* Large phones */
 @media (max-width: 480px) {
   .header {
-    height: 48px;
-    padding: 0 4px;
+    height: 56px;
   }
 
   .header a {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
-
-  .header a[href="/addPost"] {
-    width: 26px;
-    height: 26px;
-    font-size: 16px;
-  }
-}
-
-/* Small phones (iPhone SE, Galaxy S5) */
-@media (max-width: 359px) {
-  .header {
+    font-size: 22px;
+    width: 44px;
     height: 44px;
-  }
-
-  .header a {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-
-  .header a[href="/addPost"] {
-    width: 24px;
-    height: 24px;
-    font-size: 14px;
-  }
-}
-
-/* Tablet and desktop — slightly larger tap targets */
-@media (min-width: 768px) {
-  .header {
-    height: 52px;
-  }
-
-  .header a {
-    font-size: 24px;
-    width: 48px;
-    height: 48px;
   }
 }

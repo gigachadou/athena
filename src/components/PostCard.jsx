@@ -1,4 +1,4 @@
-import { FaUser, FaVolumeMute, FaVolumeUp, FaEllipsisH } from 'react-icons/fa';
+import { FaUser, FaVolumeMute, FaVolumeUp, FaEllipsisH, FaPaperPlane, FaShare } from 'react-icons/fa';
 import '../styles/PostCard.css';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -11,6 +11,7 @@ import actionDislike from '../utils/postActions/actionDislike';
 import { actionView } from '../utils/postActions/actionView';
 import following from '../utils/following';
 import unfollow from '../utils/unfollow';
+import ShareModal from './ShareModal';
 
 const PostCard = ({ post, setTrigger }) => {
     const { userData, setUserData } = useOutletContext();
@@ -23,6 +24,7 @@ const PostCard = ({ post, setTrigger }) => {
     const [isMuted, setIsMuted] = useState(true);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isFollowing, setIsFollowing] = useState(userData?.followings?.includes(post.userid));
+    const [showShareModal, setShowShareModal] = useState(false);
     const videoRef = useRef(null);
 
     const navigate = useNavigate();
@@ -35,6 +37,30 @@ const PostCard = ({ post, setTrigger }) => {
         e.stopPropagation();
         if (currentSlide > 0) setCurrentSlide(prev => prev - 1);
     }
+
+    const handleShareToChat = (e) => {
+        e.stopPropagation();
+        if (!userData) return;
+        setShowShareModal(true);
+    };
+
+    const handleShare = async (e) => {
+        e.stopPropagation();
+        const shareData = {
+            title: post.header || "Athena Post",
+            text: post.text || "",
+            url: window.location.origin + `/posts/${post.id}`
+        };
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {}
+        } else {
+            navigator.clipboard.writeText(shareData.url);
+            addNote("Link copied!", "You can now share it anywhere.", userData.id);
+        }
+    };
 
     const handleFollow = async (e) => {
         e.stopPropagation();
@@ -156,14 +182,20 @@ const PostCard = ({ post, setTrigger }) => {
                         </div>
                     )}
 
-                    <div className="post-content">
+                    <div className={`post-content ${!post.media?.length ? 'text-only' : ''}`}>
                         {post.header && <h2 className="post-title">{post.header}</h2>}
                         <p className="post-text">{post.text}</p>
                         
+                        {post.tags?.length > 0 && (
+                            <div className="post-tags">
+                                {post.tags.map(tag => <span key={tag} className="tag">#{tag}</span>)}
+                            </div>
+                        )}
+                        
                         {post.media?.length > 0 && (
                             <div className="media-container carousel-container" style={{ position: "relative" }}>
-                                {post.media[currentSlide].match(/\.(mp4|webm|ogg|mov)$/i) || post.media[currentSlide].startsWith("data:video/") ? (
-                                    <>
+                                {post.type === 'video' || post.media[currentSlide].match(/\.(mp4|webm|ogg|mov)$/i) || post.media[currentSlide].startsWith("data:video/") ? (
+                                    <div className="video-wrapper">
                                         <video 
                                             ref={videoRef}
                                             src={post.media[currentSlide]} 
@@ -172,6 +204,7 @@ const PostCard = ({ post, setTrigger }) => {
                                             loop 
                                             playsInline
                                             className="post-media" 
+                                            poster={post.cover_image}
                                         />
                                         <button 
                                             className="sound-toggle" 
@@ -180,7 +213,7 @@ const PostCard = ({ post, setTrigger }) => {
                                         >
                                             {isMuted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
                                         </button>
-                                    </>
+                                    </div>
                                 ) : (
                                     <div className="carousel-wrapper">
                                         <img src={post.media[currentSlide]} alt="Media" className="post-media" />
@@ -210,12 +243,26 @@ const PostCard = ({ post, setTrigger }) => {
                         <div className="action comment" onClick={() => navigate(`/posts/${post.id}`)}>
                             <FaComment /> <span>{post.comments?.length || 0}</span>
                         </div>
+                        <div className="action" onClick={handleShare}>
+                            <div className="icon"><FaShare /></div>
+                            <span>Share</span>
+                        </div>
+                        <div className="action" onClick={handleShareToChat}>
+                            <div className="icon"><FaPaperPlane /></div>
+                            <span>Send</span>
+                        </div>
                         <div className="action view">
                             <FaEye /> <span>{viewCount}</span>
                         </div>
                     </div>
                 </>
             )}
+            <ShareModal 
+                isOpen={showShareModal} 
+                onClose={() => setShowShareModal(false)} 
+                postId={post.id} 
+                userData={userData} 
+            />
         </div>
     );
 };

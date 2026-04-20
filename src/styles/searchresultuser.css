@@ -184,6 +184,27 @@
   border-color: var(--ig-red) !important;
 }
 
+.message-btn {
+  background-color: var(--ig-surface-soft);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--ig-radius-sm);
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--ig-transition);
+  border: 1px solid var(--ig-border);
+}
+
+.message-btn:hover {
+  background-color: var(--ig-border);
+  border-color: var(--ig-blue);
+}
+
 /* Posts Section */
 .posts {
   display: flex;

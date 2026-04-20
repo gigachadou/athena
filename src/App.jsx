@@ -11,6 +11,9 @@ import Search from './pages/Search';
 import Notification from './pages/Notification';
 import AddPost from './pages/AddPost';
 import Shorts from './pages/Shorts';
+import Challenges from './pages/Challenges';
+import Chat from './pages/Chat';
+import ChatDetail from './pages/ChatDetail';
 import SearchProfile from './components/SearchProfile';
 import PostPage from './pages/PostPage';
 import FollowerPage from './pages/FollowerPage';
@@ -44,6 +47,9 @@ function App() {
         { path: "/notification", element: <Notification /> },
         { path: "/addPost", element: <AddPost /> },
         { path: "/shorts", element: <Shorts /> },
+        { path: "/challenges", element: <Challenges /> },
+        { path: "/chat", element: <Chat /> },
+        { path: "/chat/:chatId", element: <ChatDetail /> },
         { path: "/editPost/:postId", element: <AddPost /> },
         { path: "/searchresultusers/:usersID", element: <SearchProfile /> },
         { path: "/posts/:postId", element: <PostPage /> },

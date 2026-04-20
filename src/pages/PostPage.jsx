@@ -6,7 +6,7 @@ import { actionView } from "../utils/postActions/actionView";
 import actionDislike from "../utils/postActions/actionDislike";
 import actionLike from "../utils/postActions/actionLike";
 import actionComment from "../utils/postActions/actionComment";
-import { FaArrowLeft, FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaUser, FaShare } from "react-icons/fa";
 import actionDeleteComment from "../utils/postActions/actionDeleteComment";
 import CommentEditModal from "../components/CommentEditModal";
 import { supabase } from "../utils/supabaseClient";
@@ -107,6 +107,19 @@ export default function PostPage() {
         };
     };
 
+    async function handleShare() {
+        try {
+            await navigator.share({
+                title: data.post.header || "Athena Post",
+                text: data.post.text,
+                url: window.location.href
+            });
+        } catch (err) {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link copied!");
+        }
+    }
+
     async function handleAddComment() {
         setCommentLoading(true);
         const text = inputRef.current.value;
@@ -191,6 +204,11 @@ export default function PostPage() {
                                     <FaEye /> Views: {data.post.views}
                                 </span>
                             </div>
+                            <div className="action share" onClick={handleShare}>
+                                <span className="icon">
+                                    <FaShare /> Share
+                                </span>
+                            </div>
                         </div>
                     </article>
 
@@ -210,9 +228,9 @@ export default function PostPage() {
                                         onClick={() => {
                                             if (owner.id) owner.id !== userData.id ? navigate(`/searchresultusers/${owner.id}`) : navigate(`/profile`)
                                         }}
-                                        style={{ cursor: owner.id ? "pointer" : "default", color: "lightblue" }}
-                                    > {/* style qo'shish kerak */}
-                                        {!owner?.avatar ? <FaUser width={60} height={60} /> : <img src={owner.avatar} alt="Avatar" width={60} style={{ border: "1px transparent", borderRadius: "50%" }} />} {/* style qo'shish kerak */}
+                                        style={{ cursor: owner.id ? "pointer" : "default", color: "var(--ig-blue)" }}
+                                    >
+                                        {!owner?.avatar ? <FaUser width={60} height={60} /> : <img src={owner.avatar} alt="Avatar" width={60} style={{ border: "1px transparent", borderRadius: "50%" }} />}
                                         <p>{owner.name}</p>
                                     </div>
                                     {comment.text}

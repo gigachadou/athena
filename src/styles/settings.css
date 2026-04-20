@@ -1,128 +1,187 @@
-/* ============================================
-   Settings — Instagram-style Settings Page
-   ============================================ */
-
-/* Main Container */
-.settings {
+.settings-page {
   max-width: var(--ig-max-width, 470px);
   margin: 0 auto;
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  background: var(--ig-surface);
-  border-radius: 0;
-  box-shadow: none;
-  border: none;
+  background: var(--ig-bg);
+  min-height: 100vh;
 }
 
-/* Setting Buttons */
-.settings button {
-  width: 100%;
-  padding: 14px 16px;
-  border: none;
-  border-radius: 0;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: left;
-  transition: var(--ig-transition);
-  background-color: transparent;
-  color: var(--ig-text-primary);
+.settings-header {
   display: flex;
   align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.settings-header h2 {
+  font-size: 20px;
+}
+
+.settings-section {
+  background: var(--ig-surface);
+  border: 1px solid var(--ig-border);
+  border-radius: var(--ig-radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  color: var(--ig-text-primary);
+}
+
+.section-title h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Wallet Section */
+.wallet-card {
+  background: linear-gradient(135deg, #1a1a1a, #333);
+  color: white;
+  padding: 24px;
+  border-radius: var(--ig-radius-md);
+  display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid var(--ig-border-light);
+  align-items: center;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* Arrow indicator */
-.settings button::after {
-  content: '›';
-  font-size: 18px;
-  color: var(--ig-text-secondary);
-  font-weight: 300;
+.balance-info .label {
+  font-size: 12px;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.settings button:hover {
-  background-color: var(--ig-bg);
-  color: var(--ig-text-primary);
-  transform: none;
+.balance-info .amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 4px;
+  color: #ffd700;
 }
 
-/* Log Out button */
-.settings button:nth-last-of-type(2) {
-  background-color: transparent;
-  color: var(--ig-red);
-  border-bottom: 1px solid var(--ig-border-light);
-}
-
-.settings button:nth-last-of-type(2):hover {
-  background-color: rgba(237, 73, 86, 0.05);
-  color: var(--ig-red);
-}
-
-.settings button:nth-last-of-type(2)::after {
-  color: var(--ig-red);
-}
-
-/* Delete Account */
-.settings button:nth-child(4) {
-  color: var(--ig-text-secondary);
-  font-size: 14px;
-}
-
-.settings button:nth-child(4):hover {
-  background-color: var(--ig-bg);
-  color: var(--ig-text-primary);
-}
-
-/* Back button */
-.settings button:last-of-type {
-  background-color: var(--ig-blue);
-  color: #fff;
-  justify-content: center;
-  margin-top: 12px;
+.withdraw-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 16px;
   border-radius: var(--ig-radius-sm);
+  font-size: 13px;
+  backdrop-filter: blur(5px);
+}
+
+.withdraw-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sub-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--ig-text-secondary);
+}
+
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.package-card {
+  background: var(--ig-bg);
+  border: 1px solid var(--ig-border);
+  border-radius: var(--ig-radius-md);
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--ig-transition);
+}
+
+.package-card:hover {
+  border-color: #ffd700;
+  transform: translateY(-2px);
+  background: var(--ig-surface);
+  box-shadow: var(--ig-shadow-sm);
+}
+
+.pkg-amount {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ig-text-primary);
+}
+
+.pkg-coin {
+  font-size: 12px;
+  color: var(--ig-text-secondary);
+  margin-bottom: 8px;
+}
+
+.pkg-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ig-blue);
+  background: rgba(0, 149, 246, 0.1);
+  padding: 4px 0;
+  border-radius: 6px;
+}
+
+.settings-item {
+  width: 100%;
+  text-align: left;
+  padding: 12px 0;
+  background: transparent;
+  color: var(--ig-text-primary);
+  border-bottom: 1px solid var(--ig-border-light);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.settings-item:last-child {
   border-bottom: none;
 }
 
-.settings button:last-of-type::after {
-  content: '';
+.settings-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
 }
 
-.settings button:last-of-type:hover {
-  background-color: var(--ig-blue-hover);
-  transform: none;
+.logout-btn {
+  width: 100%;
+  background: #fff0f0;
+  color: var(--ig-red);
+  border: 1px solid #ffebeb;
+  padding: 14px;
+  margin-top: 20px;
 }
 
-/* ========== RESPONSIVE ========== */
-
-@media (max-width: 480px) {
-  .settings {
-    padding: 12px;
-  }
-
-  .settings button {
-    padding: 13px 12px;
-    font-size: 13px;
-  }
+.logout-btn:hover {
+  background: var(--ig-red);
+  color: white;
 }
 
-@media (max-width: 359px) {
-  .settings {
-    padding: 8px;
-  }
-
-  .settings button {
-    padding: 12px 8px;
-    font-size: 12px;
-  }
+.settings-error {
+  background: #fff0f0;
+  color: var(--ig-red);
+  padding: 12px;
+  border-radius: var(--ig-radius-sm);
+  margin-top: 16px;
+  font-size: 13px;
+  text-align: center;
 }
 
-@media (min-width: 481px) {
-  .settings {
-    border: 1px solid var(--ig-border);
-    border-radius: var(--ig-radius-sm);
-    margin-top: 16px;
-  }
+.back-btn {
+  background: transparent;
+  color: var(--ig-text-primary);
+  padding: 8px;
+  font-size: 20px;
 }

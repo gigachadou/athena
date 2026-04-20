@@ -26,7 +26,8 @@ export default function ProtectedRoot() {
                     bio: user.bio,
                     followers: user.followers,
                     followings: user.followings,
-                    avatar: user.avatar
+                    avatar: user.avatar,
+                    coins: user.coins || 0
                 });
             } catch (err) {
                 setUserData(null);
